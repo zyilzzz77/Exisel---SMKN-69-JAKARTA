@@ -1,0 +1,43 @@
+.page { min-height: 100vh; background: var(--surface); color: var(--ink); }
+.announcement { padding: 10px 5vw; border-bottom: var(--border); background: var(--ink); color: var(--white); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.announcement span { float: right; color: var(--blue-light); }
+.header { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:20px 5vw; border-bottom:var(--border); background:var(--white); }
+.brand { display:flex; align-items:center; gap:12px; color:inherit; text-decoration:none; }
+.brand img { width:46px; height:54px; object-fit:contain; }
+.brand span { display:grid; gap:2px; }
+.brand strong { font-family:var(--font-display),sans-serif; font-size:22px; }
+.brand small { font-size:10px; font-weight:800; text-transform:uppercase; }
+.header nav { display:flex; gap:20px; font-size:12px; font-weight:800; text-transform:uppercase; }
+.header nav a { color:inherit; text-decoration:none; }
+.header nav a:hover { text-decoration:underline; }
+.shell { width:min(1120px,90vw); margin:0 auto; padding:34px 0 80px; }
+.backLink { color:inherit; font-size:12px; font-weight:800; text-decoration:underline; }
+.hero { display:grid; grid-template-columns:1fr 220px; gap:44px; align-items:center; padding:54px 0 44px; }
+.eyebrow,.cardNumber { margin:0 0 12px; color:var(--blue); font-size:11px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+.hero h1 { max-width:760px; margin:0; font-family:var(--font-display),sans-serif; font-size:clamp(48px,8vw,96px); letter-spacing:-.07em; line-height:.88; }
+.hero h1 span { color:var(--blue); }
+.hero p { max-width:680px; margin:22px 0 0; color:var(--muted); font-size:15px; line-height:1.6; }
+.logoFrame { display:grid; width:220px; aspect-ratio:1; place-items:center; overflow:hidden; border:var(--border); border-radius:var(--radius); background:var(--white); box-shadow:10px 10px 0 var(--ink); transform:rotate(2deg); }
+.logoFrame img { width:100%; height:100%; object-fit:cover; }
+.logoFrame strong { font-family:var(--font-display),sans-serif; font-size:70px; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+.infoCard,.sessionCard { min-height:310px; padding:28px; border:var(--border); border-radius:var(--radius); box-shadow:8px 8px 0 var(--ink); background:var(--white); }
+.sessionCard { background:var(--blue); color:var(--white); }
+.sessionCard .cardNumber { color:var(--white); }
+.infoCard h2 { margin:36px 0 10px; font-family:var(--font-display),sans-serif; font-size:54px; letter-spacing:-.06em; }
+.infoCard p { margin:0 0 16px; font-weight:800; line-height:1.5; }
+.muted { color:var(--muted); font-size:13px; font-weight:600 !important; }
+.sessionCard .muted,.sessionRule { color:var(--blue-light); }
+.currentCode { display:grid; gap:4px; margin:30px 0 20px; }
+.currentCode small,.currentCode span { font-size:11px; font-weight:800; text-transform:uppercase; }
+.currentCode strong { font-family:var(--font-display),sans-serif; font-size:72px; letter-spacing:.08em; line-height:1; }
+.sessionForm { display:grid; gap:12px; }
+.sessionForm button { display:flex; align-items:center; justify-content:space-between; min-height:52px; padding:12px 16px; border:var(--border); box-shadow:5px 5px 0 var(--ink); background:var(--white); color:var(--ink); cursor:pointer; font:800 12px var(--font-body),sans-serif; text-transform:uppercase; }
+.sessionForm button:hover { transform:translate(-2px,-2px); box-shadow:7px 7px 0 var(--ink); }
+.sessionForm button:disabled { cursor:wait; opacity:.7; }
+.codeOutput { display:grid; gap:3px; padding:14px; border:3px solid var(--ink); background:var(--orange-light); color:var(--ink); }
+.codeOutput span,.codeOutput small { font-size:10px; font-weight:800; text-transform:uppercase; }
+.codeOutput strong { font-family:var(--font-display),sans-serif; font-size:34px; letter-spacing:.1em; }
+.sessionMessage { margin:0; padding:10px; border:3px solid var(--ink); background:var(--orange-light); color:var(--ink); font-size:12px; font-weight:800; }
+.sessionRule { margin:18px 0 0; font-size:11px; font-weight:700; line-height:1.5; }
+@media (max-width:760px) { .header,.header nav { align-items:flex-start; flex-direction:column; } .hero,.grid { grid-template-columns:1fr; } .logoFrame { width:160px; } .currentCode strong { font-size:58px; } }

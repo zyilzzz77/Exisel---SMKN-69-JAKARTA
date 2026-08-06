@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum EnrollmentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  EXCUSED
+  ABSENT
+}
+
+model User {
+  id                 String       @id @default(uuid()) @db.Uuid
+  email              String       @unique @db.VarChar(254)
+  nis                String?      @unique @db.VarChar(20)
+  name               String       @db.VarChar(150)
+  passwordHash       String       @map("password_hash") @db.Text
+  role               Role         @default(STUDENT)
+  className          String?      @map("class_name") @db.VarChar(50)
+  isActive           Boolean      @default(true) @map("is_active")
+  mustChangePassword Boolean      @default(true) @map("must_change_password")
+  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt          DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+  enrollments        Enrollment[]
+  attendances        Attendance[]
+  createdSessions     AttendanceSession[] @relation("CreatedAttendanceSessions")
+
+  @@index([name])
+  @@index([className])
+  @@map("users")
+}
+
+model Extracurricular {
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String       @unique @db.VarChar(120)
+  description String?      @db.Text
+  capacity    Int
+  isActive    Boolean      @default(true) @map("is_active")
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+  schedules   Schedule[]
+  enrollments Enrollment[]
+  attendances Attendance[]
+  attendanceSessions AttendanceSession[]
+
+  @@map("extracurriculars")
+}
+
+model Schedule {
+  id                String          @id @default(uuid()) @db.Uuid
+  extracurricularId String          @map("extracurricular_id") @db.Uuid
+  day               DayOfWeek
+  startTime         DateTime        @map("start_time") @db.Time(0)
+  endTime           DateTime        @map("end_time") @db.Time(0)
+  location          String          @db.VarChar(150)
+  extracurricular   Extracurricular @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
+
+  @@index([extracurricularId])
+  @@map("schedules")
+}
+
+model Enrollment {
+  id                String           @id @default(uuid()) @db.Uuid
+  userId            String           @map("user_id") @db.Uuid
+  extracurricularId String           @map("extracurricular_id") @db.Uuid
+  status            EnrollmentStatus @default(APPROVED)
+  registeredAt      DateTime         @default(now()) @map("registered_at") @db.Timestamptz(3)
+  updatedAt         DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  extracurricular   Extracurricular  @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, extracurricularId])
+  @@index([extracurricularId, status])
+  @@map("enrollments")
+}
+
+model Attendance {
+  id                String           @id @default(uuid()) @db.Uuid
+  userId            String           @map("user_id") @db.Uuid
+  extracurricularId String           @map("extracurricular_id") @db.Uuid
+  attendanceDate    DateTime         @map("attendance_date") @db.Date
+  status            AttendanceStatus
+  reason            String?          @db.VarChar(500)
+  submittedAt       DateTime         @default(now()) @map("submitted_at") @db.Timestamptz(3)
+  updatedAt         DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  extracurricular   Extracurricular  @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, extracurricularId, attendanceDate])
+  @@index([attendanceDate, status])
+  @@index([extracurricularId, attendanceDate])
+  @@map("attendances")
+}
+
+model AttendanceSession {
+  id                String          @id @default(uuid()) @db.Uuid
+  extracurricularId String          @map("extracurricular_id") @db.Uuid
+  createdById       String          @map("created_by_id") @db.Uuid
+  sessionDate       DateTime        @map("session_date") @db.Date
+  code              String          @db.VarChar(12)
+  expiresAt         DateTime        @map("expires_at") @db.Timestamptz(3)
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  extracurricular   Extracurricular @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
+  createdBy         User            @relation("CreatedAttendanceSessions", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@unique([extracurricularId, sessionDate])
+  @@index([code, expiresAt])
+  @@map("attendance_sessions")
+}
+
+model LoginThrottle {
+  key           String    @id @db.Char(64)
+  attemptCount  Int       @default(0) @map("attempt_count")
+  blockedUntil  DateTime? @map("blocked_until") @db.Timestamptz(3)
+  lastAttemptAt DateTime  @default(now()) @map("last_attempt_at") @db.Timestamptz(3)
+
+  @@index([blockedUntil])
+  @@map("login_throttles")
+}

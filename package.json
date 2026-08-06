@@ -1,0 +1,46 @@
+{
+  "name": "exisel-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:import:students": "prisma db execute --file private/imports/xi-sija-1-users.sql && prisma db execute --file private/imports/xi-sija-1-nis.sql",
+    "db:local:create-admin": "node scripts/create-local-admin.mjs",
+    "db:local:start": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-local-db.ps1",
+    "db:local:stop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/stop-local-db.ps1"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "argon2": "^0.45.1",
+    "dotenv": "^17.4.2",
+    "jose": "^6.2.8",
+    "next": "16.3.0",
+    "pg": "^8.22.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/pg": "^8.20.3",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.0",
+    "prisma": "^7.9.1",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.5",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "type": "module"
+}
