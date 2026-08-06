@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: clip;
   background: var(--paper);
 }
 
@@ -446,19 +446,34 @@
   padding-top: 24px;
 }
 
-.reasonField textarea {
+.reasonField textarea,
+.reasonField input {
   resize: vertical;
   width: 100%;
+  min-height: 54px;
   padding: 14px;
   border: 3px solid var(--ink);
   background: var(--orange-light);
   font: inherit;
-  font-size: 12px;
+  font-size: 14px;
   outline: 0;
 }
 
-.reasonField textarea:focus {
+.reasonField textarea:focus,
+.reasonField input:focus {
   box-shadow: 5px 5px 0 var(--ink);
+}
+
+.attendanceCodeField input {
+  position: relative;
+  z-index: 1;
+  display: block;
+  touch-action: manipulation;
+  caret-color: var(--blue);
+  font-family: var(--font-display), sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
 }
 
 .reasonField small {
@@ -758,6 +773,12 @@
   .identityGrid,
   .statusOptions {
     grid-template-columns: 1fr;
+  }
+
+  .attendanceCodeField input {
+    min-height: 62px;
+    padding-inline: 16px;
+    font-size: 22px;
   }
 
   .fullField {

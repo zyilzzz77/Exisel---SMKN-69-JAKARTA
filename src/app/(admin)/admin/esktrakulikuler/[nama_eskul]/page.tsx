@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
+import { CopyAttendanceCodeButton } from "@/components/copy-attendance-code-button";
 import { AttendanceSessionForm } from "@/components/forms/attendance-session-form";
 import { readSession } from "@/lib/auth/session";
 import { getPrisma } from "@/lib/database/prisma";
 import {
+  formatScheduleTime,
+  formatTimestampTime,
   getJakartaDateKey,
   getSchoolDay,
-  normalizePrismaJakartaTimestamp,
   toDatabaseDate,
 } from "@/lib/school-date";
 import styles from "./admin-eskul.module.css";
@@ -41,17 +43,6 @@ function slugify(value: string) {
     .replace(/^-|-$/g, "");
 }
 
-function formatTime(value: Date) {
-  return new Intl.DateTimeFormat("id-ID", {
-    timeZone: "Asia/Jakarta",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  })
-    .format(value)
-    .replace(".", ":");
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { nama_eskul } = await params;
   return { title: `Kode Kehadiran ${nama_eskul} — EXISEL` };
@@ -79,7 +70,7 @@ export default async function AdminExtracurricularSessionPage({ params }: PagePr
         select: { day: true, startTime: true, endTime: true, location: true },
       },
       attendanceSessions: {
-        where: { sessionDate: attendanceDate },
+        where: { sessionDate: attendanceDate, expiresAt: { gt: new Date() } },
         orderBy: { createdAt: "desc" },
         take: 1,
         select: { code: true, expiresAt: true, createdAt: true },
@@ -90,7 +81,7 @@ export default async function AdminExtracurricularSessionPage({ params }: PagePr
   const program = programs.find((item) => slugify(item.name) === requestedSlug);
   if (!program) notFound();
   const schedule = program.schedules[0];
-  const activeSession = program.attendanceSessions[0];
+  const activeSession = program.attendanceSessions[0] ?? null;
 
   return (
     <main className={styles.page}>
@@ -125,7 +116,7 @@ export default async function AdminExtracurricularSessionPage({ params }: PagePr
             <span className={styles.cardNumber}>01 / Agenda</span>
             <h2>{dayLabels[day] ?? day}</h2>
             {schedule ? (
-              <p>{formatTime(schedule.startTime)}–{formatTime(schedule.endTime)} · {schedule.location}</p>
+              <p>{formatScheduleTime(schedule.startTime)}–{formatScheduleTime(schedule.endTime)} · {schedule.location}</p>
             ) : (
               <p>Ekskul ini tidak terjadwal hari ini.</p>
             )}
@@ -136,9 +127,12 @@ export default async function AdminExtracurricularSessionPage({ params }: PagePr
             {activeSession ? (
               <div className={styles.currentCode}>
                 <small>Kode aktif</small>
-                <strong>{activeSession.code}</strong>
+                <div className={styles.codeRow}>
+                  <strong>{activeSession.code}</strong>
+                  <CopyAttendanceCodeButton code={activeSession.code} />
+                </div>
                 <span>
-                  Berlaku sampai {formatTime(normalizePrismaJakartaTimestamp(activeSession.expiresAt))}
+                  Berlaku sampai {formatTimestampTime(activeSession.expiresAt)}
                 </span>
               </div>
             ) : (

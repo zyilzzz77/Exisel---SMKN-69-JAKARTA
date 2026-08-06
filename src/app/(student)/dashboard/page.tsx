@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { logoutAction } from "@/actions/auth";
+import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
 import { StudentNavigation } from "@/components/student-navigation";
 import { getStudentDashboard } from "@/lib/auth/dal";
 import {
@@ -80,7 +80,7 @@ export default async function DashboardPage() {
   const approvedEnrollments = user.enrollments.filter(
     (enrollment) => enrollment.status === "APPROVED",
   );
-  const activeEnrollment = approvedEnrollments[0] ?? user.enrollments[0];
+  const fallbackEnrollment = approvedEnrollments[0] ?? user.enrollments[0];
   const jakartaDateKey = getJakartaDateKey();
   const todayDay = getSchoolDay(jakartaDateKey);
   const todayEnrollment = approvedEnrollments.find(
@@ -92,6 +92,7 @@ export default async function DashboardPage() {
   const todaySchedule = todayEnrollment?.extracurricular.schedules.find(
     (schedule) => schedule.day === todayDay,
   );
+  const activeEnrollment = todayEnrollment ?? fallbackEnrollment;
   const todayAttendance = todayEnrollment?.extracurricular.attendances[0];
   const weekdayIndex = toDatabaseDate(jakartaDateKey).getUTCDay();
   const mondayDateKey = shiftSchoolDateKey(
@@ -169,11 +170,7 @@ export default async function DashboardPage() {
             <span className={styles.avatar} aria-hidden="true">
               {initials(user.name)}
             </span>
-            <form action={logoutAction}>
-              <button className={styles.logoutButton} type="submit">
-                Keluar <span aria-hidden="true">↗</span>
-              </button>
-            </form>
+            <ConfirmLogoutButton className={styles.logoutButton} />
           </div>
         </div>
       </header>

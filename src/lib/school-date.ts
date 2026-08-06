@@ -52,11 +52,31 @@ export function formatSchoolDate(dateKey: string) {
   }).format(toDatabaseDate(dateKey));
 }
 
+export function formatScheduleTime(value: Date) {
+  return new Intl.DateTimeFormat("id-ID", {
+    timeZone: "UTC",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+    .format(value)
+    .replace(".", ":");
+}
+
+export function formatTimestampTime(value: Date) {
+  return new Intl.DateTimeFormat("id-ID", {
+    timeZone: "Asia/Jakarta",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+    .format(value)
+    .replace(".", ":");
+}
+
 /**
- * Prisma's PostgreSQL adapter returns timestamptz values as Jakarta wall-clock
- * components encoded in a UTC Date. Normalize those session timestamps back
- * to the real instant before formatting or comparing expiry windows.
+ * Returns the Date instance. Maintained for backwards compatibility.
  */
 export function normalizePrismaJakartaTimestamp(value: Date) {
-  return new Date(value.getTime() - 7 * 60 * 60 * 1000);
+  return value;
 }

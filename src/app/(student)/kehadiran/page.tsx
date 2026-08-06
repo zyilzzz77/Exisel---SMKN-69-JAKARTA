@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { logoutAction } from "@/actions/auth";
+import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
 import { AttendanceForm } from "@/components/forms/attendance-form";
 import { StudentNavigation } from "@/components/student-navigation";
 import { getStudentAttendanceData } from "@/lib/attendance/dal";
@@ -85,11 +85,7 @@ export default async function AttendancePage({
             <span className={styles.avatar} aria-hidden="true">
               {initials(data.user.name)}
             </span>
-            <form action={logoutAction}>
-              <button className={styles.logoutButton} type="submit">
-                Keluar
-              </button>
-            </form>
+            <ConfirmLogoutButton className={styles.logoutButton} />
           </div>
         </div>
       </header>

@@ -31,6 +31,14 @@
 .currentCode { display:grid; gap:4px; margin:30px 0 20px; }
 .currentCode small,.currentCode span { font-size:11px; font-weight:800; text-transform:uppercase; }
 .currentCode strong { font-family:var(--font-display),sans-serif; font-size:72px; letter-spacing:.08em; line-height:1; }
+.codeRow { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+.copyCodeControl { display:flex; align-items:center; gap:10px; }
+.copyCodeButton { display:grid; width:52px; height:52px; flex:0 0 auto; place-items:center; padding:0; border:3px solid var(--ink); border-radius:6px; background:var(--orange); box-shadow:4px 4px 0 var(--ink); color:var(--ink); cursor:pointer; touch-action:manipulation; transition:transform 120ms ease,box-shadow 120ms ease,background 120ms ease; }
+.copyCodeButton:hover,.copyCodeButton:focus-visible { transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); outline:3px solid var(--white); outline-offset:3px; }
+.copyCodeButton:active { transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink); }
+.copyCodeButtonSuccess { background:#4fe06f; }
+.copyCodeButton svg { width:26px; height:26px; fill:none; stroke:currentColor; stroke-linecap:round; stroke-linejoin:round; stroke-width:2.2; pointer-events:none; }
+.copyCodeStatus { min-width:68px; color:var(--white); font-size:10px; font-weight:900; text-transform:uppercase; }
 .sessionForm { display:grid; gap:12px; }
 .sessionForm button { display:flex; align-items:center; justify-content:space-between; min-height:52px; padding:12px 16px; border:var(--border); box-shadow:5px 5px 0 var(--ink); background:var(--white); color:var(--ink); cursor:pointer; font:800 12px var(--font-body),sans-serif; text-transform:uppercase; }
 .sessionForm button:hover { transform:translate(-2px,-2px); box-shadow:7px 7px 0 var(--ink); }
@@ -39,5 +47,6 @@
 .codeOutput span,.codeOutput small { font-size:10px; font-weight:800; text-transform:uppercase; }
 .codeOutput strong { font-family:var(--font-display),sans-serif; font-size:34px; letter-spacing:.1em; }
 .sessionMessage { margin:0; padding:10px; border:3px solid var(--ink); background:var(--orange-light); color:var(--ink); font-size:12px; font-weight:800; }
+.sessionMessageError { margin:0; padding:10px; border:3px solid var(--ink); background:#fee2e2; color:#991b1b; font-size:12px; font-weight:800; }
 .sessionRule { margin:18px 0 0; font-size:11px; font-weight:700; line-height:1.5; }
-@media (max-width:760px) { .header,.header nav { align-items:flex-start; flex-direction:column; } .hero,.grid { grid-template-columns:1fr; } .logoFrame { width:160px; } .currentCode strong { font-size:58px; } }
+@media (max-width:760px) { .header,.header nav { align-items:flex-start; flex-direction:column; } .hero,.grid { grid-template-columns:1fr; } .logoFrame { width:160px; } .currentCode strong { font-size:58px; } .codeRow { gap:14px; } .copyCodeButton { width:48px; height:48px; } }

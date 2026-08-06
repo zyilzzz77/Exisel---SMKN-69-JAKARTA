@@ -22,14 +22,17 @@ export function AttendanceSessionForm({ extracurricularId }: { extracurricularId
         {pending ? "Membuat kode..." : "Generate kode kehadiran"}
         <span aria-hidden="true">→</span>
       </button>
-      {state.code ? (
-        <output className={styles.codeOutput} aria-live="polite">
-          <span>Kode sesi aktif</span>
-          <strong>{state.code}</strong>
-          <small>{state.message}</small>
-        </output>
-      ) : state.message ? (
-        <p className={styles.sessionMessage} role="alert">{state.message}</p>
+      {state.message ? (
+        <p
+          className={
+            state.status === "error"
+              ? styles.sessionMessageError
+              : styles.sessionMessage
+          }
+          role={state.status === "error" ? "alert" : "status"}
+        >
+          {state.message}
+        </p>
       ) : null}
     </form>
   );

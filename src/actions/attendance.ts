@@ -21,6 +21,14 @@ const attendanceSchema = z
     reason: z.string().trim().max(500, "Alasan maksimal 500 karakter."),
   })
   .superRefine((value, context) => {
+    if (value.status === "PRESENT" && !/^\d{6}$/.test(value.attendanceCode)) {
+      context.addIssue({
+        code: "custom",
+        path: ["attendanceCode"],
+        message: "Masukkan kode kehadiran 6 digit dari admin/guru.",
+      });
+    }
+
     if (value.status === "EXCUSED" && value.reason.length < 5) {
       context.addIssue({
         code: "custom",
@@ -56,7 +64,7 @@ export async function submitAttendanceAction(
     const errors = parsed.error.flatten().fieldErrors;
     return {
       status: "error",
-      message: "Periksa pilihan kehadiran dan alasan izin.",
+      message: "Periksa status, kode kehadiran, atau alasan izin.",
       errors: {
         extracurricularId: errors.extracurricularId,
         status: errors.status,

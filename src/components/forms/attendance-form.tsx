@@ -44,6 +44,7 @@ export function AttendanceForm({
       ? existingAttendance.status
       : "",
   );
+  const [attendanceCode, setAttendanceCode] = useState("");
 
   if (existingAttendance) {
     const statusLabel =
@@ -134,8 +135,10 @@ export function AttendanceForm({
           >
             <input
               checked={attendanceStatus === "PRESENT"}
+              id="attendance-status-present"
               name="status"
               onChange={() => setAttendanceStatus("PRESENT")}
+              required
               type="radio"
               value="PRESENT"
             />
@@ -153,8 +156,13 @@ export function AttendanceForm({
           >
             <input
               checked={attendanceStatus === "EXCUSED"}
+              id="attendance-status-excused"
               name="status"
-              onChange={() => setAttendanceStatus("EXCUSED")}
+              onChange={() => {
+                setAttendanceStatus("EXCUSED");
+                setAttendanceCode("");
+              }}
+              required
               type="radio"
               value="EXCUSED"
             />
@@ -188,27 +196,43 @@ export function AttendanceForm({
             <p className={styles.fieldError}>{state.errors.reason[0]}</p>
           ) : null}
         </label>
-      ) : null}
-
-      {attendanceStatus === "PRESENT" ? (
-        <label className={styles.reasonField}>
+      ) : (
+        <label className={`${styles.reasonField} ${styles.attendanceCodeField}`}>
           <span>03 / Kode kehadiran</span>
           <input
+            aria-describedby="attendance-code-help"
+            aria-label="Kode kehadiran 6 digit"
             autoComplete="one-time-code"
+            enterKeyHint="done"
+            id="attendance-code"
             inputMode="numeric"
-            maxLength={12}
+            maxLength={6}
+            minLength={6}
             name="attendanceCode"
-            placeholder="Masukkan kode dari pembina"
-            required
+            onChange={(event) => {
+              setAttendanceCode(event.currentTarget.value.replace(/\D/g, "").slice(0, 6));
+            }}
+            onFocus={() => {
+              if (attendanceStatus !== "PRESENT") {
+                setAttendanceStatus("PRESENT");
+              }
+            }}
+            pattern="[0-9]{6}"
+            placeholder="Contoh: 123456"
+            required={attendanceStatus === "PRESENT"}
+            type="text"
+            value={attendanceCode}
           />
-          <small>
-            Kode diberikan admin/guru dan berlaku sampai {attendanceCodeExpiresAt ?? "batas waktu sesi"}.
+          <small id="attendance-code-help">
+            {attendanceCodeExpiresAt
+              ? `Masukkan 6 angka. Kode berlaku sampai ${attendanceCodeExpiresAt}.`
+              : "Masukkan 6 angka dari admin/guru. Menyentuh kolom ini otomatis memilih status Hadir."}
           </small>
           {state.errors?.attendanceCode ? (
             <p className={styles.fieldError}>{state.errors.attendanceCode[0]}</p>
           ) : null}
         </label>
-      ) : null}
+      )}
 
       {state.message ? (
         <div
@@ -226,7 +250,7 @@ export function AttendanceForm({
 
       <button
         className={styles.submitButton}
-        disabled={pending || !attendanceStatus}
+        disabled={pending}
         type="submit"
       >
         <span>{pending ? "Menyimpan..." : "Submit kehadiran"}</span>

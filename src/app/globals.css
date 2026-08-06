@@ -1315,6 +1315,11 @@ a {
     gap: 8px;
   }
 
+  .header-inner > .button {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
   .desktop-nav {
     display: none;
     width: 100%;
@@ -1341,6 +1346,8 @@ a {
     display: inline-flex;
     width: 42px;
     height: 42px;
+    grid-column: 3;
+    grid-row: 1;
     flex-direction: column;
     align-items: center;
     justify-content: center;

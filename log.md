@@ -3757,6 +3757,523 @@ mengubah struktur TSX, konten teks, avatar, maupun tombol logout.
 
 ---
 
+## EXISEL-20260806-003 — Rombak UI/UX dan menambahkan visual siswa SIJA
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Senior Next.js UI/UX developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “rombak ui/ux agar lebih enak dilihat dimata dan bisa ditambahin gambar anak
+> sija”
+
+### Input asset
+
+- Screenshot tampilan awal section EXISEL.
+- Foto referensi siswa SIJA memegang piala dari clipboard attachment.
+
+### TLDR AI agents done
+
+Menyempurnakan tampilan landing page agar hierarki visual, komposisi, warna,
+dan ruang kosong lebih nyaman dilihat. Placeholder piala diganti dengan visual
+siswa SIJA yang memegang piala dan disatukan dengan gaya Neo-Brutalism EXISEL.
+
+### Changes
+
+- Mengganti area placeholder pada section pengenalan EXISEL dengan gambar siswa.
+- Menyesuaikan komposisi teks dan visual agar tetap seimbang di desktop dan
+  mobile.
+- Mempertahankan identitas Electric Blue, Bright Orange, border hitam tebal,
+  serta hard shadow.
+- Menambahkan aset aplikasi `public/student-sija-trophy.png`.
+
+### Files changed
+
+- `public/student-sija-trophy.png`
+- `src/app/page.tsx`
+- `src/app/globals.css`
+
+### Verification
+
+- TypeScript: passed.
+- Targeted ESLint: passed.
+- Visual tetap responsif pada breakpoint landing page.
+
+### Security and privacy note
+
+- Attachment digunakan hanya sebagai aset visual yang diminta pengguna.
+- Tidak ada data akun, token, cookie, password, atau informasi database yang
+  ditulis ke log.
+
+---
+
+## EXISEL-20260806-004 — Menyatukan navbar siswa dengan Neo-Brutalism
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Senior front-end architecture and UI developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompts
+
+> “semua navbar text dipages kehadiran ... sama pages ... agar kayak navbar
+> pages dashboard”
+
+> “semua navbar nya pakai neobrutalism”
+
+> “yang http://localhost:3000/ navbar atas nya itu About, backgroud, explore
+> situ khusus navbar landing pages”
+
+### TLDR AI agents done
+
+Membuat komponen navigasi siswa bersama agar style navbar konsisten di seluruh
+halaman, dengan dua varian isi: navigasi khusus landing page dan navigasi area
+siswa. Semua link memakai pil-button Neo-Brutalism dengan border tebal, hard
+shadow, hover/focus, active state, dan reflow responsif.
+
+### Navigation mapping
+
+- Landing page: `About` → `#about`, `Background` → `#background`, dan
+  `Explore` → `#pilihan`.
+- Area siswa: `Dashboard` → `/dashboard#dashboard-content`, `Pilihan ekskul` →
+  `/ekstrakurikuler`, `Kehadiran` → `/kehadiran`, `Jadwal` →
+  `/dashboard#jadwal`, dan `Akun` → `/dashboard#akun`.
+
+### Files changed
+
+- `src/components/student-navigation.tsx`
+- `src/components/student-navigation.module.css`
+- `src/app/page.tsx`
+- `src/app/(student)/dashboard/page.tsx`
+- `src/app/(student)/ekstrakurikuler/page.tsx`
+- `src/app/(student)/kehadiran/page.tsx`
+- `src/app/(student)/eskul/[nama_eskul]/page.tsx`
+- `src/app/(student)/daftar/eskul/page.tsx`
+
+### Verification
+
+- TypeScript: passed.
+- Targeted ESLint: passed.
+- Landing page menggunakan varian label landing dan tidak memakai label area
+  siswa.
+- Dashboard, katalog, detail, pendaftaran, dan kehadiran menggunakan mapping
+  area siswa yang sama.
+
+### Security note
+
+- Perubahan navbar bersifat presentasional dan navigasional.
+- Tidak ada perubahan pada autentikasi, otorisasi, database, atau data siswa.
+
+---
+
+## EXISEL-20260806-005 — Memperbaiki submit dan kode sesi kehadiran
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Senior full-stack Next.js and PostgreSQL developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “fixed bug dipages kehadiran tidak bisa submit padahal sebelumnya bisa
+> tolong difixed dan munculin untuk input code kehadiran nya”
+
+### Root cause
+
+Kolom PostgreSQL `TIME` pada jadwal dinormalisasi sebagai `Date` secara tidak
+konsisten oleh adapter Prisma. Jadwal yang seharusnya berakhir pukul 17:00
+menghasilkan masa berlaku kode sampai 00:15, sehingga kode yang baru dibuat
+langsung dianggap kedaluwarsa dan submit status Hadir ditolak.
+
+### Changes
+
+- Membaca `end_time` dari PostgreSQL sebagai teks `HH:mm:ss` melalui raw query
+  bertipe dan terparameterisasi.
+- Menggabungkan jam jadwal dengan tanggal sekolah hari ini dalam zona waktu
+  `Asia/Jakarta`.
+- Menetapkan masa berlaku kode sampai 15 menit setelah jadwal selesai.
+- Menampilkan pesan kesalahan eksplisit jika waktu jadwal tidak valid.
+- Menambahkan revalidation untuk halaman admin, laporan, dan kehadiran siswa.
+- Menampilkan input kode kehadiran 6 digit dengan keypad numerik, sanitasi
+  karakter nonangka, autocomplete OTP, bantuan masa berlaku, dan validasi Zod.
+- Mempertahankan alur Izin dengan alasan minimal 5 karakter.
+
+### Files changed
+
+- `src/actions/attendance-session.ts`
+- `src/actions/attendance.ts`
+- `src/components/forms/attendance-form.tsx`
+- `src/app/(student)/kehadiran/attendance.module.css`
+- `src/lib/school-date.ts`
+- `src/components/forms/attendance-session-form.tsx`
+
+### Verification
+
+- `tsc --noEmit`: passed.
+- Targeted ESLint: passed.
+- Jadwal 17:00 terverifikasi menghasilkan kedaluwarsa 17:15 WIB.
+- Tidak dilakukan submit menggunakan akun siswa nyata agar data kehadiran tidak
+  tercipta dan terkunci hanya untuk keperluan pengujian.
+
+### Security note
+
+- Raw query menggunakan parameter Prisma dan tidak menggabungkan input menjadi
+  SQL string mentah.
+- Kode tetap divalidasi di server terhadap ekskul, tanggal sesi, waktu
+  kedaluwarsa, enrollment aktif, dan aturan satu kali submit.
+
+---
+
+## EXISEL-20260806-006 — Memperbaiki input kode kehadiran pada mobile
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Responsive UI and form interaction developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “tampilan dimobile tidak bisa diinput code kehadiran nyaa kalau didekstop
+> bisa tolong difixed no mistakes”
+
+### Root cause
+
+Input bergantung pada transisi atribut HTML `disabled` menjadi enabled setelah
+state React memilih Hadir. Selain itu, container halaman memakai
+`overflow: hidden`, yang dapat mengganggu fokus dan pergeseran viewport ketika
+keyboard virtual Android/iOS muncul.
+
+### Changes
+
+- Menghapus ketergantungan input kode pada atribut `disabled`.
+- Menyentuh input kode otomatis memilih status Hadir.
+- Mengubah input menjadi controlled React state dan menyaring nilai menjadi
+  maksimal enam angka.
+- Menambahkan `inputMode="numeric"`, `enterKeyHint="done"`, pattern 6 digit,
+  autocomplete one-time code, serta label aksesibel.
+- Membersihkan kode ketika status diganti menjadi Izin.
+- Mengganti penguncian overflow halaman menjadi `overflow-x: clip`.
+- Memperbesar field mobile, menambahkan caret yang jelas, `z-index`, dan
+  `touch-action: manipulation`.
+
+### Files changed
+
+- `src/components/forms/attendance-form.tsx`
+- `src/app/(student)/kehadiran/attendance.module.css`
+
+### Verification
+
+- `tsc --noEmit`: passed.
+- Targeted ESLint: passed.
+- `git diff --check`: passed.
+- Responsive rules diperiksa pada viewport 390 × 844.
+- Browser pengujian anonim diarahkan ke `/login`; tidak ada credential siswa
+  yang diminta atau digunakan.
+
+### Security note
+
+- Sanitasi client hanya membantu UX; validasi kode tetap dilakukan kembali di
+  Server Action.
+- Tidak ada kehadiran nyata yang disubmit selama pengujian.
+
+---
+
+## EXISEL-20260806-007 — Mengaktifkan tombol konfirmasi kehadiran pada mobile
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** React form reliability developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “udh bisa input code nya tapi masih bug ngga bisa confirm tombol kehadiran
+> nyaa padahal udh diisi code nyaa”
+
+### Root cause
+
+Pada browser Android, radio dan input dapat berubah secara native sebelum state
+React selesai tersinkron. Tombol masih dirender dengan kondisi
+`disabled={pending || !attendanceStatus}`, sehingga terlihat abu-abu dan tidak
+dapat ditekan walaupun status Hadir serta kode sudah tampak terisi.
+
+### Changes
+
+- Tombol submit sekarang hanya disabled ketika Server Action benar-benar dalam
+  status `pending`.
+- Radio Hadir dan Izin menggunakan validasi HTML `required`.
+- Validasi Zod dan seluruh pemeriksaan bisnis di server tetap dipertahankan.
+- Perubahan mendukung progressive enhancement ketika hydration mobile belum
+  selesai sepenuhnya.
+
+### Files changed
+
+- `src/components/forms/attendance-form.tsx`
+
+### Verification
+
+- `tsc --noEmit`: passed.
+- ESLint pada form dan action kehadiran: passed.
+- `git diff --check`: passed.
+- Jalur sukses Server Action tetap membuat attendance satu kali dan
+  merevalidasi halaman siswa serta admin.
+
+### Security note
+
+- Mengaktifkan tombol tidak melewati validasi server.
+- Server tetap memeriksa session siswa, enrollment, jadwal hari ini, kode aktif,
+  kedaluwarsa, dan duplikasi attendance.
+
+---
+
+## EXISEL-20260806-008 — Memperbaiki tombol mata password pada mobile
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Authentication UI and accessibility developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “fixed bug tampilan mata dikolom password tidak berfungsi tolong difixed no
+> mistakes”
+
+### Root cause
+
+Logika React tampil/sembunyi password berfungsi, tetapi hit-area mobile hanya
+sekitar 42 × 34 px. Tombol absolut belum mempunyai posisi vertikal dan z-index
+eksplisit, sedangkan ikon anak masih menjadi elemen teratas pada titik sentuh.
+Kondisi tersebut membuat tap fisik tidak konsisten pada ponsel.
+
+### Changes
+
+- Memperbesar area sentuh menjadi 48 × 48 px.
+- Menempatkan tombol tepat di tengah dengan `top: 50%` dan
+  `translateY(-50%)`.
+- Menambahkan `z-index: 3`, `touch-action: manipulation`, dan pengaturan tap
+  highlight mobile.
+- Menetapkan `pointer-events: none` pada ikon agar tap diterima tombol.
+- Mempertahankan `type="button"` agar toggle tidak men-submit login.
+- Menambahkan `aria-controls`, `aria-pressed`, label dinamis, dan teks khusus
+  pembaca layar.
+
+### Files changed
+
+- `src/components/forms/login-form.tsx`
+- `src/app/(auth)/login/login.module.css`
+
+### Verification
+
+- `tsc --noEmit`: passed.
+- Targeted ESLint: passed.
+- `git diff --check`: passed.
+- Pengujian viewport mobile 390 × 844 memakai password dummy.
+- Tap pertama mengubah input `type="password"` menjadi `type="text"` dan label
+  menjadi “Sembunyikan password”.
+- Tap kedua mengembalikan `type="password"` dan label “Tampilkan password”.
+- Tidak ada form login yang dikirim selama pengujian.
+
+### Security and privacy note
+
+- Pengujian hanya menggunakan string dummy dan tidak memakai credential siswa.
+- Password tetap tersembunyi secara default dan tombol tidak mengubah proses
+  autentikasi server.
+
+---
+
+## EXISEL-20260806-009 — Memperbarui log seluruh perubahan sesi
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Technical documentation maintainer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “kalau sudah difixed update log.md semua perubahan yang tadi diprompt yak”
+
+### TLDR AI agents done
+
+Menambahkan catatan kronologis untuk redesign UI/UX, aset siswa SIJA, navbar
+Neo-Brutalism, perbaikan waktu sesi dan kode kehadiran, dukungan input mobile,
+tombol konfirmasi mobile, serta tombol tampil/sembunyi password.
+
+### Changes
+
+- Menambahkan entry `EXISEL-20260806-003` sampai `EXISEL-20260806-009`.
+- Mencatat prompt, akar masalah, file, perubahan, verifikasi, serta catatan
+  keamanan tanpa memasukkan credential atau data pribadi.
+
+### Files changed
+
+- `log.md`
+
+### Verification
+
+- Struktur entry mengikuti format Identity, Human Prompt, TLDR, Changes,
+  Verification, dan Security note.
+- Nomor execution ID dilanjutkan setelah `EXISEL-20260806-002`.
+
+### Security note
+
+- Log tidak mencantumkan email, password, NIS, token session, cookie, hash,
+  secret, atau kode kehadiran nyata dari screenshot.
+
+---
+
+## EXISEL-20260806-010 — Memperbaiki hydration tombol password melalui alamat Wi-Fi
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Next.js runtime and mobile interaction developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “saya udh uji coba diperangkat mobile hp namun blm bisa tombol lihat
+> password nyaa”
+
+### Root cause
+
+HP mengakses development server melalui alamat Wi-Fi
+`http://10.100.14.190:3000`, sedangkan Next.js 16 membatasi permintaan asset dan
+endpoint development dari origin tambahan secara default. HTML server tetap
+terlihat dan kontrol form native dapat digunakan, tetapi Client Component React
+berisiko tidak terhidrasi; akibatnya tombol tampil/sembunyi password yang
+membutuhkan JavaScript tidak merespons tap pada HP.
+
+### Changes
+
+- Menambahkan `allowedDevOrigins: ["10.100.14.190"]` pada `next.config.ts`.
+- Menambahkan fallback `onPointerUp` untuk perangkat touch dan stylus.
+- Menjaga `onClick` untuk mouse, keyboard, dan teknologi asistif.
+- Menambahkan guard 600 ms agar satu tap tidak diproses dua kali oleh rangkaian
+  event pointer dan click.
+- Menjaga fokus pada input password dan mengembalikan caret ke akhir nilai
+  setelah tipe input berubah.
+- Password tetap tersembunyi secara default dan tombol tetap `type="button"`.
+
+### Files changed
+
+- `next.config.ts`
+- `src/components/forms/login-form.tsx`
+- `log.md`
+
+### Verification
+
+- `tsc --noEmit`: passed.
+- Targeted ESLint untuk form login dan konfigurasi Next.js: passed.
+- `GET http://localhost:3000/login`: HTTP 200.
+- `GET http://10.100.14.190:3000/login`: HTTP 200.
+- Seluruh JavaScript chunk yang direferensikan halaman login melalui alamat
+  Wi-Fi merespons HTTP 200.
+- Pengujian tidak mengirim form login dan hanya menggunakan nilai dummy.
+
+### Security and privacy note
+
+- Origin yang diizinkan dibatasi pada alamat IPv4 Wi-Fi perangkat development
+  saat ini, bukan wildcard jaringan publik.
+- Tidak ada email, password, NIS, token, cookie, atau credential siswa yang
+  dicatat atau dikirim selama verifikasi.
+
+---
+
+## EXISEL-20260806-011 — Menambahkan fitur salin kode kehadiran
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Next.js admin UI and browser interaction developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “disamping kode kehadiran tambahin icon salin code disamping untuk fitur
+> saling code”
+
+### TLDR AI agents done
+
+Menambahkan tombol ikon salin di samping kode kehadiran aktif pada halaman admin
+ekskul. Tombol mengikuti gaya Neo-Brutalism, memberikan feedback berhasil atau
+gagal, dapat digunakan dengan keyboard dan pembaca layar, serta tetap bekerja
+pada HTTP alamat Wi-Fi melalui fallback clipboard.
+
+### Changes
+
+- Membuat Client Component kecil khusus operasi clipboard.
+- Menampilkan ikon dua lembar di samping kode aktif.
+- Mengubah ikon menjadi tanda centang dan menampilkan “Tersalin!” setelah copy
+  berhasil.
+- Menampilkan feedback “Gagal menyalin” jika browser menolak operasi copy.
+- Mengembalikan status tombol ke kondisi awal setelah 2,2 detik.
+- Menggunakan `navigator.clipboard.writeText` pada secure context.
+- Menggunakan fallback textarea sementara dan `execCommand("copy")` pada HTTP
+  jaringan lokal yang tidak menyediakan Clipboard API modern.
+- Menambahkan area sentuh 52 × 52 px di desktop dan 48 × 48 px di mobile.
+- Menambahkan hover, focus-visible, active press, `aria-label`, `aria-live`, dan
+  tooltip dinamis.
+
+### Files changed
+
+- `src/components/copy-attendance-code-button.tsx`
+- `src/app/(admin)/admin/esktrakulikuler/[nama_eskul]/page.tsx`
+- `src/app/(admin)/admin/esktrakulikuler/[nama_eskul]/admin-eskul.module.css`
+- `log.md`
+
+### Verification
+
+- `tsc --noEmit`: passed.
+- Targeted ESLint untuk tombol dan halaman admin: passed.
+- `git diff --check`: passed.
+- Tombol hanya dirender ketika terdapat sesi kode aktif.
+- Nilai kode diberikan dari Server Component sebagai prop serializable kepada
+  Client Component.
+
+### Security and privacy note
+
+- Operasi copy hanya dijalankan setelah tindakan pengguna pada tombol.
+- Kode tidak dikirim ke server atau layanan eksternal oleh fitur clipboard.
+- Nilai kode aktif tidak ditulis ke log.
+
+---
+
 ## EXISEL-20260806-012 — Navbar hamburger landing page pada mobile
 
 ### Identity
@@ -3819,6 +4336,166 @@ ditekan, ketiga menu yang sama dengan desktop muncul pada baris di bawah header.
 - Tidak ada perubahan pada autentikasi, database, session, API, maupun data
   siswa.
 - Tidak ada email, NIS, password, token, cookie, atau secret yang dicatat.
+
+---
+
+## EXISEL-20260806-013 — Menukar posisi tombol Masuk dan hamburger mobile
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Next.js responsive navigation developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “coba ubah navbar yang garis 3 nya jadi paling kanan dituker dengan buuton
+> masuk”
+
+### TLDR AI agents done
+
+Menukar posisi kontrol header landing page khusus mobile sehingga tombol Masuk
+berada di tengah dan tombol hamburger berada paling kanan, tanpa mengubah urutan
+atau tampilan navigasi desktop.
+
+### Changes
+
+- Menempatkan tombol Masuk pada kolom kedua grid header mobile.
+- Menempatkan tombol hamburger pada kolom ketiga dan paling kanan.
+- Mempertahankan panel About, Background, dan Explore di bawah header.
+- Membatasi perubahan pada breakpoint mobile maksimal 720 px.
+
+### Verification
+
+- Browser viewport 357 × 741 px: hamburger terukur di sebelah kanan tombol
+  Masuk.
+- Panel menu tetap terbuka dan seluruh tautan tetap terlihat.
+- Tidak terdapat horizontal overflow.
+- `pnpm typecheck`: passed.
+- `git diff --check`: passed.
+
+### Security note
+
+- Perubahan hanya menyentuh CSS presentasional landing page.
+- Tidak ada perubahan autentikasi, session, database, atau data siswa.
+
+---
+
+## EXISEL-20260806-014 — Menyamakan ekskul pilihan dengan jadwal hari ini
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Next.js student dashboard data developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “tolong yang eskul pilihan terupdate setiap hari nyaa massa hari ini ec
+> diatas nya basket help in fixed no mistakes”
+
+### TLDR AI agents done
+
+Menyatukan sumber data judul kartu Ekskul Pilihan dan informasi Hari ini.
+Ekskul berstatus APPROVED yang memiliki jadwal pada hari berjalan kini menjadi
+pilihan utama kartu; pendaftaran terbaru hanya digunakan sebagai fallback saat
+tidak ada jadwal hari itu.
+
+### Changes
+
+- Menghitung hari berdasarkan tanggal `Asia/Jakarta` yang sudah digunakan
+  dashboard.
+- Memprioritaskan `todayEnrollment` sebagai `activeEnrollment`.
+- Menjaga pendaftaran APPROVED terbaru sebagai fallback.
+- Menyamakan nama ekskul, status, jadwal, kehadiran, dan CTA pada kartu.
+
+### Verification
+
+- `2026-08-06` terdeteksi sebagai `THURSDAY`.
+- English Club menjadi pilihan kartu pada Kamis dan tidak lagi bertentangan
+  dengan teks Hari ini.
+- Targeted ESLint: passed.
+- `pnpm typecheck`: passed.
+- `pnpm build`: passed.
+
+### Security note
+
+- Tidak ada mutasi data pendaftaran atau jadwal.
+- Tidak ada credential, token, cookie, NIS, atau data pribadi yang dicatat.
+
+---
+
+## EXISEL-20260806-015 — Popup konfirmasi keluar untuk seluruh halaman siswa
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Next.js interaction and accessibility developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompts
+
+> “saat user mo keluar ada popup notif buat confirm mau keluar atau tidak tombol
+> nya harus sesuai dengan design web nyaa”
+
+> “popup nya ditengah”
+
+### TLDR AI agents done
+
+Mengganti logout langsung dengan popup konfirmasi Neo-Brutalism yang terpusat
+di layar. Komponen yang sama digunakan pada dashboard, katalog, detail ekskul,
+pendaftaran, dan kehadiran siswa.
+
+### Changes
+
+- Membuat Client Component `ConfirmLogoutButton` bersama.
+- Menggunakan dialog modal native dengan backdrop gelap dan blur ringan.
+- Menambahkan pilihan Batal dan Ya, keluar; hanya tombol konfirmasi yang
+  menjalankan Server Action logout.
+- Memusatkan kartu secara horizontal dan vertikal dengan posisi fixed,
+  `inset: 0`, margin dialog otomatis, dan margin kartu otomatis.
+- Menjadikan Batal sebagai fokus awal untuk mencegah logout tidak sengaja.
+- Mendukung penutupan melalui Batal, klik backdrop, dan tombol Escape.
+- Mengunci scroll selama popup terbuka dan memulihkannya setelah ditutup.
+- Menambahkan pending state, reduced-motion, focus ring, dan layout mobile.
+
+### Files changed
+
+- `src/components/confirm-logout-button.tsx`
+- `src/components/confirm-logout-button.module.css`
+- `src/app/(student)/dashboard/page.tsx`
+- `src/app/(student)/ekstrakurikuler/page.tsx`
+- `src/app/(student)/eskul/[nama_eskul]/page.tsx`
+- `src/app/(student)/daftar/eskul/page.tsx`
+- `src/app/(student)/kehadiran/page.tsx`
+- `log.md`
+
+### Verification
+
+- Popup mobile pada viewport 357 × 741 px: offset horizontal 0 px dan offset
+  vertikal 0 px.
+- Tombol Batal menutup popup tanpa menjalankan logout.
+- Tombol Escape menutup popup dan memulihkan scroll body.
+- Tombol konfirmasi terlihat tetapi tidak ditekan selama pengujian.
+- Targeted ESLint: passed.
+- `pnpm typecheck`: passed.
+- `pnpm build`: passed.
+
+### Security and privacy note
+
+- Logout tetap dijalankan oleh Server Action yang menghapus session lalu
+  mengarahkan pengguna ke `/login`.
+- Pengujian tidak menggunakan credential dan tidak menjalankan logout nyata.
+- Tidak ada email, password, NIS, token, cookie, atau secret yang dicatat.
 
 ---
 

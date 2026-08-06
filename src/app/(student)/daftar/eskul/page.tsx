@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { registerExtracurricularAction } from "@/actions/enrollment";
-import { logoutAction } from "@/actions/auth";
+import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
 import { EnrollmentSubmitButton } from "@/components/forms/enrollment-submit-button";
 import { StudentNavigation } from "@/components/student-navigation";
 import { getStudentRegistrationData } from "@/lib/auth/dal";
@@ -118,11 +118,7 @@ export default async function ExtracurricularRegistrationPage({
             <span className={styles.avatar} aria-hidden="true">
               {userInitial}
             </span>
-            <form action={logoutAction}>
-              <button className={styles.logoutButton} type="submit">
-                Keluar
-              </button>
-            </form>
+            <ConfirmLogoutButton className={styles.logoutButton} />
           </div>
         </div>
       </header>

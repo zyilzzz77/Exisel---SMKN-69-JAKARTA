@@ -68,7 +68,6 @@ export default async function AdminAttendanceDashboard({
       <div className={styles.announcement}>
         <span className={styles.liveDot} aria-hidden="true" />
         Portal monitoring admin & guru
-        <span className={styles.announcementNote}>PostgreSQL aktif</span>
       </div>
 
       <header className={styles.header}>

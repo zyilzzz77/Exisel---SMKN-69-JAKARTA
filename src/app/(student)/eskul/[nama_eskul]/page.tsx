@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { logoutAction } from "@/actions/auth";
+import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
 import { StudentNavigation } from "@/components/student-navigation";
 import { getStudentDashboard } from "@/lib/auth/dal";
 import styles from "./detail.module.css";
@@ -299,11 +299,7 @@ export default async function ExtracurricularDetailPage({
             <span className={styles.avatar} aria-hidden="true">
               {initials(user.name)}
             </span>
-            <form action={logoutAction}>
-              <button className={styles.logoutButton} type="submit">
-                Keluar <span aria-hidden="true">↗</span>
-              </button>
-            </form>
+            <ConfirmLogoutButton className={styles.logoutButton} />
           </div>
         </div>
       </header>

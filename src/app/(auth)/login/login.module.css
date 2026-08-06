@@ -430,9 +430,11 @@
 }
 
 .passwordToggle {
+  position: relative;
+  z-index: 3;
   display: grid;
-  width: 42px;
-  height: 34px;
+  width: 48px;
+  height: 48px;
   place-items: center;
   align-self: center;
   margin-right: 8px;
@@ -443,6 +445,8 @@
   color: var(--ink);
   cursor: pointer;
   font-family: var(--font-body), sans-serif;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .passwordToggle:hover,
@@ -458,6 +462,17 @@
   height: 13px;
   border: 2px solid currentColor;
   border-radius: 50% / 65%;
+  pointer-events: none;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .eyeIcon::after {
@@ -797,7 +812,10 @@
 
   .passwordToggle {
     position: absolute;
+    top: 50%;
     right: 6px;
+    margin-right: 0;
+    transform: translateY(-50%);
   }
 
   .passwordFrame input {

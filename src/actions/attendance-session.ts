@@ -6,9 +6,9 @@ import { z } from "zod";
 import { readSession } from "@/lib/auth/session";
 import { getPrisma } from "@/lib/database/prisma";
 import {
+  formatTimestampTime,
   getJakartaDateKey,
   getSchoolDay,
-  normalizePrismaJakartaTimestamp,
   toDatabaseDate,
 } from "@/lib/school-date";
 
@@ -23,24 +23,22 @@ export type AttendanceSessionState = {
   expiresAt?: string;
 };
 
-function formatTime(value: Date) {
-  return new Intl.DateTimeFormat("id-ID", {
-    timeZone: "Asia/Jakarta",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  })
-    .format(value)
-    .replace(".", ":");
+function slugify(value: string) {
+  return value
+    .toLocaleLowerCase("id-ID")
+    .normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
-function sessionExpiry(dateKey: string, endTime: Date) {
-  const pad = (value: number) => String(value).padStart(2, "0");
-  const expiry = new Date(
-    `${dateKey}T${pad(endTime.getUTCHours())}:${pad(endTime.getUTCMinutes())}:${pad(
-      endTime.getUTCSeconds(),
-    )}.000Z`,
-  );
+function sessionExpiry(dateKey: string, endTime: string) {
+  const match = /^(\d{2}):(\d{2})(?::(\d{2}))?/.exec(endTime);
+  if (!match) return null;
+
+  const [, hour, minute, second = "00"] = match;
+  const expiry = new Date(`${dateKey}T${hour}:${minute}:${second}.000+07:00`);
+  if (Number.isNaN(expiry.getTime())) return null;
+
   expiry.setUTCMinutes(expiry.getUTCMinutes() + 15);
   return expiry;
 }
@@ -80,24 +78,43 @@ export async function generateAttendanceSessionAction(
           where: { day },
           orderBy: { endTime: "desc" },
           take: 1,
-          select: { endTime: true },
+          select: { id: true },
         },
       },
     });
 
-    const endTime = program?.schedules[0]?.endTime;
-    if (!program || !endTime) {
+    const scheduleId = program?.schedules[0]?.id;
+    if (!program || !scheduleId) {
       return {
         status: "error",
         message: "Ekskul ini tidak memiliki jadwal kegiatan hari ini.",
       };
     }
 
-    const expiresAt = sessionExpiry(dateKey, endTime);
+    // Prisma's PostgreSQL adapter currently normalizes TIME columns as Date
+    // values inconsistently. Read the TIME value as text so 17:00 remains
+    // 17:00 when combined with today's Jakarta date.
+    const scheduleTimes = await prisma.$queryRaw<Array<{ endTime: string }>>`
+      SELECT "end_time"::text AS "endTime"
+      FROM "schedules"
+      WHERE "id" = CAST(${scheduleId} AS uuid)
+      LIMIT 1
+    `;
+    const expiresAt = scheduleTimes[0]?.endTime
+      ? sessionExpiry(dateKey, scheduleTimes[0].endTime)
+      : null;
+
+    if (!expiresAt) {
+      return {
+        status: "error",
+        message: "Waktu selesai kegiatan tidak valid. Periksa jadwal ekskul.",
+      };
+    }
+
     if (expiresAt.getTime() <= Date.now()) {
       return {
         status: "error",
-        message: `Sesi ${program.name} sudah berakhir pada ${formatTime(expiresAt)} dan tidak dapat dibuat ulang hari ini.`,
+        message: `Sesi ${program.name} sudah berakhir pada ${formatTimestampTime(expiresAt)} dan tidak dapat dibuat ulang hari ini.`,
       };
     }
     const existing = await prisma.attendanceSession.findUnique({
@@ -110,15 +127,12 @@ export async function generateAttendanceSessionAction(
       select: { code: true, expiresAt: true },
     });
 
-    const existingExpiresAt = existing
-      ? normalizePrismaJakartaTimestamp(existing.expiresAt)
-      : null;
-    if (existing && existingExpiresAt && existingExpiresAt.getTime() > Date.now()) {
+    if (existing && existing.expiresAt.getTime() > Date.now()) {
       return {
         status: "success",
         code: existing.code,
-        expiresAt: formatTime(existingExpiresAt),
-        message: `Kode ${program.name} masih aktif sampai ${formatTime(existingExpiresAt)}.`,
+        expiresAt: formatTimestampTime(existing.expiresAt),
+        message: `Kode ${program.name} masih aktif sampai ${formatTimestampTime(existing.expiresAt)}.`,
       };
     }
 
@@ -144,13 +158,14 @@ export async function generateAttendanceSessionAction(
       },
     });
 
-    revalidatePath(`/admin/esktrakulikuler/${program.name.toLowerCase().replaceAll(" ", "-")}`);
+    revalidatePath(`/admin/esktrakulikuler/${slugify(program.name)}`);
+    revalidatePath("/admin/laporan");
     revalidatePath("/kehadiran");
     return {
       status: "success",
       code,
-      expiresAt: formatTime(expiresAt),
-      message: `Kode ${program.name} aktif sampai ${formatTime(expiresAt)}.`,
+      expiresAt: formatTimestampTime(expiresAt),
+      message: `Kode ${program.name} aktif sampai ${formatTimestampTime(expiresAt)}.`,
     };
   } catch {
     return {

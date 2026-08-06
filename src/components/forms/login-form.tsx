@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useId, useState } from "react";
+import { useActionState, useId, useRef, useState } from "react";
 import { loginAction, type LoginState } from "@/actions/auth";
 import styles from "@/app/(auth)/login/login.module.css";
 
@@ -11,6 +11,8 @@ const initialLoginState: LoginState = {
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+  const lastTouchToggleAt = useRef(0);
   const [state, formAction, pending] = useActionState(
     loginAction,
     initialLoginState,
@@ -19,6 +21,18 @@ export function LoginForm() {
   const emailErrorId = useId();
   const passwordHintId = useId();
   const passwordErrorId = useId();
+
+  function togglePassword() {
+    setShowPassword((current) => !current);
+    window.requestAnimationFrame(() => {
+      const input = passwordInputRef.current;
+      if (!input) return;
+
+      input.focus({ preventScroll: true });
+      const caretPosition = input.value.length;
+      input.setSelectionRange(caretPosition, caretPosition);
+    });
+  }
 
   return (
     <form className={styles.form} action={formAction}>
@@ -65,6 +79,7 @@ export function LoginForm() {
             02
           </span>
           <input
+            ref={passwordInputRef}
             id="password"
             name="password"
             type={showPassword ? "text" : "password"}
@@ -79,9 +94,20 @@ export function LoginForm() {
             required
           />
           <button
+            aria-controls="password"
             className={styles.passwordToggle}
             type="button"
-            onClick={() => setShowPassword((current) => !current)}
+            onClick={() => {
+              if (Date.now() - lastTouchToggleAt.current < 600) return;
+              togglePassword();
+            }}
+            onPointerUp={(event) => {
+              if (event.pointerType !== "touch" && event.pointerType !== "pen") return;
+
+              event.preventDefault();
+              lastTouchToggleAt.current = Date.now();
+              togglePassword();
+            }}
             aria-pressed={showPassword}
             aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
           >
@@ -91,6 +117,9 @@ export function LoginForm() {
               }`}
               aria-hidden="true"
             />
+            <span className={styles.srOnly}>
+              {showPassword ? "Sembunyikan password" : "Tampilkan password"}
+            </span>
           </button>
         </div>
         {state.errors?.password ? (
