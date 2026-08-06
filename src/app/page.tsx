@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { LandingNavigation } from "@/components/landing-navigation";
 import { ScrollRevealController } from "@/components/scroll-reveal-controller";
-import { StudentNavigation } from "@/components/student-navigation";
 
 const extracurriculars = [
   {
@@ -124,11 +124,7 @@ export default function Home() {
             </span>
           </Link>
 
-          <StudentNavigation
-            ariaLabel="Navigasi utama"
-            className="desktop-nav"
-            variant="landing"
-          />
+          <LandingNavigation />
 
           <Link className="button button-small button-light" href="/login">
             Masuk <span aria-hidden="true">↗</span>

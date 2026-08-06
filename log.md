@@ -3757,5 +3757,70 @@ mengubah struktur TSX, konten teks, avatar, maupun tombol logout.
 
 ---
 
+## EXISEL-20260806-012 — Navbar hamburger landing page pada mobile
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Next.js responsive navigation developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “ditampilan mobile dipages utama dijadikan humberger / garis 3 saat dipencet
+> garis 3 nyaa memunculkan menu navbar nya seperti didekstop”
+
+### TLDR AI agents done
+
+Mengubah navigasi About, Background, dan Explore pada landing page menjadi menu
+hamburger khusus layar mobile. Header mobile sekarang menampilkan identitas
+EXISEL, tombol hamburger, dan tombol Masuk dalam satu baris. Saat hamburger
+ditekan, ketiga menu yang sama dengan desktop muncul pada baris di bawah header.
+
+### Changes
+
+- Membuat Client Component `LandingNavigation` untuk mengelola status buka dan
+  tutup menu tanpa mengubah landing page menjadi Client Component.
+- Menyembunyikan navigasi landing pada viewport maksimal 720 px dan
+  menampilkan tombol hamburger tiga garis berukuran 42 × 42 px.
+- Mengubah ikon hamburger menjadi ikon tutup ketika menu terbuka.
+- Menampilkan About, Background, dan Explore dalam panel tiga kolom yang tetap
+  mengikuti gaya Neo-Brutalism navbar desktop.
+- Menutup menu otomatis setelah salah satu tautan dipilih.
+- Menambahkan dukungan tombol Escape, `aria-controls`, `aria-expanded`, dan
+  label tombol dinamis untuk aksesibilitas.
+- Mempertahankan tampilan desktop/tablet dan navigasi halaman siswa lainnya.
+
+### Files changed
+
+- `src/components/landing-navigation.tsx`
+- `src/components/student-navigation.tsx`
+- `src/app/page.tsx`
+- `src/app/globals.css`
+- `log.md`
+
+### Verification
+
+- `pnpm typecheck`: passed.
+- Targeted ESLint untuk landing page dan komponen navigasi: passed.
+- `GET http://localhost:3000/`: HTTP 200.
+- Browser viewport 357 × 741 px: hamburger terlihat dan menu tersembunyi pada
+  kondisi awal.
+- Setelah hamburger ditekan: About, Background, dan Explore terlihat serta
+  `aria-expanded` berubah menjadi `true`.
+- Tidak terdapat horizontal overflow pada kondisi menu tertutup maupun terbuka.
+
+### Security and privacy note
+
+- Perubahan hanya menyentuh presentasi dan interaksi navigasi frontend.
+- Tidak ada perubahan pada autentikasi, database, session, API, maupun data
+  siswa.
+- Tidak ada email, NIS, password, token, cookie, atau secret yang dicatat.
+
+---
+
 _End of log. Future changes must append a new execution entry with Identity,
 Human Prompt, TLDR AI agents done, Changes, Verification, and Security note._

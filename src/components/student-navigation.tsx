@@ -53,6 +53,8 @@ type StudentNavigationProps = {
   activeItem?: NavigationItemId;
   ariaLabel?: string;
   className: string;
+  id?: string;
+  onNavigate?: () => void;
   variant?: "landing" | "student";
 };
 
@@ -60,13 +62,19 @@ export function StudentNavigation({
   activeItem,
   ariaLabel = "Navigasi siswa",
   className,
+  id,
+  onNavigate,
   variant = "student",
 }: StudentNavigationProps) {
   const navigationItems =
     variant === "landing" ? landingNavigationItems : studentNavigationItems;
 
   return (
-    <nav className={`${className} ${styles.nav}`} aria-label={ariaLabel}>
+    <nav
+      className={`${className} ${styles.nav}`}
+      aria-label={ariaLabel}
+      id={id}
+    >
       {navigationItems.map((item) => {
         const isActive = item.id === activeItem;
 
@@ -76,6 +84,7 @@ export function StudentNavigation({
             className={`${styles.link} ${isActive ? styles.active : ""}`}
             href={item.href}
             key={item.id}
+            onClick={onNavigate}
           >
             {item.label}
           </Link>

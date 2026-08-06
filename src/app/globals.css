@@ -256,6 +256,10 @@ a {
   background: var(--orange-light);
 }
 
+.mobile-menu-toggle {
+  display: none;
+}
+
 .header-inner > .button {
   justify-self: end;
 }
@@ -1307,27 +1311,91 @@ a {
 
   .header-inner {
     min-height: 68px;
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 8px;
   }
 
   .desktop-nav {
-    justify-content: flex-start;
-    gap: 2px;
-    overflow-x: auto;
-    padding-bottom: 8px;
-    font-size: 9px;
-    scrollbar-width: none;
-    white-space: nowrap;
+    display: none;
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    overflow: visible;
+    padding-bottom: 14px;
+    white-space: normal;
   }
 
-  .desktop-nav::-webkit-scrollbar {
-    display: none;
+  .desktop-nav.mobile-menu-open {
+    display: grid;
+    animation: mobile-menu-enter 180ms ease-out both;
   }
 
   .desktop-nav a {
-    min-height: 34px;
-    padding: 5px 8px;
-    box-shadow: none;
+    width: 100%;
+    min-height: 40px;
+    padding: 7px 6px;
+    font-size: 10px;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex;
+    width: 42px;
+    height: 42px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    justify-self: end;
+    padding: 0;
+    border: 3px solid var(--ink);
+    border-radius: 9px;
+    background: var(--white);
+    box-shadow: 3px 3px 0 var(--ink);
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease,
+      box-shadow 150ms ease,
+      transform 150ms ease;
+  }
+
+  .mobile-menu-toggle span {
+    display: block;
+    width: 20px;
+    height: 3px;
+    border-radius: 999px;
+    background: currentColor;
+    transition: opacity 150ms ease, transform 150ms ease;
+  }
+
+  .mobile-menu-toggle:hover,
+  .mobile-menu-toggle:focus-visible,
+  .mobile-menu-toggle-open {
+    background: var(--blue);
+    color: var(--white);
+  }
+
+  .mobile-menu-toggle:focus-visible {
+    outline: 3px solid var(--orange);
+    outline-offset: 3px;
+  }
+
+  .mobile-menu-toggle:active {
+    box-shadow: 1px 1px 0 var(--ink);
+    transform: translate(2px, 2px);
+  }
+
+  .mobile-menu-toggle-open span:first-child {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .mobile-menu-toggle-open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-toggle-open span:last-child {
+    transform: translateY(-8px) rotate(-45deg);
   }
 
   .brand-copy small {
@@ -1631,6 +1699,18 @@ a {
   .footer-links {
     flex-direction: column;
     gap: 12px;
+  }
+}
+
+@keyframes mobile-menu-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
