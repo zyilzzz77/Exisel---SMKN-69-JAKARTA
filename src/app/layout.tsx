@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
+import { EskulChatbot } from "@/components/eskul-chatbot";
 import "./globals.css";
 
 const displayFont = Space_Grotesk({
@@ -41,7 +42,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id" className={`${displayFont.variable} ${bodyFont.variable}`}>
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        {children}
+        <EskulChatbot />
+      </body>
     </html>
   );
 }

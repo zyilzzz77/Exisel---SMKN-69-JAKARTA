@@ -95,7 +95,10 @@ export const getStudentAttendanceData = cache(
                   take: 1,
                 },
                 attendanceSessions: {
-                  where: { sessionDate: attendanceDate },
+                  where: {
+                    sessionDate: attendanceDate,
+                    expiresAt: { gt: new Date() },
+                  },
                   orderBy: { createdAt: "desc" },
                   take: 1,
                   select: { expiresAt: true },

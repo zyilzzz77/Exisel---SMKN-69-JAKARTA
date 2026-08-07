@@ -19,7 +19,7 @@ export function AttendanceSessionForm({ extracurricularId }: { extracurricularId
     <form action={formAction} className={styles.sessionForm}>
       <input name="extracurricularId" type="hidden" value={extracurricularId} />
       <button disabled={pending} type="submit">
-        {pending ? "Membuat kode..." : "Generate kode kehadiran"}
+        {pending ? "Mengaktifkan QR..." : "Aktifkan QR dinamis"}
         <span aria-hidden="true">→</span>
       </button>
       {state.message ? (

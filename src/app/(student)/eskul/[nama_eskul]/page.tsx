@@ -140,11 +140,34 @@ const programDetails: Record<
 };
 
 const programLogos: Record<string, string> = {
+  PMR: "/logo-pmr.png",
   "English Club": "/logo-english-club.png",
   Nihon: "/logo-nihon.png",
   Basket: "/logo-basket.png",
   ITC: "/logo-itc.png",
   Pramuka: "/logo-pramuka.png",
+  Futsal: "/logo-futsal.png",
+};
+
+const programDocumentation: Record<
+  string,
+  {
+    src: string;
+    alt: string;
+    title: string;
+    description: string;
+    caption: string;
+  }
+> = {
+  PMR: {
+    src: "/dokumentasi-pmr-agenda-2025.png",
+    alt: "Kolase dokumentasi agenda PMR SMKN 69 Jakarta pada 20 Oktober 2025",
+    title: "Belajar langsung lewat simulasi dan aksi.",
+    description:
+      "Anggota PMR berlatih tandu, pertolongan pertama, serta simulasi penanganan korban bersama pembina dan teman satu tim.",
+    caption:
+      "Dokumentasi agenda PMR SMKN 69 Jakarta — Senin, 20 Oktober 2025.",
+  },
 };
 
 function slugify(value: string) {
@@ -257,6 +280,7 @@ export default async function ExtracurricularDetailPage({
     100,
   );
   const logo = programLogos[program.name];
+  const documentation = programDocumentation[program.name];
 
   return (
     <main className={styles.page}>
@@ -406,6 +430,37 @@ export default async function ExtracurricularDetailPage({
             </blockquote>
           </div>
         </section>
+
+        {documentation ? (
+          <section
+            className={styles.documentationSection}
+            id="dokumentasi"
+            aria-labelledby="documentation-title"
+          >
+            <div className={styles.documentationCopy}>
+              <p className={styles.eyebrow}>Dokumentasi kegiatan</p>
+              <h2 id="documentation-title">{documentation.title}</h2>
+              <p>{documentation.description}</p>
+              <div className={styles.documentationMeta}>
+                <span>Agenda PMR</span>
+                <strong>20 Oktober 2025</strong>
+              </div>
+            </div>
+
+            <figure className={styles.documentationFigure}>
+              <div className={styles.documentationFrame}>
+                <Image
+                  alt={documentation.alt}
+                  height={1600}
+                  sizes="(max-width: 760px) calc(100vw - 80px), (max-width: 1080px) 460px, 420px"
+                  src={documentation.src}
+                  width={720}
+                />
+              </div>
+              <figcaption>{documentation.caption}</figcaption>
+            </figure>
+          </section>
+        ) : null}
 
         <section className={styles.skillsSection} aria-labelledby="skills-title">
           <div className={styles.sectionHeading}>

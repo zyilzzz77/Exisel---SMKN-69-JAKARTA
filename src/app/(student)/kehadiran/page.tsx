@@ -54,7 +54,9 @@ export default async function AttendancePage({
 
       <div className={styles.announcement}>
         <span className={styles.liveDot} aria-hidden="true" />
-        Kehadiran ekskul / {data.formattedDate}
+        <span className={styles.announcementText}>
+          Kehadiran ekskul / {data.formattedDate}
+        </span>
         <span className={styles.announcementNote}>Waktu Jakarta</span>
       </div>
 
@@ -127,18 +129,7 @@ export default async function AttendancePage({
             <AttendanceForm
               className={data.user.className ?? "Kelas belum tercatat"}
               existingAttendance={selectedProgram.attendance}
-              attendanceCodeExpiresAt={
-                selectedProgram.attendanceCodeExpiresAt
-                  ? new Intl.DateTimeFormat("id-ID", {
-                      timeZone: "Asia/Jakarta",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: false,
-                    })
-                      .format(selectedProgram.attendanceCodeExpiresAt)
-                      .replace(".", ":")
-                  : null
-              }
+              attendanceSessionActive={Boolean(selectedProgram.attendanceCodeExpiresAt)}
               extracurricularId={selectedProgram.id}
               extracurricularName={selectedProgram.name}
               key={`${selectedProgram.id}-${selectedProgram.attendance?.status ?? "new"}`}

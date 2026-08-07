@@ -98,28 +98,6 @@
   text-transform: uppercase;
 }
 
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.nav a {
-  padding-block: 8px;
-  border-bottom: 3px solid transparent;
-}
-
-.nav a:hover,
-.nav a:focus-visible,
-.nav .activeNav {
-  border-bottom-color: var(--orange);
-  color: var(--blue);
-}
-
 .accountArea {
   display: flex;
   align-items: center;

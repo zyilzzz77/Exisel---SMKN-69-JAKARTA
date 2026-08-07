@@ -1,0 +1,55 @@
+services:
+  database:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-exisel}
+      POSTGRES_USER: ${POSTGRES_USER:-exisel}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Isi POSTGRES_PASSWORD di file .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - exisel
+
+  migrate:
+    build:
+      context: .
+      target: migrator
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-exisel}:${POSTGRES_PASSWORD:?Isi POSTGRES_PASSWORD di file .env}@database:5432/${POSTGRES_DB:-exisel}?schema=public
+    command: ["pnpm", "db:migrate"]
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: "no"
+    networks:
+      - exisel
+
+  app:
+    build:
+      context: .
+      target: runner
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-exisel}:${POSTGRES_PASSWORD:?Isi POSTGRES_PASSWORD di file .env}@database:5432/${POSTGRES_DB:-exisel}?schema=public
+      SESSION_SECRET: ${SESSION_SECRET:?Isi SESSION_SECRET di file .env}
+      # Localhost/LAN Docker runs over HTTP. Set true only behind HTTPS.
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    networks:
+      - exisel
+
+volumes:
+  postgres_data:
+
+networks:
+  exisel:

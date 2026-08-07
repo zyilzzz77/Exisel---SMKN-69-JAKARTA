@@ -1,6 +1,6 @@
 "use server";
 
-import { randomInt } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { readSession } from "@/lib/auth/session";
@@ -19,7 +19,6 @@ const sessionSchema = z.object({
 export type AttendanceSessionState = {
   status: "idle" | "success" | "error";
   message: string;
-  code?: string;
   expiresAt?: string;
 };
 
@@ -130,13 +129,12 @@ export async function generateAttendanceSessionAction(
     if (existing && existing.expiresAt.getTime() > Date.now()) {
       return {
         status: "success",
-        code: existing.code,
         expiresAt: formatTimestampTime(existing.expiresAt),
-        message: `Kode ${program.name} masih aktif sampai ${formatTimestampTime(existing.expiresAt)}.`,
+        message: `Sesi QR ${program.name} masih aktif sampai ${formatTimestampTime(existing.expiresAt)}.`,
       };
     }
 
-    const code = String(randomInt(100000, 1000000));
+    const code = randomBytes(6).toString("hex");
     await prisma.attendanceSession.upsert({
       where: {
         extracurricularId_sessionDate: {
@@ -163,14 +161,13 @@ export async function generateAttendanceSessionAction(
     revalidatePath("/kehadiran");
     return {
       status: "success",
-      code,
       expiresAt: formatTimestampTime(expiresAt),
-      message: `Kode ${program.name} aktif sampai ${formatTimestampTime(expiresAt)}.`,
+      message: `QR dinamis ${program.name} aktif sampai ${formatTimestampTime(expiresAt)}.`,
     };
   } catch {
     return {
       status: "error",
-      message: "Kode belum dapat dibuat. Pastikan database aktif lalu coba lagi.",
+      message: "Sesi QR belum dapat dibuat. Pastikan database aktif lalu coba lagi.",
     };
   }
 }

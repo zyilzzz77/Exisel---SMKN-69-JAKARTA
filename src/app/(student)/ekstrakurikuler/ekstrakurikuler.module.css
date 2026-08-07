@@ -104,55 +104,6 @@
   text-transform: uppercase;
 }
 
-.navigation {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.navigation a {
-  display: inline-flex;
-  min-height: 42px;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  border: var(--border);
-  border-radius: 10px;
-  background: var(--surface);
-  box-shadow: 4px 4px 0 var(--ink);
-  text-decoration: none;
-  transition: background-color 150ms ease, color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
-}
-
-.navigation a:hover,
-.navigation a:focus-visible {
-  background: var(--blue);
-  color: var(--white);
-  outline: none;
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--ink);
-}
-
-.navigation a:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--ink);
-}
-
-.navigation .activeNav {
-  background: var(--orange);
-  color: var(--ink);
-}
-
-.navigation .activeNav:hover,
-.navigation .activeNav:focus-visible {
-  background: var(--orange);
-  color: var(--ink);
-  transform: none;
-  box-shadow: 4px 4px 0 var(--ink);
-}
-
 .accountActions {
   display: flex;
   align-items: center;

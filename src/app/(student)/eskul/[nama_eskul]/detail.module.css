@@ -98,26 +98,6 @@
   text-transform: uppercase;
 }
 
-.navigation {
-  display: flex;
-  align-items: center;
-  gap: 26px;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.navigation a {
-  padding-block: 7px;
-  border-bottom: 3px solid transparent;
-}
-
-.navigation a:hover,
-.navigation a:focus-visible,
-.navigation .activeNav {
-  border-bottom-color: var(--orange);
-  outline: none;
-}
-
 .accountActions {
   display: flex;
   align-items: center;
@@ -442,6 +422,89 @@
   line-height: 0;
 }
 
+.documentationSection {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.72fr);
+  align-items: center;
+  gap: clamp(40px, 6vw, 76px);
+  margin-bottom: 112px;
+  padding: clamp(32px, 5vw, 64px);
+  border: var(--border);
+  background: var(--orange);
+  box-shadow: 10px 10px 0 var(--ink);
+}
+
+.documentationCopy h2 {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(42px, 5.6vw, 72px);
+  font-weight: 800;
+  letter-spacing: -0.065em;
+  line-height: 0.92;
+}
+
+.documentationCopy > p:last-of-type {
+  max-width: 600px;
+  margin: 24px 0 0;
+  font-size: 17px;
+}
+
+.documentationMeta {
+  display: grid;
+  width: fit-content;
+  gap: 2px;
+  margin-top: 34px;
+  padding: 12px 16px;
+  border: 3px solid var(--ink);
+  background: var(--white);
+  box-shadow: 4px 4px 0 var(--ink);
+  text-transform: uppercase;
+}
+
+.documentationMeta span {
+  color: var(--blue);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.documentationMeta strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 15px;
+}
+
+.documentationFigure {
+  margin: 0;
+}
+
+.documentationFrame {
+  position: relative;
+  width: min(100%, 420px);
+  aspect-ratio: 9 / 16;
+  margin-inline: auto;
+  overflow: hidden;
+  border: var(--border);
+  background: var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  transform: rotate(1deg);
+}
+
+.documentationFrame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 48%;
+}
+
+.documentationFigure figcaption {
+  max-width: 420px;
+  margin: 18px auto 0;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
 .skillsSection {
   margin-inline: calc(50% - 50vw);
   padding: 96px max(40px, calc((100vw - 1280px) / 2));
@@ -687,8 +750,14 @@
   }
 
   .scheduleSection,
-  .registrationSection {
+  .registrationSection,
+  .documentationSection {
     grid-template-columns: 1fr;
+  }
+
+  .documentationFrame,
+  .documentationFigure figcaption {
+    max-width: 460px;
   }
 }
 
@@ -802,13 +871,35 @@
 
   .sectionHeading h2,
   .scheduleIntro h2,
-  .registrationSection h2 {
+  .registrationSection h2,
+  .documentationCopy h2 {
     font-size: 42px;
   }
 
   .storySection,
   .skillsSection {
     padding-bottom: 76px;
+  }
+
+  .documentationSection {
+    gap: 34px;
+    margin-bottom: 76px;
+    padding: 28px 22px;
+    box-shadow: 7px 7px 0 var(--ink);
+  }
+
+  .documentationCopy > p:last-of-type {
+    font-size: 14px;
+  }
+
+  .documentationFrame {
+    width: min(100%, 340px);
+    box-shadow: 5px 5px 0 var(--ink);
+    transform: none;
+  }
+
+  .documentationFigure figcaption {
+    width: min(100%, 340px);
   }
 
   .storyGrid,

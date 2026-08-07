@@ -21,6 +21,15 @@ function getSessionKey() {
   return new TextEncoder().encode(secret);
 }
 
+function shouldUseSecureCookie() {
+  const configuredValue = process.env.SESSION_COOKIE_SECURE;
+
+  if (configuredValue === "true") return true;
+  if (configuredValue === "false") return false;
+
+  return process.env.NODE_ENV === "production";
+}
+
 export async function createSession(payload: Pick<SessionPayload, "userId" | "role">) {
   const expiresAt = new Date(Date.now() + SESSION_DURATION_SECONDS * 1000);
   const token = await new SignJWT(payload)
@@ -32,7 +41,7 @@ export async function createSession(payload: Pick<SessionPayload, "userId" | "ro
   const cookieStore = await cookies();
   cookieStore.set(SESSION_COOKIE, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: shouldUseSecureCookie(),
     sameSite: "lax",
     expires: expiresAt,
     path: "/",

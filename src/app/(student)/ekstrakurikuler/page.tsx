@@ -90,7 +90,13 @@ const programPresentation: Record<
     tone: "orange",
     logo: "/logo-pramuka.png",
   },
-  Futsal: { order: 8, number: "08", category: "Olahraga", tone: "white" },
+  Futsal: {
+    order: 8,
+    number: "08",
+    category: "Olahraga",
+    tone: "white",
+    logo: "/logo-futsal.png",
+  },
 };
 
 const toneClasses: Record<string, string> = {

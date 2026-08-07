@@ -4499,5 +4499,532 @@ pendaftaran, dan kehadiran siswa.
 
 ---
 
+## EXISEL-20260806-016 — Menyeragamkan navbar siswa menjadi biru dan stabil
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Next.js responsive navigation and UI consistency developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompts
+
+> “ubah warna navbar nya ini jadi warna biru aja seperti bagian landing page
+> awal, kamu keren harus bisa ya”
+
+> “masih ada bug nih, masih ada warna orange di navbarnya, dan juga ketika di
+> klik pada navbar kehadiran komposisi button mengecil, kamu hebat harus bisa ya”
+
+### TLDR AI agents done
+
+Menjadikan navigasi aktif pada seluruh halaman siswa berwarna biru secara
+konsisten, menghapus sisa indikator oranye, dan mencegah ukuran maupun posisi
+tombol berubah ketika ditekan. Aturan navigasi yang sebelumnya tersebar pada
+masing-masing halaman dipusatkan pada komponen navigasi bersama.
+
+### Changes
+
+- Menambahkan layout, jarak, ukuran minimum, dan tipografi navbar pada stylesheet
+  komponen `StudentNavigation` bersama.
+- Mengubah tombol aktif dari oranye menjadi biru dengan teks putih.
+- Mengubah focus ring menjadi biru muda agar konsisten dengan palet baru.
+- Menghapus transform dan perubahan shadow saat tombol ditekan agar komposisi
+  tombol tidak mengecil atau bergeser.
+- Menjaga ukuran active, hover, focus, dan pressed state tetap identik.
+- Menghapus aturan navigasi lokal yang duplikat dan saling menimpa dari seluruh
+  halaman siswa yang menggunakan navbar bersama.
+
+### Files changed
+
+- `src/components/student-navigation.module.css`
+- `src/app/(student)/dashboard/dashboard.module.css`
+- `src/app/(student)/ekstrakurikuler/ekstrakurikuler.module.css`
+- `src/app/(student)/kehadiran/attendance.module.css`
+- `src/app/(student)/daftar/eskul/registration.module.css`
+- `src/app/(student)/eskul/[nama_eskul]/detail.module.css`
+
+### Verification
+
+- Active navigation menggunakan latar biru dan teks putih.
+- Sisa garis atau active state oranye pada navbar siswa tidak ditemukan.
+- Tombol Kehadiran tidak berubah ukuran, posisi, atau shadow saat ditekan.
+- Shared navigation tetap responsif pada halaman dashboard, pilihan ekskul,
+  kehadiran, pendaftaran, dan detail ekskul.
+- Targeted browser verification: passed.
+- `pnpm lint`: passed.
+- `pnpm typecheck`: passed.
+- `pnpm build`: passed.
+
+### Security and privacy note
+
+- Perubahan hanya menyentuh stylesheet presentasional.
+- Tidak ada perubahan pada autentikasi, session, database, API, atau data siswa.
+- Tidak ada credential, token, cookie, atau data pribadi yang dicatat.
+
+---
+
+## EXISEL-20260806-017 — Menambahkan ticker silang Join Now
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Next.js landing-page motion and responsive UI developer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “kamu harus membuat pergerakan menjadi lebih cepat dari kanan ke kiri, lalu
+> kamu harus buat satu lagi dengan bentuk menyilang lalu untuk warnanya orange
+> aja, lalu kata kata nya yaitu ‘Join Now!’”
+
+### TLDR AI agents done
+
+Mengubah ticker pilihan ekstrakurikuler menjadi marquee biru yang bergerak
+lebih cepat dan terus-menerus dari kanan ke kiri, lalu menambahkan ticker kedua
+berwarna oranye bertuliskan “Join Now!” yang melintang diagonal di atasnya.
+
+### Changes
+
+- Mengubah ticker biru dari animasi bolak-balik 26 detik menjadi animasi satu
+  arah 14 detik dari kanan ke kiri.
+- Menggunakan dua salinan grup konten agar perulangan marquee berlangsung
+  seamless tanpa ruang kosong atau lompatan visual.
+- Menambahkan pita oranye dengan teks “Join Now!” dan pemisah bintang putih.
+- Menjalankan ticker oranye selama 10 detik per putaran dari kanan ke kiri.
+- Menyusun pita biru horizontal dan pita oranye diagonal sebesar -6 derajat
+  sehingga keduanya membentuk komposisi silang.
+- Menggunakan sudut -10 derajat dan lebar tambahan pada layar maksimal 600 px
+  agar efek silang dan keterbacaan tetap terjaga pada mobile.
+- Menambahkan label aksesibel pada kedua ticker dan menyembunyikan salinan
+  dekoratif dari pembaca layar.
+
+### Files changed
+
+- `src/app/page.tsx`
+- `src/app/globals.css`
+
+### Verification
+
+- Ticker biru: durasi 14 detik, direction normal, iteration infinite.
+- Ticker oranye: durasi 10 detik, direction normal, iteration infinite.
+- Teks “Join Now!” tampil pada pita oranye.
+- Visual desktop 1280 × 800 px: dua ticker terlihat bersilang dan terbaca.
+- Visual mobile 375 × 812 px: sudut responsif diterapkan dan ticker tetap
+  berada di dalam area halaman.
+- `pnpm lint`: passed.
+- `pnpm typecheck`: passed.
+- `pnpm build`: passed.
+- `git diff --check`: passed.
+
+### Security and privacy note
+
+- Perubahan hanya menyentuh markup dan CSS landing page.
+- Tidak ada perubahan pada autentikasi, database, session, maupun data siswa.
+- Tidak ada layanan eksternal atau aset pihak ketiga yang ditambahkan.
+
+---
+
+## EXISEL-20260806-018 — Memperbarui log seluruh perubahan terbaru
+
+### Identity
+
+- **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Role:** Technical documentation agent
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “sama update log.md dari semua perubahan”
+
+### TLDR AI agents done
+
+Menambahkan audit trail untuk perbaikan warna dan kestabilan navbar siswa serta
+ticker silang “Join Now!” pada landing page, termasuk file yang berubah, detail
+implementasi, hasil pengujian, dan catatan keamanan.
+
+### Changes
+
+- Menambahkan entry `EXISEL-20260806-016` sampai `EXISEL-20260806-018`.
+- Mencatat seluruh perubahan produk yang masih berada pada working tree.
+- Mempertahankan struktur Identity, Human Prompt, TLDR, Changes, Verification,
+  dan Security note yang digunakan entry sebelumnya.
+
+### Files changed
+
+- `log.md`
+
+### Verification
+
+- Nomor execution ID dilanjutkan setelah `EXISEL-20260806-015`.
+- Seluruh file produk yang berubah tercantum dalam entry terkait.
+- Log tidak memuat credential, data pribadi siswa, atau nilai session.
+
+### Security note
+
+- Dokumentasi tidak mencantumkan email, password, NIS, token, cookie, secret,
+  hash, atau kode kehadiran nyata.
+
+---
+
+## EXISEL-20260807-019 — Menyiapkan runtime Docker dan autentikasi localhost
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompts
+
+> “ini saya mau jalanin nya pakai docker apakah bisa”
+
+> “oke jalanin container untuk test local host”
+
+> “lah kan sebelumnya udh ada 36 akun dipostgres sql”
+
+### TLDR AI agents done
+
+Menambahkan image produksi multi-stage, PostgreSQL 16, migrator Prisma, health
+check, volume persisten, dokumentasi environment, serta konfigurasi cookie
+session yang dapat digunakan melalui HTTP localhost/LAN saat pengujian Docker.
+
+### Changes
+
+- Menambahkan `.dockerignore`, `.env.docker.example`, `Dockerfile`, dan
+  `compose.yml`.
+- Menggunakan volume `postgres_data` agar akun PostgreSQL tidak hilang ketika
+  container aplikasi dibuat ulang.
+- Menambahkan `SESSION_COOKIE_SECURE` dengan default aman untuk production dan
+  override `false` khusus localhost Docker.
+- Memperbarui README dan konfigurasi Next.js untuk workflow Docker/LAN.
+
+### Verification
+
+- Docker build produksi: passed.
+- Migration container: completed.
+- PostgreSQL health check: healthy.
+- Aplikasi tersedia pada `http://localhost:3000`.
+
+### Security note
+
+Nilai database password, session secret, cookie, dan credential akun tidak
+dicatat atau dimasukkan ke source control.
+
+---
+
+## EXISEL-20260807-020 — Menyeragamkan card ekskul, logo, routing, dan responsivitas
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompts
+
+> “sesuaikan warna card nya sama seperti di bagian semua eskul, lalu untuk card
+> halaman depan ditambah gambar dari card semua eskul”
+
+> “dimobile 2 card”
+
+> “direct nya ke /eskul/nama_eskul ... benerin ui/ux ... diberbagai tampilan
+> devices serta animasi card saat diklik”
+
+### TLDR AI agents done
+
+Menyatukan warna dan logo card ekskul pada landing, dashboard, katalog, serta
+detail; memperbaiki tujuan link menjadi `/eskul/[nama_eskul]`; dan menata grid
+dua card pada mobile dengan ukuran serta pressed-state yang konsisten.
+
+### Changes
+
+- Memperbarui landing page, dashboard, katalog, detail, dan stylesheet terkait.
+- Menambahkan alias `/ekstrakulikuler` untuk kompatibilitas ejaan route yang
+  digunakan tombol dashboard.
+- Menjaga kartu olahraga memiliki dimensi yang sama.
+- Menambahkan transisi klik yang konsisten dengan tombol Neo-Brutalism lain.
+
+### Verification
+
+- Routing card menuju `/eskul/[slug]`.
+- Grid dan ukuran card responsif pada desktop dan mobile.
+- TypeScript, ESLint, dan build Next.js: passed.
+
+### Security note
+
+Perubahan bersifat presentasional dan routing; tidak mengubah data akun.
+
+---
+
+## EXISEL-20260807-021 — Menambahkan dokumentasi dan identitas visual PMR
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “dipages http://localhost:3000/eskul/pmr tambahin photo dokumentasi dan
+> tambahin logo eskul nyaa”
+
+### TLDR AI agents done
+
+Menambahkan logo PMR pada hero detail dan galeri dokumentasi agenda PMR yang
+responsif, lengkap dengan teks alternatif, caption, serta frame yang mengikuti
+design system aplikasi.
+
+### Files changed
+
+- `public/dokumentasi-pmr-agenda-2025.png`
+- `src/app/(student)/eskul/[nama_eskul]/page.tsx`
+- `src/app/(student)/eskul/[nama_eskul]/detail.module.css`
+
+### Verification
+
+- Aset dapat dilayani Next.js.
+- Detail PMR tetap responsif dan dapat dibangun untuk production.
+
+### Security note
+
+Aset dokumentasi tidak digunakan sebagai credential atau input autentikasi.
+
+---
+
+## EXISEL-20260807-022 — Memperbaiki navigasi dashboard dan navbar kehadiran mobile
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompts
+
+> “jelajahi eskul pada mobile tidak berfungsi ke page menu eskul”
+
+> “seharusnya ... direct ke pages /ekstrakulikuler”
+
+> “navbar atas ui/ux nya berantakan dipages kehaidran tolong difixed”
+
+### TLDR AI agents done
+
+Memperbaiki CTA Jelajahi Ekskul agar mempertahankan session siswa dan menuju
+katalog yang benar, serta merapikan announcement, brand, navbar, avatar, dan
+aksi akun pada halaman kehadiran mobile.
+
+### Changes
+
+- Memperbarui route target dashboard dan menyediakan alias route katalog.
+- Menggunakan `StudentNavigation` bersama agar status aktif stabil.
+- Menata header kehadiran pada viewport sempit tanpa overflow horizontal.
+- Memperbaiki konfigurasi secure cookie untuk lingkungan HTTP Docker.
+
+### Verification
+
+- Link dashboard tidak lagi salah menuju login akibat cookie localhost.
+- Header mobile tidak meluber secara horizontal.
+- Lint, typecheck, dan build: passed.
+
+### Security note
+
+Session tetap menggunakan JWT bertanda tangan, cookie HttpOnly, dan SameSite
+Lax. Override cookie non-secure hanya ditujukan untuk HTTP lokal.
+
+---
+
+## EXISEL-20260807-023 — Menambahkan EksiBot berbasis dataset keyword
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompts
+
+> “saya mau tambahin fitur chatbot untuk menanyakan eskul nya dipojok kanan
+> bawah”
+
+> “tambahin keyword kalau ada yang hello atau hallo atau nanya nanya exisel”
+
+> “harus bisa jawab ... setiap eskul ... namsel apa? smkn 69 dimana”
+
+### TLDR AI agents done
+
+Membuat EksiBot lokal berbasis dataset keyword yang dapat menjawab salam,
+informasi EXISEL/NAMSEL/SMKN 69, daftar ekskul, jadwal, lokasi, kapasitas,
+rekomendasi minat, serta cara pendaftaran tanpa mengirim percakapan ke layanan
+AI eksternal.
+
+### Files changed
+
+- `src/components/eskul-chatbot.tsx`
+- `src/components/eskul-chatbot.module.css`
+- `src/lib/chatbot/eskul-keyword-dataset.ts`
+- `src/app/layout.tsx`
+
+### Verification
+
+- Popup desktop dan mobile dapat dibuka, diisi, dan ditutup.
+- Tampilan mobile dibuat sebagai panel ringkas, bukan full screen.
+- Dataset mencakup delapan ekskul dan identitas sekolah.
+- Lint, typecheck, dan build: passed.
+
+### Security note
+
+Pesan chatbot diproses di browser dan tidak disimpan ke database.
+
+---
+
+## EXISEL-20260807-024 — Mengganti kode kehadiran dengan QR dinamis empat detik
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompts
+
+> “ubah sistem code kehadiran menjadi sistem barcode berganti 4 detik dan setiap
+> berganti barcode nya expired”
+
+> “fitur kamera nya ... dibawah fitur opsi kehadiran ... pemidai otomatis ...
+> asal izin kamera diizinkan”
+
+### TLDR AI agents done
+
+Mengganti kode hadir enam digit dengan QR dinamis bertanda tangan yang berganti
+setiap empat detik, serta menanamkan pemindai kamera otomatis langsung di bawah
+opsi Hadir pada form siswa. Validasi final selalu dilakukan backend.
+
+### Changes
+
+- Menambahkan endpoint admin `GET /api/attendance/qr` tanpa cache.
+- Menambahkan generator dan validator HMAC yang mengikat token ke versi,
+  ekskul, tanggal Jakarta, bucket empat detik, nonce sesi, dan session secret.
+- Menggunakan perbandingan signature constant-time dan menolak bucket lama
+  tanpa grace period.
+- Mengganti kode sesi dengan nonce acak 12 karakter yang tidak dikirim ke
+  browser.
+- Menambahkan QR canvas admin, countdown, progress, dan refresh terjadwal.
+- Menambahkan scanner kamera belakang siswa menggunakan `@zxing/browser` dan
+  submission otomatis ke Server Action.
+- Mempertahankan alur Izin dengan alasan wajib.
+- Menambahkan `qrcode`, `@zxing/browser`, serta type declaration QRCode.
+
+### Verification
+
+- QR pada bucket aktif diterima.
+- QR yang sama pada bucket berikutnya ditolak.
+- QR untuk ekskul berbeda ditolak.
+- TypeScript, ESLint, Next.js production build, dan Docker build: passed.
+- Container aplikasi dan PostgreSQL: running/healthy.
+
+### Security note
+
+Endpoint QR hanya dapat diakses admin. Kamera browser membutuhkan HTTPS atau
+pengecualian localhost; alamat IP HTTP pada mobile tidak dianggap secure
+context oleh browser modern.
+
+---
+
+## EXISEL-20260807-025 — Menambahkan logo Futsal pada seluruh presentasi card
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “tambahin logo futsal setiap card futsal”
+
+### TLDR AI agents done
+
+Menambahkan aset logo Futsal yang diberikan pengguna dan memetakannya pada
+landing page, katalog seluruh ekskul, dashboard siswa, halaman detail Futsal,
+serta halaman admin Futsal.
+
+### Files changed
+
+- `public/logo-futsal.png`
+- `src/app/page.tsx`
+- `src/app/(student)/ekstrakurikuler/page.tsx`
+- `src/app/(student)/dashboard/page.tsx`
+- `src/app/(student)/eskul/[nama_eskul]/page.tsx`
+- `src/app/(admin)/admin/esktrakulikuler/[nama_eskul]/page.tsx`
+
+### Verification
+
+- Logo dan landing page memberikan HTTP 200.
+- ESLint, TypeScript, Next.js production build, dan Docker build: passed.
+- Container aplikasi dan PostgreSQL: running.
+
+### Security note
+
+Logo merupakan aset visual dan tidak memuat credential aplikasi.
+
+---
+
+## EXISEL-20260807-026 — Memperbarui log dan menyiapkan release commit
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “update log.md dan psuh commit perubahan yang baru”
+
+### TLDR AI agents done
+
+Memperbarui audit trail perubahan Docker, UI/routing, dokumentasi PMR,
+EksiBot, QR kehadiran, dan logo Futsal; menjalankan pemeriksaan release; lalu
+menyiapkan commit dan push ke repository origin.
+
+### Verification
+
+- Folder nested repository dan data privat tidak dimasukkan ke commit.
+- Secret serta credential tidak ditulis ke log.
+- Pemeriksaan release dicatat pada hasil commit/push eksekusi ini.
+
+### Security note
+
+Commit hanya berisi source, konfigurasi contoh, dokumentasi, dan aset aplikasi;
+nilai `.env`, database volume, serta kredensial tidak disertakan.
+
+---
+
 _End of log. Future changes must append a new execution entry with Identity,
 Human Prompt, TLDR AI agents done, Changes, Verification, and Security note._

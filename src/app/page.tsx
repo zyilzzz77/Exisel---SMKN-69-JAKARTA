@@ -10,13 +10,15 @@ const extracurriculars = [
     category: "Kemanusiaan",
     day: "Senin & Selasa",
     tone: "blue",
+    logo: "/logo-pmr.png",
   },
   {
     number: "02",
     name: "English Club",
     category: "Bahasa",
     day: "Kamis",
-    tone: "orange",
+    tone: "pink",
+    logo: "/logo-english-club.png",
   },
   {
     number: "03",
@@ -24,6 +26,7 @@ const extracurriculars = [
     category: "Bahasa & Budaya",
     day: "Selasa",
     tone: "white",
+    logo: "/logo-nihon.png",
   },
   {
     number: "04",
@@ -31,13 +34,15 @@ const extracurriculars = [
     category: "Olahraga",
     day: "Senin",
     tone: "lavender",
+    logo: "/logo-basket.png",
   },
   {
     number: "05",
     name: "ITC",
     category: "Teknologi",
     day: "Jumat",
-    tone: "orange",
+    tone: "navy",
+    logo: "/logo-itc.png",
   },
   {
     number: "06",
@@ -45,13 +50,15 @@ const extracurriculars = [
     category: "Kepemimpinan",
     day: "Selasa",
     tone: "blue",
+    logo: "/logo-paskibra.png",
   },
   {
     number: "07",
     name: "Pramuka",
     category: "Kepanduan",
     day: "Rabu",
-    tone: "green",
+    tone: "orange",
+    logo: "/logo-pramuka.png",
   },
   {
     number: "08",
@@ -59,6 +66,7 @@ const extracurriculars = [
     category: "Olahraga",
     day: "Jumat",
     tone: "white",
+    logo: "/logo-futsal.png",
   },
 ] as const;
 
@@ -82,9 +90,6 @@ const steps = [
       "Konfirmasi pilihanmu dan pantau status pendaftaran dari satu dashboard.",
   },
 ] as const;
-
-const elevatedCardMotion =
-  "group relative z-0 transform-gpu origin-center will-change-transform transition-[transform,box-shadow,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:z-10 hover:-translate-x-1 hover:-translate-y-2 hover:scale-[1.025] hover:shadow-[16px_16px_0_var(--ink)] hover:brightness-[1.02] focus-within:z-10 focus-within:-translate-x-1 focus-within:-translate-y-2 focus-within:scale-[1.025] focus-within:shadow-[16px_16px_0_var(--ink)] active:translate-x-1 active:translate-y-1 active:scale-[0.99] active:shadow-none active:duration-100";
 
 const softCardMotion =
   "will-change-transform transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 focus-within:-translate-y-1 hover:shadow-[8px_8px_0_var(--ink)] focus-within:shadow-[8px_8px_0_var(--ink)] active:translate-x-1 active:translate-y-1 active:shadow-none active:duration-100";
@@ -209,13 +214,44 @@ export default function Home() {
           </div>
         </section>
 
-        <div className="ticker" aria-label="Pilihan ekstrakurikuler tersedia">
-          <div className="ticker-track">
-            {extracurriculars.map((item) => (
-              <span key={item.name}>
-                {item.name} <b aria-hidden="true">✦</b>
-              </span>
-            ))}
+        <div className="ticker-stage">
+          <div
+            className="ticker ticker-blue"
+            aria-label="Pilihan ekstrakurikuler tersedia"
+          >
+            <div className="ticker-track ticker-track-programs">
+              {[0, 1].map((copyIndex) => (
+                <div
+                  className="ticker-group"
+                  key={copyIndex}
+                  aria-hidden={copyIndex === 1 ? "true" : undefined}
+                >
+                  {extracurriculars.map((item) => (
+                    <span key={`${copyIndex}-${item.name}`}>
+                      {item.name} <b aria-hidden="true">✦</b>
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="ticker ticker-orange" aria-label="Join Now!">
+            <div className="ticker-track ticker-track-join">
+              {[0, 1].map((copyIndex) => (
+                <div
+                  className="ticker-group ticker-join-group"
+                  key={copyIndex}
+                  aria-hidden={copyIndex === 1 ? "true" : undefined}
+                >
+                  {Array.from({ length: 8 }, (_, itemIndex) => (
+                    <span key={`${copyIndex}-${itemIndex}`}>
+                      Join Now! <b aria-hidden="true">✦</b>
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -234,17 +270,34 @@ export default function Home() {
 
             <div className="program-grid">
               {extracurriculars.map((item) => (
-                <article
-                  className={`program-card program-card-${item.tone} ${elevatedCardMotion}`}
+                <Link
+                  className={`program-card program-card-${item.tone} group`}
+                  href={`/eskul/${item.name.toLowerCase().replaceAll(" ", "-")}`}
                   key={item.name}
+                  aria-label={`Lihat detail ekstrakurikuler ${item.name}`}
                 >
                   <div className="program-card-top transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-focus-within:-translate-y-0.5">
                     <span className="program-number">{item.number}</span>
                     <span className="chip">{item.category}</span>
                   </div>
-                  <h3 className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-hover:scale-[1.015] group-focus-within:translate-x-1 group-focus-within:scale-[1.015]">
-                    {item.name}
-                  </h3>
+                  <div
+                    className={`program-card-body ${"logo" in item ? "" : "program-card-body-text"}`}
+                  >
+                    <h3 className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-hover:scale-[1.015] group-focus-within:translate-x-1 group-focus-within:scale-[1.015]">
+                      {item.name}
+                    </h3>
+                    {"logo" in item ? (
+                      <span className="program-logo" aria-hidden="true">
+                        <Image
+                          src={item.logo}
+                          alt=""
+                          width={320}
+                          height={320}
+                          sizes="(max-width: 720px) 58px, 96px"
+                        />
+                      </span>
+                    ) : null}
+                  </div>
                   <div className="program-card-bottom transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0.5 group-focus-within:translate-y-0.5">
                     <p>
                       <span>Jadwal</span>
@@ -254,15 +307,11 @@ export default function Home() {
                       <span>Waktu</span>
                       <strong>15.45–17.00</strong>
                     </p>
-                    <Link
-                      className="round-link"
-                      href={`/ekstrakurikuler/${item.name.toLowerCase().replaceAll(" ", "-")}`}
-                      aria-label={`Lihat detail ${item.name}`}
-                    >
+                    <span className="round-link" aria-hidden="true">
                       ↗
-                    </Link>
+                    </span>
                   </div>
-                </article>
+                </Link>
               ))}
             </div>
 

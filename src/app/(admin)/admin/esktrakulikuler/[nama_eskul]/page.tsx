@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
-import { CopyAttendanceCodeButton } from "@/components/copy-attendance-code-button";
+import { AttendanceQrDisplay } from "@/components/attendance-qr-display";
 import { AttendanceSessionForm } from "@/components/forms/attendance-session-form";
 import { readSession } from "@/lib/auth/session";
 import { getPrisma } from "@/lib/database/prisma";
@@ -33,6 +33,7 @@ const logos: Record<string, string> = {
   Basket: "/logo-basket.png",
   ITC: "/logo-itc.png",
   "English Club": "/logo-english-club.png",
+  Futsal: "/logo-futsal.png",
 };
 
 function slugify(value: string) {
@@ -73,7 +74,7 @@ export default async function AdminExtracurricularSessionPage({ params }: PagePr
         where: { sessionDate: attendanceDate, expiresAt: { gt: new Date() } },
         orderBy: { createdAt: "desc" },
         take: 1,
-        select: { code: true, expiresAt: true, createdAt: true },
+        select: { expiresAt: true, createdAt: true },
       },
     },
   });
@@ -103,8 +104,8 @@ export default async function AdminExtracurricularSessionPage({ params }: PagePr
         <section className={styles.hero}>
           <div>
             <p className={styles.eyebrow}>Sesi hari ini / {dateKey}</p>
-            <h1>Kode kehadiran <span>{program.name}.</span></h1>
-            <p>Generate satu kode untuk dibagikan admin, guru, atau pembina saat kegiatan berlangsung.</p>
+            <h1>QR kehadiran <span>{program.name}.</span></h1>
+            <p>Tampilkan QR dinamis kepada siswa. QR berganti setiap 4 detik dan token sebelumnya langsung kedaluwarsa.</p>
           </div>
           <div className={styles.logoFrame}>
             {logos[program.name] ? <Image alt={`Logo ${program.name}`} height={220} src={logos[program.name]} width={220} /> : <strong>{program.name.slice(0, 2).toUpperCase()}</strong>}
@@ -123,23 +124,17 @@ export default async function AdminExtracurricularSessionPage({ params }: PagePr
             <p className={styles.muted}>{program.description}</p>
           </article>
           <article className={styles.sessionCard}>
-            <span className={styles.cardNumber}>02 / Sesi kode</span>
+            <span className={styles.cardNumber}>02 / Sesi QR dinamis</span>
             {activeSession ? (
-              <div className={styles.currentCode}>
-                <small>Kode aktif</small>
-                <div className={styles.codeRow}>
-                  <strong>{activeSession.code}</strong>
-                  <CopyAttendanceCodeButton code={activeSession.code} />
-                </div>
-                <span>
-                  Berlaku sampai {formatTimestampTime(activeSession.expiresAt)}
-                </span>
-              </div>
+              <>
+                <AttendanceQrDisplay extracurricularId={program.id} programName={program.name} />
+                <p className={styles.qrSessionEnd}>Sesi berakhir {formatTimestampTime(activeSession.expiresAt)}</p>
+              </>
             ) : (
-              <p className={styles.muted}>Belum ada kode aktif untuk agenda ini.</p>
+              <p className={styles.muted}>Belum ada QR aktif untuk agenda ini.</p>
             )}
             {schedule ? <AttendanceSessionForm extracurricularId={program.id} /> : null}
-            <p className={styles.sessionRule}>Kode otomatis berakhir 15 menit setelah waktu selesai kegiatan.</p>
+            <p className={styles.sessionRule}>Setiap QR hanya berlaku pada siklus 4 detiknya. Seluruh sesi berakhir 15 menit setelah kegiatan selesai.</p>
           </article>
         </section>
       </div>

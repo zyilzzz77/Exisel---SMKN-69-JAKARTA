@@ -5,6 +5,7 @@ import {
   submitAttendanceAction,
   type AttendanceState,
 } from "@/actions/attendance";
+import { AttendanceQrScanner } from "@/components/attendance-qr-scanner";
 import styles from "@/app/(student)/kehadiran/attendance.module.css";
 
 const initialState: AttendanceState = {
@@ -21,7 +22,7 @@ type AttendanceFormProps = {
     status: "PRESENT" | "EXCUSED" | "ABSENT";
     reason: string | null;
   } | null;
-  attendanceCodeExpiresAt: string | null;
+  attendanceSessionActive: boolean;
 };
 
 export function AttendanceForm({
@@ -30,7 +31,7 @@ export function AttendanceForm({
   extracurricularId,
   extracurricularName,
   existingAttendance,
-  attendanceCodeExpiresAt,
+  attendanceSessionActive,
 }: AttendanceFormProps) {
   const [state, formAction, pending] = useActionState(
     submitAttendanceAction,
@@ -44,7 +45,6 @@ export function AttendanceForm({
       ? existingAttendance.status
       : "",
   );
-  const [attendanceCode, setAttendanceCode] = useState("");
 
   if (existingAttendance) {
     const statusLabel =
@@ -160,7 +160,6 @@ export function AttendanceForm({
               name="status"
               onChange={() => {
                 setAttendanceStatus("EXCUSED");
-                setAttendanceCode("");
               }}
               required
               type="radio"
@@ -196,43 +195,12 @@ export function AttendanceForm({
             <p className={styles.fieldError}>{state.errors.reason[0]}</p>
           ) : null}
         </label>
-      ) : (
-        <label className={`${styles.reasonField} ${styles.attendanceCodeField}`}>
-          <span>03 / Kode kehadiran</span>
-          <input
-            aria-describedby="attendance-code-help"
-            aria-label="Kode kehadiran 6 digit"
-            autoComplete="one-time-code"
-            enterKeyHint="done"
-            id="attendance-code"
-            inputMode="numeric"
-            maxLength={6}
-            minLength={6}
-            name="attendanceCode"
-            onChange={(event) => {
-              setAttendanceCode(event.currentTarget.value.replace(/\D/g, "").slice(0, 6));
-            }}
-            onFocus={() => {
-              if (attendanceStatus !== "PRESENT") {
-                setAttendanceStatus("PRESENT");
-              }
-            }}
-            pattern="[0-9]{6}"
-            placeholder="Contoh: 123456"
-            required={attendanceStatus === "PRESENT"}
-            type="text"
-            value={attendanceCode}
-          />
-          <small id="attendance-code-help">
-            {attendanceCodeExpiresAt
-              ? `Masukkan 6 angka. Kode berlaku sampai ${attendanceCodeExpiresAt}.`
-              : "Masukkan 6 angka dari admin/guru. Menyentuh kolom ini otomatis memilih status Hadir."}
-          </small>
-          {state.errors?.attendanceCode ? (
-            <p className={styles.fieldError}>{state.errors.attendanceCode[0]}</p>
-          ) : null}
-        </label>
-      )}
+      ) : attendanceStatus === "PRESENT" ? (
+        <AttendanceQrScanner
+          extracurricularId={extracurricularId}
+          sessionActive={attendanceSessionActive}
+        />
+      ) : null}
 
       {state.message ? (
         <div
@@ -248,14 +216,12 @@ export function AttendanceForm({
         </div>
       ) : null}
 
-      <button
-        className={styles.submitButton}
-        disabled={pending}
-        type="submit"
-      >
-        <span>{pending ? "Menyimpan..." : "Submit kehadiran"}</span>
-        <span aria-hidden="true">→</span>
-      </button>
+      {attendanceStatus === "EXCUSED" ? (
+        <button className={styles.submitButton} disabled={pending} type="submit">
+          <span>{pending ? "Menyimpan..." : "Submit izin"}</span>
+          <span aria-hidden="true">→</span>
+        </button>
+      ) : null}
     </form>
   );
 }

@@ -41,6 +41,32 @@ const schoolWeekDays = [
   { day: "FRIDAY", label: "Jumat" },
 ] as const;
 
+const programPresentation: Record<
+  string,
+  {
+    tone: "blue" | "navy" | "orange" | "pink" | "white" | "lavender";
+    logo?: string;
+  }
+> = {
+  PMR: { tone: "blue", logo: "/logo-pmr.png" },
+  "English Club": { tone: "pink", logo: "/logo-english-club.png" },
+  Nihon: { tone: "white", logo: "/logo-nihon.png" },
+  Basket: { tone: "lavender", logo: "/logo-basket.png" },
+  ITC: { tone: "navy", logo: "/logo-itc.png" },
+  Paskibra: { tone: "blue", logo: "/logo-paskibra.png" },
+  Pramuka: { tone: "orange", logo: "/logo-pramuka.png" },
+  Futsal: { tone: "white", logo: "/logo-futsal.png" },
+};
+
+const programToneClasses = {
+  blue: styles.programBlue,
+  navy: styles.programNavy,
+  orange: styles.programOrange,
+  pink: styles.programPink,
+  white: styles.programWhite,
+  lavender: styles.programLavender,
+} as const;
+
 function formatTime(value: Date) {
   return new Intl.DateTimeFormat("id-ID", {
     hour: "2-digit",
@@ -124,12 +150,6 @@ export default async function DashboardPage() {
     (total, weekDay) => total + weekDay.events.length,
     0,
   );
-  const programTones = [
-    styles.programBlue,
-    styles.programOrange,
-    styles.programLight,
-  ];
-
   return (
     <main className={styles.page}>
       <a className="skip-link" href="#dashboard-content">
@@ -187,8 +207,8 @@ export default async function DashboardPage() {
               dari satu tempat.
             </p>
             <div className={styles.heroActions}>
-              <Link className={styles.primaryButton} href="/ekstrakurikuler">
-                Jelajahi ekskul <span aria-hidden="true">↓</span>
+              <Link className={styles.primaryButton} href="/ekstrakulikuler">
+                Jelajahi ekskul <span aria-hidden="true">→</span>
               </Link>
               <a className={styles.textLink} href="#jadwal">
                 Lihat jadwalmu <span aria-hidden="true">→</span>
@@ -377,6 +397,9 @@ export default async function DashboardPage() {
           <div className={styles.programGrid}>
             {extracurriculars.slice(0, 3).map((program, index) => {
               const schedule = program.schedules[0];
+              const presentation = programPresentation[program.name] ?? {
+                tone: "white" as const,
+              };
               const remainingSeats = Math.max(
                 program.capacity - program._count.enrollments,
                 0,
@@ -384,16 +407,33 @@ export default async function DashboardPage() {
 
               return (
                 <article
-                  className={`${styles.programCard} ${programTones[index]}`}
+                  className={`${styles.programCard} ${programToneClasses[presentation.tone]}`}
                   key={program.id}
                 >
                   <div className={styles.programTop}>
                     <span>0{index + 1}</span>
                     <span className={styles.seatBadge}>{remainingSeats} kursi</span>
                   </div>
-                  <div className={styles.programBody}>
-                    <h3>{program.name}</h3>
-                    <p>{program.description}</p>
+                  <div
+                    className={`${styles.programBody} ${
+                      presentation.logo ? styles.programBodyWithLogo : ""
+                    }`}
+                  >
+                    <div className={styles.programCopy}>
+                      <h3>{program.name}</h3>
+                      <p>{program.description}</p>
+                    </div>
+                    {presentation.logo ? (
+                      <span className={styles.programLogo} aria-hidden="true">
+                        <Image
+                          src={presentation.logo}
+                          alt=""
+                          width={320}
+                          height={320}
+                          sizes="(max-width: 760px) 92px, (max-width: 1080px) 104px, 112px"
+                        />
+                      </span>
+                    ) : null}
                   </div>
                   <div className={styles.programMeta}>
                     <p>

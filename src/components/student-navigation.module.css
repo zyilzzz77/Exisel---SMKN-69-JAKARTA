@@ -1,3 +1,11 @@
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
 .nav .link {
   display: inline-flex;
   min-height: 42px;
@@ -30,25 +38,25 @@
 }
 
 .nav .link:focus-visible {
-  outline: 3px solid var(--orange);
+  outline: 3px solid var(--blue-light);
   outline-offset: 3px;
 }
 
 .nav .link:active {
-  box-shadow: 1px 1px 0 var(--ink);
-  transform: translate(3px, 3px);
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: none;
 }
 
 .nav .active {
-  background: var(--orange);
-  color: var(--ink);
+  background: var(--blue);
+  color: var(--white);
 }
 
 .nav .active:hover,
 .nav .active:focus-visible {
-  background: var(--orange);
+  background: var(--blue);
   box-shadow: 4px 4px 0 var(--ink);
-  color: var(--ink);
+  color: var(--white);
   transform: none;
 }
 

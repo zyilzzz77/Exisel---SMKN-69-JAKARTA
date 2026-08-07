@@ -7,7 +7,6 @@ const REVEAL_SELECTOR = [
   ".hero-visual",
   ".ticker",
   ".section-heading",
-  ".program-card",
   ".section-kicker",
   ".step-card",
   ".feature-intro",

@@ -49,4 +49,14 @@
 .sessionMessage { margin:0; padding:10px; border:3px solid var(--ink); background:var(--orange-light); color:var(--ink); font-size:12px; font-weight:800; }
 .sessionMessageError { margin:0; padding:10px; border:3px solid var(--ink); background:#fee2e2; color:#991b1b; font-size:12px; font-weight:800; }
 .sessionRule { margin:18px 0 0; font-size:11px; font-weight:700; line-height:1.5; }
+.qrDisplay { display:grid; grid-template-columns:minmax(190px,260px) 1fr; align-items:center; gap:22px; margin:24px 0 18px; }
+.qrCanvasFrame { display:grid; place-items:center; padding:10px; border:4px solid var(--ink); background:var(--white); box-shadow:6px 6px 0 var(--ink); }
+.qrCanvasFrame canvas { display:block; width:100% !important; height:auto !important; aspect-ratio:1; }
+.qrMeta { display:grid; gap:7px; min-width:0; }
+.qrMeta strong { font-family:var(--font-display),sans-serif; font-size:20px; line-height:1.1; }
+.qrMeta span,.qrMeta small { color:var(--blue-light); font-size:10px; font-weight:700; }
+.qrProgress { height:10px; overflow:hidden; border:2px solid var(--white); background:var(--ink); }
+.qrProgress i { display:block; height:100%; background:var(--orange); transition:width 100ms linear; }
+.qrSessionEnd { margin:0 0 16px; color:var(--white); font-size:10px; font-weight:900; text-transform:uppercase; }
 @media (max-width:760px) { .header,.header nav { align-items:flex-start; flex-direction:column; } .hero,.grid { grid-template-columns:1fr; } .logoFrame { width:160px; } .currentCode strong { font-size:58px; } .codeRow { gap:14px; } .copyCodeButton { width:48px; height:48px; } }
+@media (max-width:560px) { .qrDisplay { grid-template-columns:1fr; } .qrCanvasFrame { width:min(100%,280px); margin-inline:auto; } .qrMeta { text-align:center; } }

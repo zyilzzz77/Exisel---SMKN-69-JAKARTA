@@ -31,9 +31,14 @@
 .liveDot {
   width: 10px;
   height: 10px;
+  flex: 0 0 auto;
   border: 2px solid var(--ink);
   border-radius: 50%;
   background: #4fe06f;
+}
+
+.announcementText {
+  min-width: 0;
 }
 
 .announcementNote {
@@ -91,24 +96,6 @@
   font-size: 8px;
   font-weight: 800;
   text-transform: uppercase;
-}
-
-.navigation {
-  display: flex;
-  gap: 26px;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.navigation a {
-  padding-block: 8px;
-  border-bottom: 3px solid transparent;
-}
-
-.navigation a:hover,
-.navigation a:focus-visible,
-.navigation .activeNav {
-  border-bottom-color: var(--orange);
 }
 
 .accountActions {
@@ -476,6 +463,116 @@
   letter-spacing: 0.16em;
 }
 
+.scannerPanel {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 18px;
+  border: 3px solid var(--ink);
+  background: #0b0d14;
+  color: var(--white);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.scannerHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.scannerHeading span {
+  color: #8eb2ff;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.scannerHeading h3 {
+  margin: 4px 0 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 23px;
+}
+
+.scannerBadge {
+  flex: 0 0 auto;
+  padding: 6px 9px;
+  border: 2px solid var(--white);
+  border-radius: 999px;
+  background: #123fcb;
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+.cameraViewport {
+  position: relative;
+  display: grid;
+  min-height: 310px;
+  place-items: center;
+  overflow: hidden;
+  border: 3px solid var(--white);
+  background: #171a23;
+}
+
+.cameraViewport video {
+  width: 100%;
+  height: 100%;
+  min-height: 310px;
+  object-fit: cover;
+}
+
+.cameraViewport > p,
+.scanProcessing {
+  position: absolute;
+  z-index: 3;
+  margin: 0;
+  padding: 10px 14px;
+  border: 2px solid var(--white);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .8);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.scanCorners {
+  position: absolute;
+  z-index: 2;
+  width: min(62%, 250px);
+  aspect-ratio: 1;
+}
+
+.scanCorners i {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-color: var(--orange);
+  border-style: solid;
+}
+
+.scanCorners i:nth-child(1) { top: 0; left: 0; border-width: 5px 0 0 5px; }
+.scanCorners i:nth-child(2) { top: 0; right: 0; border-width: 5px 5px 0 0; }
+.scanCorners i:nth-child(3) { bottom: 0; left: 0; border-width: 0 0 5px 5px; }
+.scanCorners i:nth-child(4) { right: 0; bottom: 0; border-width: 0 5px 5px 0; }
+
+.cameraError {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  max-width: 420px;
+  gap: 9px;
+  margin: 18px;
+  padding: 18px;
+  border: 3px solid var(--white);
+  background: #171a23;
+  text-align: center;
+}
+
+.cameraError span { font-size: 10px; line-height: 1.5; }
+.cameraError button { padding: 10px; border: 2px solid var(--ink); background: var(--orange); font: inherit; font-size: 9px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+.scannerHint { margin: 0; color: #cbd5ed; font-size: 9px; line-height: 1.5; }
+.scannerForm { display: none; }
+
 .reasonField small {
   color: var(--muted);
   font-size: 9px;
@@ -719,7 +816,7 @@
     grid-template-columns: 1fr auto;
   }
 
-  .navigation {
+  .headerInner .navigation {
     display: none;
   }
 
@@ -745,8 +842,34 @@
     display: none;
   }
 
+  .announcement {
+    gap: 7px;
+    padding-inline: 10px;
+    font-size: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .announcementText {
+    white-space: nowrap;
+  }
+
   .headerInner {
     min-height: 72px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .accountActions {
+    gap: 0;
+  }
+
+  .avatar {
+    width: 38px;
+    height: 38px;
   }
 
   .hero {
@@ -780,6 +903,12 @@
     padding-inline: 16px;
     font-size: 22px;
   }
+
+  .scannerPanel { margin-inline: -8px; padding: 12px; }
+  .scannerHeading { align-items: flex-start; }
+  .scannerHeading h3 { font-size: 19px; }
+  .cameraViewport,
+  .cameraViewport video { min-height: 250px; }
 
   .fullField {
     grid-column: auto;

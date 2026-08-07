@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { readSession } from "@/lib/auth/session";
 import { getPrisma } from "@/lib/database/prisma";
+import { validateAttendanceQrPayload } from "@/lib/attendance/rotating-qr";
 import {
   getJakartaDateKey,
   getSchoolDay,
@@ -17,15 +18,15 @@ const attendanceSchema = z
     status: z.enum(["PRESENT", "EXCUSED"], {
       message: "Pilih Hadir atau Izin.",
     }),
-    attendanceCode: z.string().trim().max(12, "Kode kehadiran tidak valid."),
+    attendanceToken: z.string().trim().max(512, "QR kehadiran tidak valid."),
     reason: z.string().trim().max(500, "Alasan maksimal 500 karakter."),
   })
   .superRefine((value, context) => {
-    if (value.status === "PRESENT" && !/^\d{6}$/.test(value.attendanceCode)) {
+    if (value.status === "PRESENT" && !value.attendanceToken) {
       context.addIssue({
         code: "custom",
-        path: ["attendanceCode"],
-        message: "Masukkan kode kehadiran 6 digit dari admin/guru.",
+        path: ["attendanceToken"],
+        message: "Pindai QR kehadiran terbaru dari admin/guru.",
       });
     }
 
@@ -44,7 +45,7 @@ export type AttendanceState = {
   errors?: {
     extracurricularId?: string[];
     status?: string[];
-    attendanceCode?: string[];
+    attendanceToken?: string[];
     reason?: string[];
   };
 };
@@ -56,7 +57,7 @@ export async function submitAttendanceAction(
   const parsed = attendanceSchema.safeParse({
     extracurricularId: formData.get("extracurricularId"),
     status: formData.get("status"),
-    attendanceCode: formData.get("attendanceCode") ?? "",
+    attendanceToken: formData.get("attendanceToken") ?? "",
     reason: formData.get("reason") ?? "",
   });
 
@@ -64,11 +65,11 @@ export async function submitAttendanceAction(
     const errors = parsed.error.flatten().fieldErrors;
     return {
       status: "error",
-      message: "Periksa status, kode kehadiran, atau alasan izin.",
+      message: "Periksa status, QR kehadiran, atau alasan izin.",
       errors: {
         extracurricularId: errors.extracurricularId,
         status: errors.status,
-        attendanceCode: errors.attendanceCode,
+        attendanceToken: errors.attendanceToken,
         reason: errors.reason,
       },
     };
@@ -136,7 +137,11 @@ export async function submitAttendanceAction(
           !sessionCode ||
           normalizePrismaJakartaTimestamp(sessionCode.expiresAt).getTime() <
             Date.now() ||
-          sessionCode.code !== parsed.data.attendanceCode
+          !validateAttendanceQrPayload(parsed.data.attendanceToken, {
+            extracurricularId: enrollment.extracurricularId,
+            dateKey,
+            sessionNonce: sessionCode.code,
+          })
         ) {
           return "invalidCode" as const;
         }
@@ -175,8 +180,8 @@ export async function submitAttendanceAction(
       return {
         status: "error",
         message:
-          "Kode kehadiran salah atau sudah kedaluwarsa. Minta kode terbaru kepada admin/guru.",
-        errors: { attendanceCode: ["Kode kehadiran tidak valid atau sudah kedaluwarsa."] },
+          "QR sudah berganti atau tidak valid. Arahkan kamera ke QR terbaru; pemindai akan mencoba kembali otomatis.",
+        errors: { attendanceToken: ["QR tidak valid atau sudah kedaluwarsa."] },
       };
     }
   } catch {
