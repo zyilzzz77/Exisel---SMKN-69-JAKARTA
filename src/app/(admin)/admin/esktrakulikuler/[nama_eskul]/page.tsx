@@ -8,7 +8,6 @@ import { readSession } from "@/lib/auth/session";
 import { getPrisma } from "@/lib/database/prisma";
 import {
   formatScheduleTime,
-  formatTimestampTime,
   getJakartaDateKey,
   getSchoolDay,
   toDatabaseDate,
@@ -128,13 +127,13 @@ export default async function AdminExtracurricularSessionPage({ params }: PagePr
             {activeSession ? (
               <>
                 <AttendanceQrDisplay extracurricularId={program.id} programName={program.name} />
-                <p className={styles.qrSessionEnd}>Sesi berakhir {formatTimestampTime(activeSession.expiresAt)}</p>
+                <p className={styles.qrSessionEnd}>Sesi aktif sampai pembina menekan Selesai</p>
               </>
             ) : (
               <p className={styles.muted}>Belum ada QR aktif untuk agenda ini.</p>
             )}
-            {schedule ? <AttendanceSessionForm extracurricularId={program.id} /> : null}
-            <p className={styles.sessionRule}>Setiap QR hanya berlaku pada siklus 4 detiknya. Seluruh sesi berakhir 15 menit setelah kegiatan selesai.</p>
+            <AttendanceSessionForm active={Boolean(activeSession)} extracurricularId={program.id} />
+            <p className={styles.sessionRule}>QR dapat dibuat pada hari apa pun untuk kegiatan, lomba, atau testing. Setiap QR hanya berlaku pada siklus 4 detiknya; tekan Selesai untuk menutup sesi dan membuat sesi baru.</p>
           </article>
         </section>
       </div>

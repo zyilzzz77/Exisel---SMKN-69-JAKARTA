@@ -5,12 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { readSession } from "@/lib/auth/session";
 import { getPrisma } from "@/lib/database/prisma";
-import {
-  formatTimestampTime,
-  getJakartaDateKey,
-  getSchoolDay,
-  toDatabaseDate,
-} from "@/lib/school-date";
+import { getJakartaDateKey, toDatabaseDate } from "@/lib/school-date";
 
 const sessionSchema = z.object({
   extracurricularId: z.string().uuid("Ekskul tidak valid."),
@@ -22,24 +17,14 @@ export type AttendanceSessionState = {
   expiresAt?: string;
 };
 
+const SESSION_SAFETY_LIMIT_MS = 24 * 60 * 60 * 1_000;
+
 function slugify(value: string) {
   return value
     .toLocaleLowerCase("id-ID")
     .normalize("NFKD")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
-}
-
-function sessionExpiry(dateKey: string, endTime: string) {
-  const match = /^(\d{2}):(\d{2})(?::(\d{2}))?/.exec(endTime);
-  if (!match) return null;
-
-  const [, hour, minute, second = "00"] = match;
-  const expiry = new Date(`${dateKey}T${hour}:${minute}:${second}.000+07:00`);
-  if (Number.isNaN(expiry.getTime())) return null;
-
-  expiry.setUTCMinutes(expiry.getUTCMinutes() + 15);
-  return expiry;
 }
 
 export async function generateAttendanceSessionAction(
@@ -59,7 +44,6 @@ export async function generateAttendanceSessionAction(
   }
 
   const dateKey = getJakartaDateKey();
-  const day = getSchoolDay(dateKey);
   const attendanceDate = toDatabaseDate(dateKey);
   const prisma = getPrisma();
 
@@ -68,54 +52,20 @@ export async function generateAttendanceSessionAction(
       where: {
         id: parsed.data.extracurricularId,
         isActive: true,
-        schedules: { some: { day } },
       },
       select: {
         id: true,
         name: true,
-        schedules: {
-          where: { day },
-          orderBy: { endTime: "desc" },
-          take: 1,
-          select: { id: true },
-        },
       },
     });
 
-    const scheduleId = program?.schedules[0]?.id;
-    if (!program || !scheduleId) {
+    if (!program) {
       return {
         status: "error",
-        message: "Ekskul ini tidak memiliki jadwal kegiatan hari ini.",
+        message: "Ekskul tidak ditemukan atau sedang tidak aktif.",
       };
     }
-
-    // Prisma's PostgreSQL adapter currently normalizes TIME columns as Date
-    // values inconsistently. Read the TIME value as text so 17:00 remains
-    // 17:00 when combined with today's Jakarta date.
-    const scheduleTimes = await prisma.$queryRaw<Array<{ endTime: string }>>`
-      SELECT "end_time"::text AS "endTime"
-      FROM "schedules"
-      WHERE "id" = CAST(${scheduleId} AS uuid)
-      LIMIT 1
-    `;
-    const expiresAt = scheduleTimes[0]?.endTime
-      ? sessionExpiry(dateKey, scheduleTimes[0].endTime)
-      : null;
-
-    if (!expiresAt) {
-      return {
-        status: "error",
-        message: "Waktu selesai kegiatan tidak valid. Periksa jadwal ekskul.",
-      };
-    }
-
-    if (expiresAt.getTime() <= Date.now()) {
-      return {
-        status: "error",
-        message: `Sesi ${program.name} sudah berakhir pada ${formatTimestampTime(expiresAt)} dan tidak dapat dibuat ulang hari ini.`,
-      };
-    }
+    const expiresAt = new Date(Date.now() + SESSION_SAFETY_LIMIT_MS);
     const existing = await prisma.attendanceSession.findUnique({
       where: {
         extracurricularId_sessionDate: {
@@ -129,8 +79,7 @@ export async function generateAttendanceSessionAction(
     if (existing && existing.expiresAt.getTime() > Date.now()) {
       return {
         status: "success",
-        expiresAt: formatTimestampTime(existing.expiresAt),
-        message: `Sesi QR ${program.name} masih aktif sampai ${formatTimestampTime(existing.expiresAt)}.`,
+        message: `Sesi QR ${program.name} masih aktif. Tekan Selesai sebelum membuat sesi baru.`,
       };
     }
 
@@ -161,13 +110,65 @@ export async function generateAttendanceSessionAction(
     revalidatePath("/kehadiran");
     return {
       status: "success",
-      expiresAt: formatTimestampTime(expiresAt),
-      message: `QR dinamis ${program.name} aktif sampai ${formatTimestampTime(expiresAt)}.`,
+      message: `QR dinamis ${program.name} aktif. Tekan Selesai setelah absensi selesai.`,
     };
   } catch {
     return {
       status: "error",
       message: "Sesi QR belum dapat dibuat. Pastikan database aktif lalu coba lagi.",
     };
+  }
+}
+
+export async function finishAttendanceSessionAction(
+  _previousState: AttendanceSessionState,
+  formData: FormData,
+): Promise<AttendanceSessionState> {
+  const parsed = sessionSchema.safeParse({
+    extracurricularId: formData.get("extracurricularId"),
+  });
+  if (!parsed.success) {
+    return { status: "error", message: "Ekskul tidak valid." };
+  }
+
+  const session = await readSession();
+  if (!session || session.role !== "ADMIN") {
+    return { status: "error", message: "Sesi admin berakhir. Silakan login kembali." };
+  }
+
+  const dateKey = getJakartaDateKey();
+  const attendanceDate = toDatabaseDate(dateKey);
+  const prisma = getPrisma();
+
+  try {
+    const program = await prisma.extracurricular.findFirst({
+      where: { id: parsed.data.extracurricularId, isActive: true },
+      select: { id: true, name: true },
+    });
+    if (!program) {
+      return { status: "error", message: "Ekskul tidak ditemukan atau sedang tidak aktif." };
+    }
+
+    const result = await prisma.attendanceSession.updateMany({
+      where: {
+        extracurricularId: program.id,
+        sessionDate: attendanceDate,
+        expiresAt: { gt: new Date() },
+      },
+      data: {
+        code: randomBytes(6).toString("hex"),
+        expiresAt: new Date(),
+      },
+    });
+
+    revalidatePath(`/admin/esktrakulikuler/${slugify(program.name)}`);
+    revalidatePath("/admin/laporan");
+    revalidatePath("/kehadiran");
+
+    return result.count > 0
+      ? { status: "success", message: `Sesi ${program.name} selesai. QR lama sudah kedaluwarsa dan sesi baru dapat dibuat.` }
+      : { status: "error", message: `Tidak ada sesi QR ${program.name} yang sedang aktif.` };
+  } catch {
+    return { status: "error", message: "Sesi QR belum dapat diselesaikan. Coba lagi." };
   }
 }

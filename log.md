@@ -5351,5 +5351,56 @@ serta private key dilarang masuk repository. Cloudflare harus memakai Full
 
 ---
 
+## EXISEL-20260807-033 — Sesi QR manual lintas jadwal dengan tombol Selesai
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “tombol generate code kehadiran bisa digenerate kapan pun meskipun hari
+> ekskul berbeda karena untuk lomba dan testing; setelah absen ada tombol
+> selesai lalu bisa generate lagi”
+
+### TLDR AI agents done
+
+Mengubah sesi QR dari batas otomatis berdasarkan jadwal menjadi sesi manual
+yang dapat dibuat pada hari apa pun, ditutup dengan tombol Selesai, dan dibuat
+ulang pada hari yang sama.
+
+### Changes
+
+- Menghapus syarat hari jadwal dan batas jam selesai + 15 menit dari generator.
+- Mengizinkan admin membuat QR untuk kegiatan, lomba, atau testing kapan pun.
+- Menambahkan action Selesai yang mengganti nonce dan langsung meng-expire sesi,
+  sehingga QR lama tidak dapat dipakai lagi.
+- Mengubah form secara kondisional: Aktifkan QR saat tidak ada sesi dan Selesai
+  saat sesi aktif.
+- Mengizinkan satu record sesi harian didaur ulang dengan nonce baru setelah
+  sesi sebelumnya ditutup.
+- Mempertahankan batas pengaman backend 24 jam jika admin lupa menutup sesi.
+- Memperbarui penjelasan UI agar jadwal hanya menjadi informasi, bukan syarat.
+
+### Verification
+
+- ESLint: passed.
+- TypeScript `tsc --noEmit`: passed.
+- Next.js production build: passed.
+- `git diff --check`: passed.
+
+### Security note
+
+QR tetap berotasi setiap empat detik. Tombol Selesai tidak hanya mengubah UI,
+tetapi juga mengganti nonce sesi dan meng-expire record di database, sehingga
+token QR lama gagal pada validasi backend. Batas pengaman 24 jam mencegah sesi
+terlupa aktif tanpa batas.
+
+---
+
 _End of log. Future changes must append a new execution entry with Identity,
 Human Prompt, TLDR AI agents done, Changes, Verification, and Security note._
