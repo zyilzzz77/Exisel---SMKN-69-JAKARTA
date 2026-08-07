@@ -421,7 +421,11 @@ export default async function ExtracurricularPage({
                     ))}
                   </div>
 
-                  <div className={styles.capacityBlock}>
+                  <div
+                    className={`${styles.capacityBlock} ${
+                      program.name === "ITC" ? styles.itcStatusArea : ""
+                    }`}
+                  >
                     <div>
                       <span>Kuota terisi</span>
                       <strong>
@@ -433,7 +437,11 @@ export default async function ExtracurricularPage({
                     </div>
                   </div>
 
-                  <div className={styles.cardFooter}>
+                  <div
+                    className={`${styles.cardFooter} ${
+                      program.name === "ITC" ? styles.itcStatusArea : ""
+                    }`}
+                  >
                     {isEnrolled ? (
                       <Link className={styles.enrolledState} href="/dashboard">
                         Pilihanmu <span aria-hidden="true">→</span>

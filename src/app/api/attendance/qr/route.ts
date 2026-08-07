@@ -39,16 +39,19 @@ export async function GET(request: Request) {
     return NextResponse.json({ message: "Sesi QR belum aktif atau sudah berakhir." }, { status: 404 });
   }
 
+  const serverNow = Date.now();
   const qr = createAttendanceQrPayload({
     extracurricularId: parsedId.data,
     dateKey,
     sessionNonce: attendanceSession.code,
+    now: serverNow,
   });
 
   return NextResponse.json(
     {
       ...qr,
       rotationMs: ATTENDANCE_QR_ROTATION_MS,
+      serverNow,
       sessionEndsAt: attendanceSession.expiresAt.toISOString(),
     },
     { headers: { "Cache-Control": "no-store, max-age=0" } },

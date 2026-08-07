@@ -23,8 +23,11 @@ FROM dependencies AS builder
 COPY . .
 # Prisma reads DATABASE_URL while generating the client. The build does not
 # connect to this placeholder database; Compose supplies the real URL at runtime.
+ARG NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ENV DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/exisel?schema=public"
 ENV SESSION_SECRET="docker-build-only-secret-at-least-32-characters"
+ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
+ENV NEXT_TELEMETRY_DISABLED="1"
 RUN pnpm db:generate && pnpm build
 
 FROM system AS runner
@@ -32,6 +35,7 @@ WORKDIR /app
 ENV NODE_ENV="production"
 ENV HOSTNAME="0.0.0.0"
 ENV PORT="3000"
+ENV NEXT_TELEMETRY_DISABLED="1"
 
 RUN groupadd --system --gid 1001 nodejs \
     && useradd --system --uid 1001 --gid nodejs nextjs

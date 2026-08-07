@@ -735,6 +735,16 @@
   background: #d61f3a;
 }
 
+.capacityBlock.itcStatusArea {
+  margin-inline: -26px;
+  padding: 18px 26px;
+  background: var(--orange);
+}
+
+.capacityBlock.itcStatusArea .capacityTrack span {
+  background: var(--blue);
+}
+
 .cardFooter {
   min-height: 42px;
   align-items: end;
@@ -774,6 +784,16 @@
 
 .cardPink .enrolledState {
   border-color: #0b235f;
+}
+
+.cardFooter.itcStatusArea {
+  margin-inline: -26px;
+  padding: 0 26px 18px;
+  background: var(--orange);
+}
+
+.cardFooter.itcStatusArea .enrolledState {
+  border-color: var(--white);
 }
 
 .cardFooter > strong {
@@ -1140,6 +1160,16 @@
     align-items: flex-start;
     flex-direction: column;
     gap: 8px;
+  }
+
+  .capacityBlock.itcStatusArea {
+    margin-inline: -22px;
+    padding-inline: 22px;
+  }
+
+  .cardFooter.itcStatusArea {
+    margin-inline: -22px;
+    padding-inline: 22px;
   }
 
   .emptyState {

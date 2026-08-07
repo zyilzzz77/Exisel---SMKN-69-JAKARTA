@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type FormEvent, useEffect, useId, useRef, useState } from "react";
@@ -79,7 +80,15 @@ export function EskulChatbot() {
           role="dialog"
         >
           <header className={styles.header}>
-            <span className={styles.botMark} aria-hidden="true">E</span>
+            <span className={styles.botMark} aria-hidden="true">
+              <Image
+                alt=""
+                height={512}
+                priority
+                src="/eksibot-avatar.png"
+                width={512}
+              />
+            </span>
             <div>
               <strong>EksiBot</strong>
               <small><span aria-hidden="true" /> Dataset keyword aktif</small>

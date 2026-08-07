@@ -34,6 +34,7 @@ yarn-error.log*
 .env*
 !.env.example
 !.env.docker.example
+!.env.production.example
 
 # local imports may contain student personal data
 /private/

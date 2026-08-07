@@ -61,3 +61,10 @@ pnpm dev
 ```
 
 Buka <http://localhost:3000>.
+
+## Deployment production ke VPS
+
+Konfigurasi Docker production dengan Caddy dan SSL otomatis tersedia di
+[`DEPLOYMENT.md`](./DEPLOYMENT.md). Stack production memakai
+`compose.production.yml`; hanya port 80/443 milik Caddy yang dipublikasikan,
+sedangkan Next.js dan PostgreSQL tetap berada pada jaringan internal Docker.

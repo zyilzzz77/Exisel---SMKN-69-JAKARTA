@@ -5102,5 +5102,254 @@ credential tidak disertakan dalam commit.
 
 ---
 
+## EXISEL-20260807-028 — Mengganti favicon dengan logo NAMSEL transparan
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “fav.icon pakai logo namsel dan background putih hilangin kecuali texnyaa”
+
+### TLDR AI agents done
+
+Mengganti favicon aplikasi dengan logo resmi SMKN 69 Jakarta dan menghapus
+latar putih di luar perisai menjadi transparan tanpa menghapus tulisan maupun
+elemen putih yang menjadi bagian dari logo.
+
+### Changes
+
+- Membuat `src/app/icon.png` berukuran 512 × 512 dengan alpha transparency.
+- Mengganti `src/app/favicon.ico` dengan favicon multi-size berisi logo NAMSEL.
+- Mempertahankan bentuk, warna, tulisan “SMK NEGERI 69” dan “JAKARTA”, buku,
+  garis, serta semua elemen putih internal pada logo asli.
+- Menghapus hanya area putih di luar siluet perisai.
+
+### Verification
+
+- Sudut `icon.png` memiliki alpha `0` atau sepenuhnya transparan.
+- Next.js menghasilkan route statis `/icon.png`.
+- Halaman aplikasi memuat metadata `image/x-icon` dan `image/png`.
+- Aset favicon PNG berhasil dibuka langsung dari container lokal.
+- ESLint, TypeScript, Next.js production build, dan Docker build: passed.
+- Container aplikasi berjalan pada port `3000`; PostgreSQL healthy.
+
+### Security note
+
+Perubahan hanya mencakup aset favicon dan catatan log; tidak ada credential,
+data siswa, atau konfigurasi rahasia yang ditambahkan.
+
+---
+
+## EXISEL-20260807-029 — Menstabilkan countdown QR di HP dan laptop
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “dilaptop sama dihp detik nya ngga muncul dihp tolong difixed no mistakes”
+
+### TLDR AI agents done
+
+Memperbaiki countdown QR dinamis yang dapat berhenti pada `0 detik` di HP
+dengan menyinkronkan timer browser terhadap waktu server dan latensi jaringan,
+serta membuat refresh pulih otomatis setelah tab atau koneksi aktif kembali.
+
+### Changes
+
+- Menambahkan `serverNow` pada response endpoint QR dan menggunakan timestamp
+  yang sama saat membuat payload serta waktu kedaluwarsanya.
+- Menghitung offset waktu server di client menggunakan estimasi setengah
+  round-trip request agar jam perangkat tidak memengaruhi countdown.
+- Membatasi countdown pada rentang `4` sampai `1` selama token baru dimuat,
+  sehingga UI tidak membeku pada `0 detik`.
+- Menambahkan pengaman request ganda dan retry otomatis saat jaringan gagal.
+- Memuat ulang token saat halaman kembali visible, window kembali fokus,
+  perangkat online kembali, atau halaman dipulihkan dari back-forward cache.
+- Mempertahankan validasi backend tanpa grace period; token lama tetap langsung
+  ditolak setelah bucket empat detiknya berakhir.
+
+### Verification
+
+- Android viewport `412 × 915`: tiga siklus teramati dengan pola
+  `4 → 3 → 2 → 1 → 4` dan tidak pernah menampilkan `0 detik`.
+- Laptop viewport `1366 × 768`: pergantian countdown dan token tetap berjalan.
+- ESLint dan TypeScript: passed tanpa warning.
+- Next.js production build dan Docker build: passed.
+- Container aplikasi berjalan pada port `3000`; PostgreSQL healthy.
+
+### Security note
+
+Sinkronisasi waktu hanya memengaruhi tampilan dan penjadwalan refresh di
+browser. Backend tetap menjadi sumber kebenaran dan hanya menerima token dari
+bucket empat detik yang sedang aktif.
+
+---
+
+## EXISEL-20260807-030 — Mengganti avatar EksiBot dengan robot transparan
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “ubah avatar eksibot menjadi gambar yang aku kirimkan jangan lupa background
+> putihnya yang robot ya, dihapus”
+
+### TLDR AI agents done
+
+Mengganti avatar huruf “E” pada header EksiBot dengan gambar robot kiriman
+pengguna, menghapus latar putih di luar lingkaran biru, dan mempertahankan
+seluruh bagian putih robot sebagai bagian dari ilustrasi.
+
+### Changes
+
+- Menambahkan aset `public/eksibot-avatar.png` berukuran 512 × 512 dengan alpha.
+- Mengekstrak avatar menggunakan batas lingkaran dari gambar asli agar badan
+  putih robot, wajah, antena, mata, dan detail lain tidak ikut terhapus.
+- Mengganti mark huruf “E” dengan komponen gambar Next.js.
+- Mengubah frame avatar menjadi lingkaran transparan dengan border dan shadow
+  yang konsisten dengan gaya UI EksiBot.
+- Menyesuaikan ukuran avatar desktop dan mobile tanpa mengubah ukuran panel.
+
+### Verification
+
+- Keempat sudut aset memiliki alpha `0`; titik tengah tetap opaque.
+- Desktop `1280 × 720`: avatar, nama, status, dan tombol tutup tampil utuh.
+- Mobile `375 × 812`: avatar tampil `32 × 32`, tidak terpotong, dan tidak ada
+  overflow horizontal.
+- ESLint, TypeScript, Next.js production build, dan Docker build: passed.
+- Container aplikasi berjalan pada port `3000`; PostgreSQL healthy.
+
+### Security note
+
+Perubahan hanya mencakup aset visual dan komponen presentasi chatbot; dataset,
+autentikasi, serta data pengguna tidak berubah.
+
+---
+
+## EXISEL-20260807-031 — Mengubah area status ITC menjadi oranye
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “ubah kotak kuota terisi dan pilihanmu menjadi warna oren pada kolom itc.
+> hanya ubah itunya saja ya”
+
+### TLDR AI agents done
+
+Mengubah hanya latar area “Kuota terisi” dan “Pilihanmu” pada kartu ITC menjadi
+oranye tanpa mengubah kartu, warna, tombol, atau layout ekskul lain.
+
+### Changes
+
+- Menambahkan class status khusus hanya ketika `program.name === "ITC"`.
+- Memberi latar oranye pada blok kuota dan footer status ITC.
+- Mengubah isi progress kuota ITC menjadi biru agar kontras di atas oranye.
+- Mengubah garis bawah “Pilihanmu” menjadi putih pada area oranye.
+- Menyesuaikan padding area oranye untuk desktop dan mobile.
+
+### Verification
+
+- Kondisi class dibatasi hanya untuk program ITC.
+- Kartu ekskul lain tidak menerima class atau aturan warna baru.
+- ESLint, TypeScript, Next.js production build, dan Docker build: passed.
+- Container aplikasi berjalan pada port `3000`; PostgreSQL healthy.
+
+### Security note
+
+Perubahan hanya mencakup presentasi CSS dan class kondisional; data kuota,
+pendaftaran, autentikasi, dan database tidak berubah.
+
+---
+
+## EXISEL-20260807-032 — Menyiapkan deployment Docker production dan Cloudflare
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “update log.md dan push semua perubahan ke GitHub, deploy production pakai
+> Docker pada domain exisel.web.id di VPS 208.84.100.133, aktifkan SSL, dan
+> berikan langkah deployment dengan domain yang sudah di Cloudflare”
+
+### TLDR AI agents done
+
+Menambahkan stack Docker Compose production yang memisahkan PostgreSQL,
+migrasi, Next.js standalone, serta Caddy; menyiapkan HTTPS otomatis dan
+security headers; dan mendokumentasikan alur deployment Cloudflare dari DNS
+only sampai proxy Full (strict).
+
+### Changes
+
+- Menambahkan `compose.production.yml` untuk PostgreSQL internal, migrasi
+  Prisma, aplikasi Next.js standalone non-root, health check, dan Caddy.
+- Menambahkan `Caddyfile` untuk reverse proxy, HTTPS otomatis, kompresi,
+  pembatasan request body, serta security headers.
+- Menambahkan `.env.production.example` tanpa kredensial nyata dan memastikan
+  `.env.production` tetap tidak dilacak Git.
+- Menambahkan `scripts/deploy-production.sh` untuk validasi, pull, build,
+  migrasi, dan startup stack secara konsisten.
+- Menambahkan `DEPLOYMENT.md` berisi DNS Cloudflare, firewall, instalasi Docker,
+  pembuatan secret, migrasi aman 36 akun, deployment, verifikasi, update,
+  backup, serta rollback.
+- Mengubah Dockerfile agar URL publik dapat ditetapkan saat build, menonaktifkan
+  telemetry, dan mempertahankan runner non-root.
+- Menonaktifkan header `X-Powered-By` Next.js dan menambahkan tautan panduan
+  production pada README.
+
+### Verification
+
+- ESLint: passed.
+- TypeScript `tsc --noEmit`: passed.
+- Next.js production build: passed.
+- Docker Compose production config: valid.
+- Sintaks Bash skrip deployment: valid.
+- Docker image target `migrate` dan `app`: berhasil dibangun.
+- Caddy 2.11.4 configuration validation: valid; automatic HTTPS dan redirect
+  HTTP ke HTTPS terdeteksi.
+- Hostname VPS mengarah ke `208.84.100.133` dan port SSH 22 dapat dijangkau.
+- Pada waktu pemeriksaan, A record publik `exisel.web.id` belum terdeteksi dan
+  SOA masih menunjukkan `ns1.idwebhost.id`; delegasi nameserver Cloudflare
+  harus diaktifkan serta record A dibuat sebelum penerbitan SSL.
+
+### Security note
+
+Hanya port 80/443 milik Caddy yang dipublikasikan. Port aplikasi 3000 dan
+PostgreSQL 5432 tetap internal. Secret production, dump database, password,
+serta private key dilarang masuk repository. Cloudflare harus memakai Full
+(strict), bukan Flexible, setelah Caddy memperoleh sertifikat origin valid.
+
+---
+
 _End of log. Future changes must append a new execution entry with Identity,
 Human Prompt, TLDR AI agents done, Changes, Verification, and Security note._
