@@ -5026,5 +5026,81 @@ nilai `.env`, database volume, serta kredensial tidak disertakan.
 
 ---
 
+## EXISEL-20260807-027 — Menyempurnakan kartu rekomendasi dan halaman detail ekskul
+
+### Identity
+
+- **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
+- **Model used:** GPT-5 Codex
+- **AI agent:** Codex
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “rekomendasi eskul nya langsung direct aja ke pages /eskul/nama_eskul”
+
+> “tambahin foto dokum basket”
+
+> “tambahin dokum nihon”
+
+> “setiap pages /eskul/nama_eskul nama dan logo dijadiin satu”
+
+> “didekstop saat user pertama kali buka pages eskul nama eskul dan logo nya
+> muncul tanpa terpotong karena navbar atas terlalu besar”
+
+### TLDR AI agents done
+
+Mengarahkan seluruh kartu rekomendasi dashboard langsung ke halaman detail,
+menambahkan dokumentasi kegiatan English Club, Basket, dan Nihon, menyatukan
+nama serta logo ekskul dalam satu hero biru, dan memadatkan layout desktop agar
+identitas ekskul terlihat utuh pada layar pertama tanpa merusak layout mobile.
+
+### Changes
+
+- Membuat seluruh area kartu rekomendasi dashboard dapat diklik dan mengarah ke
+  `/eskul/[slug]`.
+- Menambahkan aset dokumentasi kegiatan English Club, Basket, dan Nihon.
+- Menambahkan metadata, rasio gambar landscape/4:3, teks alternatif, deskripsi,
+  dan caption dokumentasi untuk ketiga ekskul.
+- Menambahkan pemetaan logo Paskibra pada halaman detail.
+- Menggabungkan judul, informasi, dan logo ekskul ke dalam satu hero biru yang
+  konsisten untuk seluruh halaman `/eskul/[nama_eskul]`.
+- Mengatur ulang susunan mobile agar logo dan identitas tetap mudah dibaca
+  sebelum judul ekskul serta tidak menimbulkan overflow horizontal.
+- Memadatkan announcement bar, navbar, breadcrumb, ruang hero, tipografi,
+  tombol, dan ukuran logo khusus desktop.
+- Menjaga nama dan logo tetap terlihat penuh pada viewport desktop dan laptop
+  saat halaman pertama kali dibuka.
+
+### Files changed
+
+- `log.md`
+- `public/dokumentasi-basket.png`
+- `public/dokumentasi-english-club.png`
+- `public/dokumentasi-nihon.png`
+- `src/app/(student)/dashboard/dashboard.module.css`
+- `src/app/(student)/dashboard/page.tsx`
+- `src/app/(student)/eskul/[nama_eskul]/detail.module.css`
+- `src/app/(student)/eskul/[nama_eskul]/page.tsx`
+
+### Verification
+
+- Kartu rekomendasi dashboard menuju langsung ke `/eskul/[slug]`.
+- Nama dan logo terlihat penuh pada viewport `1870 × 857` dan `1280 × 720`.
+- Mobile `375 × 812` mempertahankan logo sebelum nama dan tidak memiliki
+  overflow horizontal.
+- ESLint dan TypeScript: passed.
+- Next.js production build dan Docker build: passed.
+- Container aplikasi berjalan pada port `3000`; PostgreSQL healthy.
+
+### Security note
+
+Perubahan hanya mencakup source UI, log proyek, dan aset gambar dokumentasi.
+Folder nested repository, file `.env`, data privat, volume database, serta
+credential tidak disertakan dalam commit.
+
+---
+
 _End of log. Future changes must append a new execution entry with Identity,
 Human Prompt, TLDR AI agents done, Changes, Verification, and Security note._

@@ -145,6 +145,7 @@ const programLogos: Record<string, string> = {
   Nihon: "/logo-nihon.png",
   Basket: "/logo-basket.png",
   ITC: "/logo-itc.png",
+  Paskibra: "/logo-paskibra.png",
   Pramuka: "/logo-pramuka.png",
   Futsal: "/logo-futsal.png",
 };
@@ -157,6 +158,12 @@ const programDocumentation: Record<
     title: string;
     description: string;
     caption: string;
+    metaLabel: string;
+    metaValue: string;
+    width: number;
+    height: number;
+    landscape?: boolean;
+    fourThree?: boolean;
   }
 > = {
   PMR: {
@@ -167,6 +174,49 @@ const programDocumentation: Record<
       "Anggota PMR berlatih tandu, pertolongan pertama, serta simulasi penanganan korban bersama pembina dan teman satu tim.",
     caption:
       "Dokumentasi agenda PMR SMKN 69 Jakarta — Senin, 20 Oktober 2025.",
+    metaLabel: "Agenda PMR",
+    metaValue: "20 Oktober 2025",
+    width: 720,
+    height: 1600,
+  },
+  "English Club": {
+    src: "/dokumentasi-english-club.png",
+    alt: "Foto bersama anggota English Club dan guru di ruang kelas SMKN 69 Jakarta",
+    title: "Berlatih bersama. Tumbuh lebih percaya diri.",
+    description:
+      "Anggota English Club membangun keberanian berkomunikasi, kekompakan, dan kreativitas melalui kegiatan belajar yang aktif bersama teman dan guru.",
+    caption: "Dokumentasi kegiatan English Club SMKN 69 Jakarta.",
+    metaLabel: "English Club",
+    metaValue: "Kegiatan bersama",
+    width: 1156,
+    height: 650,
+    landscape: true,
+  },
+  Nihon: {
+    src: "/dokumentasi-nihon.png",
+    alt: "Foto bersama anggota Nihon berkostum karakter Jepang dan guru SMKN 69 Jakarta di area sekolah",
+    title: "Mengenal budaya. Menampilkan kreativitas.",
+    description:
+      "Anggota Nihon mengeksplorasi bahasa dan budaya Jepang melalui karya, kostum karakter, penampilan, serta kegiatan kreatif bersama teman dan guru.",
+    caption: "Dokumentasi kegiatan Nihon SMKN 69 Jakarta.",
+    metaLabel: "Nihon",
+    metaValue: "Kegiatan budaya",
+    width: 1156,
+    height: 867,
+    fourThree: true,
+  },
+  Basket: {
+    src: "/dokumentasi-basket.png",
+    alt: "Foto bersama anggota Basket putra dan putri SMKN 69 Jakarta di lapangan olahraga dalam ruangan",
+    title: "Berlatih keras. Bertumbuh sebagai satu tim.",
+    description:
+      "Anggota Basket mengembangkan teknik, stamina, komunikasi, dan kekompakan melalui latihan serta pertandingan bersama tim putra dan putri.",
+    caption: "Dokumentasi kegiatan Basket SMKN 69 Jakarta.",
+    metaLabel: "Basket",
+    metaValue: "Latihan bersama",
+    width: 1280,
+    height: 960,
+    fourThree: true,
   },
 };
 
@@ -341,50 +391,57 @@ export default async function ExtracurricularDetailPage({
               <span>{presentation.number}</span>
               <span>{presentation.category}</span>
             </div>
-            <p className={styles.eyebrow}>{presentation.kicker}</p>
-            <h1 id="program-title">{program.name}</h1>
-            <h2>{presentation.headline}</h2>
-            <p className={styles.heroDescription}>{program.description}</p>
-            <div className={styles.heroActions}>
-              <Link
-                className={styles.primaryButton}
-                href={
-                  isEnrolled
-                    ? "/dashboard"
-                    : `/daftar/eskul?ekskul=${encodeURIComponent(program.id)}`
-                }
+            <div className={styles.heroContent}>
+              <div className={styles.heroText}>
+                <p className={styles.eyebrow}>{presentation.kicker}</p>
+                <h1 id="program-title">{program.name}</h1>
+                <h2>{presentation.headline}</h2>
+                <p className={styles.heroDescription}>{program.description}</p>
+                <div className={styles.heroActions}>
+                  <Link
+                    className={styles.primaryButton}
+                    href={
+                      isEnrolled
+                        ? "/dashboard"
+                        : `/daftar/eskul?ekskul=${encodeURIComponent(program.id)}`
+                    }
+                  >
+                    {isEnrolled ? "Lihat statusmu" : "Daftar sekarang"}
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                  <a className={styles.secondaryButton} href="#jadwal">
+                    Lihat jadwal <span aria-hidden="true">↓</span>
+                  </a>
+                </div>
+              </div>
+
+              <aside
+                className={styles.heroIdentity}
+                aria-label={`Identitas ${program.name}`}
               >
-                {isEnrolled ? "Lihat statusmu" : "Daftar sekarang"}
-                <span aria-hidden="true">→</span>
-              </Link>
-              <a className={styles.secondaryButton} href="#jadwal">
-                Lihat jadwal <span aria-hidden="true">↓</span>
-              </a>
+                <div className={styles.unifiedLogoFrame}>
+                  {logo ? (
+                    <Image
+                      alt={`Logo ${program.name}`}
+                      height={448}
+                      priority
+                      src={logo}
+                      width={448}
+                    />
+                  ) : (
+                    <span className={styles.rescueMark} aria-hidden="true">
+                      +
+                    </span>
+                  )}
+                </div>
+                <div className={styles.identityCopy}>
+                  <span>Identitas ekskul</span>
+                  <strong>SMKN 69 Jakarta</strong>
+                  <small>{presentation.kicker}</small>
+                </div>
+              </aside>
             </div>
           </div>
-
-          <aside className={styles.heroPoster} aria-label={`Identitas ${program.name}`}>
-            <div className={styles.posterTop}>
-              <span>SMKN 69 Jakarta</span>
-              <strong>{presentation.number}</strong>
-            </div>
-            <div className={styles.posterVisual}>
-              {logo ? (
-                <Image
-                  alt={`Logo ${program.name}`}
-                  height={448}
-                  priority
-                  src={logo}
-                  width={448}
-                />
-              ) : (
-                <span className={styles.rescueMark} aria-hidden="true">
-                  +
-                </span>
-              )}
-            </div>
-            <p>{presentation.kicker}</p>
-          </aside>
         </section>
 
         <section className={styles.factStrip} aria-label="Informasi utama ekskul">
@@ -442,19 +499,27 @@ export default async function ExtracurricularDetailPage({
               <h2 id="documentation-title">{documentation.title}</h2>
               <p>{documentation.description}</p>
               <div className={styles.documentationMeta}>
-                <span>Agenda PMR</span>
-                <strong>20 Oktober 2025</strong>
+                <span>{documentation.metaLabel}</span>
+                <strong>{documentation.metaValue}</strong>
               </div>
             </div>
 
             <figure className={styles.documentationFigure}>
-              <div className={styles.documentationFrame}>
+              <div
+                className={`${styles.documentationFrame} ${
+                  documentation.fourThree
+                    ? styles.documentationFrameFourThree
+                    : documentation.landscape
+                    ? styles.documentationFrameLandscape
+                    : ""
+                }`}
+              >
                 <Image
                   alt={documentation.alt}
-                  height={1600}
+                  height={documentation.height}
                   sizes="(max-width: 760px) calc(100vw - 80px), (max-width: 1080px) 460px, 420px"
                   src={documentation.src}
-                  width={720}
+                  width={documentation.width}
                 />
               </div>
               <figcaption>{documentation.caption}</figcaption>

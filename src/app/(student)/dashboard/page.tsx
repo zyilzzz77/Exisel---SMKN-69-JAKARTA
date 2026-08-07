@@ -87,6 +87,14 @@ function initials(name: string) {
     .join("");
 }
 
+function slugify(value: string) {
+  return value
+    .toLocaleLowerCase("id-ID")
+    .normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 function formatWeekRange(startDateKey: string, endDateKey: string) {
   const dateFormatter = new Intl.DateTimeFormat("id-ID", {
     timeZone: "UTC",
@@ -406,9 +414,11 @@ export default async function DashboardPage() {
               );
 
               return (
-                <article
+                <Link
                   className={`${styles.programCard} ${programToneClasses[presentation.tone]}`}
+                  href={`/eskul/${slugify(program.name)}`}
                   key={program.id}
+                  aria-label={`Lihat detail ekskul ${program.name}`}
                 >
                   <div className={styles.programTop}>
                     <span>0{index + 1}</span>
@@ -444,11 +454,11 @@ export default async function DashboardPage() {
                           : "Segera hadir"}
                       </strong>
                     </p>
-                    <Link href="/ekstrakurikuler" aria-label={`Lihat informasi ${program.name}`}>
+                    <span className={styles.programArrow} aria-hidden="true">
                       ↗
-                    </Link>
+                    </span>
                   </div>
-                </article>
+                </Link>
               );
             })}
           </div>

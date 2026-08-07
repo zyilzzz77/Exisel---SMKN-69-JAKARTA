@@ -737,6 +737,18 @@
   transform: translate(-3px, -3px);
 }
 
+.programCard:focus-visible {
+  outline: 4px solid var(--orange);
+  outline-offset: 5px;
+  box-shadow: 12px 12px 0 var(--ink);
+  transform: translate(-3px, -3px);
+}
+
+.programCard:active {
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: translate(3px, 3px);
+}
+
 .programBlue {
   background: var(--blue);
   color: var(--white);
@@ -875,7 +887,7 @@
   font-size: 13px;
 }
 
-.programMeta a {
+.programArrow {
   display: grid;
   width: 44px;
   height: 44px;
@@ -889,9 +901,8 @@
   transition: transform 140ms ease;
 }
 
-.programMeta a:hover,
-.programMeta a:focus-visible {
-  outline: none;
+.programCard:hover .programArrow,
+.programCard:focus-visible .programArrow {
   transform: rotate(10deg) scale(1.08);
 }
 

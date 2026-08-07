@@ -186,9 +186,6 @@
 }
 
 .hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.75fr);
-  gap: 28px;
   padding-bottom: 72px;
 }
 
@@ -200,10 +197,79 @@
 }
 
 .heroCopy {
-  min-height: 600px;
+  min-height: 560px;
   padding: clamp(32px, 5vw, 64px);
   background: var(--blue);
   color: var(--white);
+}
+
+.heroContent {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  align-items: center;
+  gap: clamp(36px, 6vw, 84px);
+}
+
+.heroText {
+  min-width: 0;
+}
+
+.heroIdentity {
+  display: grid;
+  align-self: stretch;
+  align-content: center;
+  gap: 22px;
+  padding: clamp(18px, 2.5vw, 28px);
+  border: 3px solid var(--white);
+  border-radius: 8px;
+  background: #0b235f;
+}
+
+.unifiedLogoFrame {
+  display: grid;
+  width: min(100%, 310px);
+  aspect-ratio: 1;
+  place-items: center;
+  margin-inline: auto;
+  overflow: hidden;
+  border: 4px solid var(--ink);
+  border-radius: 8px;
+  background: var(--white);
+  box-shadow: 7px 7px 0 var(--ink);
+  transform: rotate(1deg);
+}
+
+.unifiedLogoFrame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.identityCopy {
+  display: grid;
+  gap: 4px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.identityCopy span {
+  color: var(--orange);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+.identityCopy strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 17px;
+}
+
+.identityCopy small {
+  color: var(--blue-light);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
 }
 
 .heroMeta {
@@ -241,7 +307,7 @@
 .heroCopy h1 {
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(82px, 10vw, 144px);
+  font-size: clamp(68px, 8vw, 118px);
   font-weight: 800;
   letter-spacing: -0.08em;
   line-height: 0.78;
@@ -489,6 +555,18 @@
   transform: rotate(1deg);
 }
 
+.documentationFrameLandscape {
+  width: min(100%, 560px);
+  aspect-ratio: 16 / 9;
+  transform: rotate(-1deg);
+}
+
+.documentationFrameFourThree {
+  width: min(100%, 560px);
+  aspect-ratio: 4 / 3;
+  transform: rotate(-1deg);
+}
+
 .documentationFrame img {
   width: 100%;
   height: 100%;
@@ -708,6 +786,136 @@
   font-weight: 800;
 }
 
+/* Keep the complete extracurricular identity visible in the first desktop viewport. */
+@media (min-width: 1081px) {
+  .announcement {
+    min-height: 28px;
+    border-bottom-width: 2px;
+    font-size: 9px;
+  }
+
+  .liveDot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .headerInner {
+    min-height: 64px;
+    gap: 22px;
+  }
+
+  .brand {
+    gap: 10px;
+  }
+
+  .brandLogo {
+    width: 34px;
+    height: 44px;
+  }
+
+  .brandCopy strong {
+    font-size: 17px;
+  }
+
+  .brandCopy small {
+    margin-top: 3px;
+    font-size: 8px;
+  }
+
+  .navigation {
+    gap: 14px;
+  }
+
+  .navigation a {
+    min-height: 38px;
+    padding: 6px 12px;
+    border-width: 3px;
+    font-size: 11px;
+  }
+
+  .accountActions {
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 11px;
+  }
+
+  .logoutButton {
+    min-height: 38px;
+    padding: 6px 12px;
+    border-width: 3px;
+    font-size: 10px;
+  }
+
+  .breadcrumb {
+    padding-block: 12px;
+    font-size: 9px;
+  }
+
+  .hero {
+    padding-bottom: 64px;
+  }
+
+  .heroCopy {
+    min-height: 390px;
+    padding: clamp(26px, 3vw, 38px);
+  }
+
+  .heroMeta {
+    margin-bottom: 20px;
+  }
+
+  .heroContent {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 270px);
+    gap: clamp(28px, 4vw, 56px);
+  }
+
+  .heroIdentity {
+    align-self: center;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .unifiedLogoFrame {
+    width: min(100%, 210px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .identityCopy strong {
+    font-size: 14px;
+  }
+
+  .heroCopy h1 {
+    font-size: clamp(58px, 6vw, 88px);
+    line-height: 0.82;
+  }
+
+  .heroCopy h2 {
+    margin-top: 18px;
+    font-size: clamp(24px, 2.5vw, 34px);
+  }
+
+  .heroDescription {
+    margin-top: 14px;
+    font-size: 14px;
+  }
+
+  .heroActions {
+    margin-top: 22px;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    min-height: 42px;
+    padding: 8px 14px;
+    border-width: 3px;
+    font-size: 10px;
+  }
+}
+
 @media (max-width: 1080px) {
   .shell,
   .headerInner,
@@ -723,8 +931,9 @@
     display: none;
   }
 
-  .hero {
-    grid-template-columns: 1fr;
+  .heroContent {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+    gap: 38px;
   }
 
   .heroPoster {
@@ -819,12 +1028,43 @@
     padding: 28px 22px;
   }
 
+  .heroContent {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .heroIdentity {
+    order: -1;
+    grid-template-columns: 132px minmax(0, 1fr);
+    align-items: center;
+    gap: 18px;
+    padding: 16px;
+  }
+
+  .unifiedLogoFrame {
+    width: 132px;
+    margin: 0;
+    box-shadow: 5px 5px 0 var(--ink);
+    transform: none;
+  }
+
+  .identityCopy {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .identityCopy strong {
+    font-size: 15px;
+  }
+
   .heroMeta {
-    margin-bottom: 42px;
+    margin-bottom: 26px;
   }
 
   .heroCopy h1 {
-    font-size: clamp(68px, 24vw, 100px);
+    overflow-wrap: anywhere;
+    font-size: clamp(52px, 17vw, 76px);
+    line-height: 0.84;
   }
 
   .heroCopy h2 {
