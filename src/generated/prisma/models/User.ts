@@ -233,6 +233,7 @@ export type UserWhereInput = {
   enrollments?: Prisma.EnrollmentListRelationFilter
   attendances?: Prisma.AttendanceListRelationFilter
   createdSessions?: Prisma.AttendanceSessionListRelationFilter
+  communityMessages?: Prisma.CommunityMessageListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -250,6 +251,7 @@ export type UserOrderByWithRelationInput = {
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   attendances?: Prisma.AttendanceOrderByRelationAggregateInput
   createdSessions?: Prisma.AttendanceSessionOrderByRelationAggregateInput
+  communityMessages?: Prisma.CommunityMessageOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -270,6 +272,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   enrollments?: Prisma.EnrollmentListRelationFilter
   attendances?: Prisma.AttendanceListRelationFilter
   createdSessions?: Prisma.AttendanceSessionListRelationFilter
+  communityMessages?: Prisma.CommunityMessageListRelationFilter
 }, "id" | "email" | "nis">
 
 export type UserOrderByWithAggregationInput = {
@@ -321,6 +324,7 @@ export type UserCreateInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -338,6 +342,7 @@ export type UserUncheckedCreateInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
 }
 
 export type UserUpdateInput = {
@@ -355,6 +360,7 @@ export type UserUpdateInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -372,6 +378,7 @@ export type UserUncheckedUpdateInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -525,6 +532,20 @@ export type UserUpdateOneRequiredWithoutCreatedSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedSessionsInput, Prisma.UserUpdateWithoutCreatedSessionsInput>, Prisma.UserUncheckedUpdateWithoutCreatedSessionsInput>
 }
 
+export type UserCreateNestedOneWithoutCommunityMessagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCommunityMessagesInput, Prisma.UserUncheckedCreateWithoutCommunityMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCommunityMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCommunityMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCommunityMessagesInput, Prisma.UserUncheckedCreateWithoutCommunityMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCommunityMessagesInput
+  upsert?: Prisma.UserUpsertWithoutCommunityMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommunityMessagesInput, Prisma.UserUpdateWithoutCommunityMessagesInput>, Prisma.UserUncheckedUpdateWithoutCommunityMessagesInput>
+}
+
 export type UserCreateWithoutEnrollmentsInput = {
   id?: string
   email: string
@@ -539,6 +560,7 @@ export type UserCreateWithoutEnrollmentsInput = {
   updatedAt?: Date | string
   attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
 }
 
 export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -555,6 +577,7 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   updatedAt?: Date | string
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
 }
 
 export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -587,6 +610,7 @@ export type UserUpdateWithoutEnrollmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -603,6 +627,7 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
 }
 
 export type UserCreateWithoutAttendancesInput = {
@@ -619,6 +644,7 @@ export type UserCreateWithoutAttendancesInput = {
   updatedAt?: Date | string
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
 }
 
 export type UserUncheckedCreateWithoutAttendancesInput = {
@@ -635,6 +661,7 @@ export type UserUncheckedCreateWithoutAttendancesInput = {
   updatedAt?: Date | string
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
 }
 
 export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -667,6 +694,7 @@ export type UserUpdateWithoutAttendancesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAttendancesInput = {
@@ -683,6 +711,7 @@ export type UserUncheckedUpdateWithoutAttendancesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
 }
 
 export type UserCreateWithoutCreatedSessionsInput = {
@@ -699,6 +728,7 @@ export type UserCreateWithoutCreatedSessionsInput = {
   updatedAt?: Date | string
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
 }
 
 export type UserUncheckedCreateWithoutCreatedSessionsInput = {
@@ -715,6 +745,7 @@ export type UserUncheckedCreateWithoutCreatedSessionsInput = {
   updatedAt?: Date | string
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
 }
 
 export type UserCreateOrConnectWithoutCreatedSessionsInput = {
@@ -747,6 +778,7 @@ export type UserUpdateWithoutCreatedSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
@@ -763,6 +795,91 @@ export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+}
+
+export type UserCreateWithoutCommunityMessagesInput = {
+  id?: string
+  email: string
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCommunityMessagesInput = {
+  id?: string
+  email: string
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCommunityMessagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCommunityMessagesInput, Prisma.UserUncheckedCreateWithoutCommunityMessagesInput>
+}
+
+export type UserUpsertWithoutCommunityMessagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCommunityMessagesInput, Prisma.UserUncheckedUpdateWithoutCommunityMessagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCommunityMessagesInput, Prisma.UserUncheckedCreateWithoutCommunityMessagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCommunityMessagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCommunityMessagesInput, Prisma.UserUncheckedUpdateWithoutCommunityMessagesInput>
+}
+
+export type UserUpdateWithoutCommunityMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCommunityMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 
@@ -774,12 +891,14 @@ export type UserCountOutputType = {
   enrollments: number
   attendances: number
   createdSessions: number
+  communityMessages: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrollments?: boolean | UserCountOutputTypeCountEnrollmentsArgs
   attendances?: boolean | UserCountOutputTypeCountAttendancesArgs
   createdSessions?: boolean | UserCountOutputTypeCountCreatedSessionsArgs
+  communityMessages?: boolean | UserCountOutputTypeCountCommunityMessagesArgs
 }
 
 /**
@@ -813,6 +932,13 @@ export type UserCountOutputTypeCountCreatedSessionsArgs<ExtArgs extends runtime.
   where?: Prisma.AttendanceSessionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCommunityMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommunityMessageWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -829,6 +955,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   attendances?: boolean | Prisma.User$attendancesArgs<ExtArgs>
   createdSessions?: boolean | Prisma.User$createdSessionsArgs<ExtArgs>
+  communityMessages?: boolean | Prisma.User$communityMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -879,6 +1006,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   attendances?: boolean | Prisma.User$attendancesArgs<ExtArgs>
   createdSessions?: boolean | Prisma.User$createdSessionsArgs<ExtArgs>
+  communityMessages?: boolean | Prisma.User$communityMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -890,6 +1018,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     attendances: Prisma.$AttendancePayload<ExtArgs>[]
     createdSessions: Prisma.$AttendanceSessionPayload<ExtArgs>[]
+    communityMessages: Prisma.$CommunityMessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1300,6 +1429,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   enrollments<T extends Prisma.User$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attendances<T extends Prisma.User$attendancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdSessions<T extends Prisma.User$createdSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendanceSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  communityMessages<T extends Prisma.User$communityMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$communityMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommunityMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1802,6 +1932,30 @@ export type User$createdSessionsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.AttendanceSessionScalarFieldEnum | Prisma.AttendanceSessionScalarFieldEnum[]
+}
+
+/**
+ * User.communityMessages
+ */
+export type User$communityMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommunityMessage
+   */
+  select?: Prisma.CommunityMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommunityMessage
+   */
+  omit?: Prisma.CommunityMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommunityMessageInclude<ExtArgs> | null
+  where?: Prisma.CommunityMessageWhereInput
+  orderBy?: Prisma.CommunityMessageOrderByWithRelationInput | Prisma.CommunityMessageOrderByWithRelationInput[]
+  cursor?: Prisma.CommunityMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommunityMessageScalarFieldEnum | Prisma.CommunityMessageScalarFieldEnum[]
 }
 
 /**

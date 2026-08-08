@@ -1,0 +1,110 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+type TypewriterHeadingProps = {
+  as?: "h1" | "h2" | "h3" | "p";
+  className?: string;
+  highlightText?: string;
+  id?: string;
+  lineBreak?: boolean;
+  mainText: string;
+  repeatOnScroll?: boolean;
+};
+
+export function TypewriterHeading({
+  as: Component = "h1",
+  className,
+  highlightText = "",
+  id,
+  lineBreak = true,
+  mainText,
+  repeatOnScroll = true,
+}: TypewriterHeadingProps) {
+  const containerRef = useRef<HTMLHeadingElement | HTMLParagraphElement | null>(null);
+
+  const line1 = mainText.trim();
+  const line2 = highlightText.trim();
+  const fullText = line2 ? `${line1} ${line2}` : line1;
+
+  const [displayedText, setDisplayedText] = useState("");
+  const [isDone, setIsDone] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        } else if (repeatOnScroll) {
+          setIsVisible(false);
+          setDisplayedText("");
+          setIsDone(false);
+        }
+      },
+      { threshold: 0.15 },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [repeatOnScroll]);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    let index = 0;
+    setDisplayedText("");
+    setIsDone(false);
+
+    const timer = setInterval(() => {
+      index++;
+      setDisplayedText(fullText.slice(0, index));
+
+      if (index >= fullText.length) {
+        clearInterval(timer);
+        setIsDone(true);
+      }
+    }, 60);
+
+    return () => clearInterval(timer);
+  }, [isVisible, fullText]);
+
+  const line1Length = line1.length;
+  const currentLine1 = displayedText.slice(
+    0,
+    Math.min(displayedText.length, line1Length),
+  );
+  const currentLine2 =
+    line2 && displayedText.length > line1Length
+      ? displayedText.slice(line1Length).trimStart()
+      : "";
+
+  return (
+    <Component className={className} id={id} ref={containerRef as never}>
+      {currentLine1}
+      {currentLine2 ? (
+        <>
+          {lineBreak ? <br /> : " "}
+          <span>{currentLine2}</span>
+        </>
+      ) : null}
+      <span
+        aria-hidden="true"
+        style={{
+          display: "inline-block",
+          width: "4px",
+          height: "0.8em",
+          backgroundColor: "var(--orange)",
+          marginLeft: "4px",
+          borderRadius: "2px",
+          verticalAlign: "middle",
+          opacity: isVisible && !isDone ? 1 : 0,
+          transition: "opacity 0.2s ease",
+        }}
+      />
+    </Component>
+  );
+}

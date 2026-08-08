@@ -24,7 +24,7 @@ export default function LoginPage() {
         <Link className={styles.brand} href="/" aria-label="Kembali ke beranda EXISEL">
           <span className={styles.brandLogo}>
             <Image
-              src="/logo-smkn69.png"
+              src="/logo-smkn69.webp"
               alt="Logo SMK Negeri 69 Jakarta"
               width={758}
               height={948}
@@ -96,7 +96,12 @@ export default function LoginPage() {
         <section className={styles.formSection} id="form-login" aria-labelledby="login-title">
           <div className={styles.loginCard}>
             <div className={styles.cardHeader}>
-              <span className={styles.accessBadge}>Akses siswa</span>
+              <div className={styles.cardHeaderBadges}>
+                <span className={styles.accessBadge}>Akses siswa</span>
+                <Link className={styles.adminMobileLink} href="/admin/login">
+                  Login Admin/Guru <span aria-hidden="true">↗</span>
+                </Link>
+              </div>
               <span className={styles.cardNumber}>01 / LOGIN</span>
             </div>
 

@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
               alt="Logo SMK Negeri 69 Jakarta"
               height={948}
               priority
-              src="/logo-smkn69.png"
+              src="/logo-smkn69.webp"
               width={758}
             />
           </span>

@@ -193,6 +193,82 @@
   background: var(--white);
 }
 
+.typingIndicator {
+  align-self: flex-start;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 6px;
+  width: fit-content;
+  max-width: 88%;
+  padding: 10px 14px;
+  border: 3px solid var(--ink);
+  border-radius: 4px 14px 14px;
+  background: var(--white);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.typingIndicator > span.typingLabel {
+  color: var(--blue);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+.dotsWrapper {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 5px;
+}
+
+.typingDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue);
+  animation: typingBounce 1.2s infinite ease-in-out;
+}
+
+.typingDot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.typingDot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typingDot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.typingCursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--blue);
+  font-weight: 900;
+  animation: cursorBlink 0.6s infinite alternate;
+}
+
+@keyframes cursorBlink {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes typingBounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.35;
+  }
+  40% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
 .userMessage {
   align-self: flex-end;
   border-radius: 14px 4px 14px 14px;

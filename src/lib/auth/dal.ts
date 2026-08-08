@@ -130,6 +130,74 @@ export const getStudentDashboard = cache(async () => {
   return { user, extracurriculars };
 });
 
+export const getPublicExtracurricularData = cache(async () => {
+  const session = await readSession();
+  const prisma = getPrisma();
+
+  const [extracurriculars, currentUser] = await Promise.all([
+    prisma.extracurricular.findMany({
+      where: { isActive: true },
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        capacity: true,
+        schedules: {
+          orderBy: { day: "asc" },
+          select: {
+            id: true,
+            day: true,
+            startTime: true,
+            endTime: true,
+            location: true,
+          },
+        },
+        _count: {
+          select: {
+            enrollments: {
+              where: { status: { in: ["PENDING", "APPROVED"] } },
+            },
+          },
+        },
+      },
+    }),
+    session?.userId
+      ? prisma.user.findUnique({
+          where: { id: session.userId },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            role: true,
+            className: true,
+            isActive: true,
+            enrollments: {
+              where: { status: { in: ["PENDING", "APPROVED"] } },
+              select: {
+                id: true,
+                status: true,
+                registeredAt: true,
+                extracurricularId: true,
+                extracurricular: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        })
+      : null,
+  ]);
+
+  return {
+    extracurriculars,
+    user: currentUser?.isActive ? currentUser : null,
+  };
+});
+
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 

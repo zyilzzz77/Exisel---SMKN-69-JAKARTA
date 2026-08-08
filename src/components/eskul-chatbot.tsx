@@ -4,31 +4,97 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type FormEvent, useEffect, useId, useRef, useState } from "react";
-import { getEskulChatbotReply, type ChatbotReply } from "@/lib/chatbot/eskul-keyword-dataset";
+import {
+  getEskulChatbotReply,
+  type ChatbotReply,
+} from "@/lib/chatbot/eskul-keyword-dataset";
 import styles from "./eskul-chatbot.module.css";
 
 type ChatMessage = ChatbotReply & {
   id: number;
   sender: "bot" | "user";
+  animate?: boolean;
 };
 
 const initialMessage: ChatMessage = {
   id: 1,
   sender: "bot",
   text: "Halo! Aku EksiBot 👋 Tanyakan ekskul, jadwal, lokasi, kuota, atau ceritakan minatmu.",
+  animate: false,
 };
 
-const quickQuestions = ["Ekskul apa saja?", "Saya suka coding", "Jadwal PMR kapan?"];
+const quickQuestions = [
+  "Ekskul apa saja?",
+  "Saya suka coding",
+  "Jadwal PMR kapan?",
+];
+
+function TypewriterBotMessage({
+  message,
+  onClosePanel,
+  onTypingStep,
+}: {
+  message: ChatMessage;
+  onClosePanel: () => void;
+  onTypingStep: () => void;
+}) {
+  const [displayedText, setDisplayedText] = useState(
+    message.animate ? "" : message.text,
+  );
+  const [isFinished, setIsFinished] = useState(!message.animate);
+
+  useEffect(() => {
+    if (!message.animate || isFinished) return;
+
+    let index = 0;
+    const fullText = message.text;
+    const interval = setInterval(() => {
+      index++;
+      setDisplayedText(fullText.slice(0, index));
+      onTypingStep();
+
+      if (index >= fullText.length) {
+        clearInterval(interval);
+        setIsFinished(true);
+      }
+    }, 12);
+
+    return () => clearInterval(interval);
+  }, [message.animate, message.text, isFinished, onTypingStep]);
+
+  return (
+    <article className={styles.botMessage}>
+      <span>EksiBot</span>
+      <p>
+        {displayedText}
+        {!isFinished ? <span className={styles.typingCursor}>|</span> : null}
+      </p>
+      {isFinished && message.action ? (
+        <Link href={message.action.href} onClick={onClosePanel}>
+          {message.action.label} <span aria-hidden="true">→</span>
+        </Link>
+      ) : null}
+    </article>
+  );
+}
 
 export function EskulChatbot() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
+  const [isThinking, setIsThinking] = useState(false);
   const nextId = useRef(2);
   const inputRef = useRef<HTMLInputElement>(null);
   const messageEndRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
+
+  const scrollToBottom = () => {
+    messageEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -41,26 +107,34 @@ export function EskulChatbot() {
   }, [isOpen]);
 
   useEffect(() => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }, [messages]);
+    scrollToBottom();
+  }, [messages, isThinking]);
 
   function sendMessage(value: string) {
     const question = value.trim();
-    if (!question) return;
+    if (!question || isThinking) return;
 
     const userMessage: ChatMessage = {
       id: nextId.current++,
       sender: "user",
       text: question,
     };
-    const botMessage: ChatMessage = {
-      id: nextId.current++,
-      sender: "bot",
-      ...getEskulChatbotReply(question),
-    };
 
-    setMessages((current) => [...current, userMessage, botMessage]);
+    setMessages((current) => [...current, userMessage]);
     setInput("");
+    setIsThinking(true);
+
+    setTimeout(() => {
+      const reply = getEskulChatbotReply(question);
+      const botMessage: ChatMessage = {
+        id: nextId.current++,
+        sender: "bot",
+        ...reply,
+        animate: true,
+      };
+      setMessages((current) => [...current, botMessage]);
+      setIsThinking(false);
+    }, 350);
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -85,13 +159,15 @@ export function EskulChatbot() {
                 alt=""
                 height={512}
                 priority
-                src="/eksibot-avatar.png"
+                src="/eksibot-avatar.webp"
                 width={512}
               />
             </span>
             <div>
               <strong>EksiBot</strong>
-              <small><span aria-hidden="true" /> Dataset keyword aktif</small>
+              <small>
+                <span aria-hidden="true" /> Dataset keyword aktif
+              </small>
             </div>
             <button
               aria-label="Tutup chatbot"
@@ -104,27 +180,49 @@ export function EskulChatbot() {
           </header>
 
           <div aria-live="polite" className={styles.messages}>
-            {messages.map((message) => (
-              <article
-                className={message.sender === "user" ? styles.userMessage : styles.botMessage}
-                key={message.id}
+            {messages.map((message) =>
+              message.sender === "user" ? (
+                <article className={styles.userMessage} key={message.id}>
+                  <span>Kamu</span>
+                  <p>{message.text}</p>
+                </article>
+              ) : (
+                <TypewriterBotMessage
+                  key={message.id}
+                  message={message}
+                  onClosePanel={() => setIsOpen(false)}
+                  onTypingStep={scrollToBottom}
+                />
+              ),
+            )}
+
+            {isThinking ? (
+              <div
+                aria-label="EksiBot sedang mengetik"
+                className={styles.typingIndicator}
               >
-                <span>{message.sender === "user" ? "Kamu" : "EksiBot"}</span>
-                <p>{message.text}</p>
-                {message.action ? (
-                  <Link href={message.action.href} onClick={() => setIsOpen(false)}>
-                    {message.action.label} <span aria-hidden="true">→</span>
-                  </Link>
-                ) : null}
-              </article>
-            ))}
+                <span className={styles.typingLabel}>EKSIBOT</span>
+                <div className={styles.dotsWrapper}>
+                  <span className={styles.typingDot} />
+                  <span className={styles.typingDot} />
+                  <span className={styles.typingDot} />
+                </div>
+              </div>
+            ) : null}
             <div ref={messageEndRef} />
           </div>
 
           {messages.length === 1 ? (
-            <div className={styles.quickQuestions} aria-label="Pertanyaan cepat">
+            <div
+              className={styles.quickQuestions}
+              aria-label="Pertanyaan cepat"
+            >
               {quickQuestions.map((question) => (
-                <button key={question} onClick={() => sendMessage(question)} type="button">
+                <button
+                  key={question}
+                  onClick={() => sendMessage(question)}
+                  type="button"
+                >
                   {question}
                 </button>
               ))}
@@ -144,7 +242,11 @@ export function EskulChatbot() {
               ref={inputRef}
               value={input}
             />
-            <button aria-label="Kirim pertanyaan" disabled={!input.trim()} type="submit">
+            <button
+              aria-label="Kirim pertanyaan"
+              disabled={!input.trim()}
+              type="submit"
+            >
               <svg aria-hidden="true" viewBox="0 0 24 24">
                 <path d="m4 4 17 8-17 8 3-8-3-8Z" />
                 <path d="M7 12h14" />

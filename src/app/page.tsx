@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LandingNavigation } from "@/components/landing-navigation";
 import { ScrollRevealController } from "@/components/scroll-reveal-controller";
+import { TypewriterHeading } from "@/components/typewriter-heading";
 
 const extracurriculars = [
   {
@@ -10,7 +11,7 @@ const extracurriculars = [
     category: "Kemanusiaan",
     day: "Senin & Selasa",
     tone: "blue",
-    logo: "/logo-pmr.png",
+    logo: "/logo-pmr.webp",
   },
   {
     number: "02",
@@ -18,7 +19,7 @@ const extracurriculars = [
     category: "Bahasa",
     day: "Kamis",
     tone: "pink",
-    logo: "/logo-english-club.png",
+    logo: "/logo-english-club.webp",
   },
   {
     number: "03",
@@ -26,7 +27,7 @@ const extracurriculars = [
     category: "Bahasa & Budaya",
     day: "Selasa",
     tone: "white",
-    logo: "/logo-nihon.png",
+    logo: "/logo-nihon.webp",
   },
   {
     number: "04",
@@ -34,7 +35,7 @@ const extracurriculars = [
     category: "Olahraga",
     day: "Senin",
     tone: "lavender",
-    logo: "/logo-basket.png",
+    logo: "/logo-basket.webp",
   },
   {
     number: "05",
@@ -42,7 +43,7 @@ const extracurriculars = [
     category: "Teknologi",
     day: "Jumat",
     tone: "navy",
-    logo: "/logo-itc.png",
+    logo: "/logo-itc.webp",
   },
   {
     number: "06",
@@ -50,7 +51,7 @@ const extracurriculars = [
     category: "Kepemimpinan",
     day: "Selasa",
     tone: "blue",
-    logo: "/logo-paskibra.png",
+    logo: "/logo-paskibra.webp",
   },
   {
     number: "07",
@@ -58,7 +59,7 @@ const extracurriculars = [
     category: "Kepanduan",
     day: "Rabu",
     tone: "orange",
-    logo: "/logo-pramuka.png",
+    logo: "/logo-pramuka.webp",
   },
   {
     number: "08",
@@ -66,14 +67,14 @@ const extracurriculars = [
     category: "Olahraga",
     day: "Jumat",
     tone: "white",
-    logo: "/logo-futsal.png",
+    logo: "/logo-futsal.webp",
   },
 ] as const;
 
 const steps = [
   {
     number: "01",
-    title: "Masuk pakai NIS",
+    title: "Masuk pakai akun yang sudah diberikan",
     description:
       "Gunakan akun yang sudah diberikan sekolah. Tidak perlu bikin akun baru.",
   },
@@ -116,7 +117,7 @@ export default function Home() {
           <Link className="brand" href="/" aria-label="EXISEL, halaman utama">
             <span className="brand-logo">
               <Image
-                src="/logo-smkn69.png"
+                src="/logo-smkn69.webp"
                 alt="Logo SMK Negeri 69 Jakarta"
                 width={758}
                 height={948}
@@ -143,9 +144,12 @@ export default function Home() {
             <p className="eyebrow">
               <span aria-hidden="true">✦</span> Satu tempat. Banyak panggung.
             </p>
-            <h1 id="hero-title">
-              Temukan ekskul yang bikin kamu <span>tumbuh.</span>
-            </h1>
+            <TypewriterHeading
+              highlightText="tumbuh."
+              id="hero-title"
+              lineBreak={false}
+              mainText="Temukan ekskul yang bikin kamu"
+            />
             <p className="hero-description">
               Cari, bandingkan, dan daftar ekstrakurikuler tanpa formulir yang
               bikin ribet. Semua jadwal dan statusmu ada di satu tempat.
@@ -330,7 +334,11 @@ export default function Home() {
           <div className="section-heading compact-heading">
             <div>
               <p className="eyebrow eyebrow-dark">Cara daftar</p>
-              <h2 id="steps-title">Tiga langkah. Nggak pakai drama.</h2>
+              <TypewriterHeading
+                as="h2"
+                id="steps-title"
+                mainText="Tiga langkah. Nggak pakai drama."
+              />
             </div>
             <p>
               Prosesnya dibuat singkat supaya waktumu dipakai untuk mencoba,
@@ -354,9 +362,11 @@ export default function Home() {
             <div className="feature-header">
               <div>
                 <p className="eyebrow">Apa itu EXISEL?</p>
-                <h2 id="feature-title">
-                  Satu tempat untuk semua urusan ekskulmu.
-                </h2>
+                <TypewriterHeading
+                  as="h2"
+                  id="feature-title"
+                  mainText="Satu tempat untuk semua urusan ekskulmu."
+                />
               </div>
               <p className="feature-heading-note">
                 Dari mencari kegiatan yang cocok sampai memantau kehadiran,
@@ -368,7 +378,7 @@ export default function Home() {
               <figure className="feature-image">
                 <div className="feature-photo-frame">
                   <Image
-                    src="/student-sija-trophy.png"
+                    src="/student-sija-trophy.webp"
                     alt="Siswa SIJA tersenyum sambil memegang piala di lapangan"
                     width={1080}
                     height={1448}
@@ -456,7 +466,7 @@ export default function Home() {
           <div className="footer-brand">
             <span className="brand-logo">
               <Image
-                src="/logo-smkn69.png"
+                src="/logo-smkn69.webp"
                 alt="Logo SMK Negeri 69 Jakarta"
                 width={758}
                 height={948}

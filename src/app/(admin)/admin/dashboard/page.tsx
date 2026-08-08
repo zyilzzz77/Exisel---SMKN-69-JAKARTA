@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { adminLogoutAction } from "@/actions/auth";
+import { AdminNavigation } from "@/components/admin-navigation";
 import { getAdminAttendanceDashboard } from "@/lib/attendance/dal";
 import styles from "./admin-dashboard.module.css";
 
@@ -17,6 +18,32 @@ const statusLabels = {
   MISSING: "Belum mengisi",
 } as const;
 
+const programPresentation: Record<
+  string,
+  {
+    tone: "blue" | "navy" | "orange" | "pink" | "white" | "lavender";
+    logo?: string;
+  }
+> = {
+  PMR: { tone: "blue", logo: "/logo-pmr.webp" },
+  "English Club": { tone: "pink", logo: "/logo-english-club.webp" },
+  Nihon: { tone: "white", logo: "/logo-nihon.webp" },
+  Basket: { tone: "lavender", logo: "/logo-basket.webp" },
+  ITC: { tone: "navy", logo: "/logo-itc.webp" },
+  Paskibra: { tone: "blue", logo: "/logo-paskibra.webp" },
+  Pramuka: { tone: "orange", logo: "/logo-pramuka.webp" },
+  Futsal: { tone: "white", logo: "/logo-futsal.webp" },
+};
+
+const programToneClasses = {
+  blue: styles.programBlue,
+  navy: styles.programNavy,
+  orange: styles.programOrange,
+  pink: styles.programPink,
+  white: styles.programWhite,
+  lavender: styles.programLavender,
+} as const;
+
 function getFirst(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
 }
@@ -28,6 +55,14 @@ function initials(name: string) {
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join("");
+}
+
+function slugify(value: string) {
+  return value
+    .toLocaleLowerCase("id-ID")
+    .normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 function formatSubmittedAt(value: Date | null) {
@@ -59,6 +94,11 @@ export default async function AdminAttendanceDashboard({
     status: getFirst(query.status),
     search: getFirst(query.q),
   });
+
+  const todayPrograms = data.extracurriculars.filter(
+    (program) => program.schedules.length > 0,
+  );
+
   return (
     <main className={styles.page}>
       <a className="skip-link" href="#attendance-table">
@@ -78,7 +118,7 @@ export default async function AdminAttendanceDashboard({
                 alt="Logo SMK Negeri 69 Jakarta"
                 height={948}
                 priority
-                src="/logo-smkn69.png"
+                src="/logo-smkn69.webp"
                 width={758}
               />
             </span>
@@ -88,13 +128,7 @@ export default async function AdminAttendanceDashboard({
             </span>
           </Link>
 
-          <nav className={styles.navigation} aria-label="Navigasi admin">
-            <Link className={styles.activeNav} href="/admin/dashboard">
-              Kehadiran
-            </Link>
-            <Link href="/admin/laporan">Laporan</Link>
-            <Link href="/ekstrakurikuler">Katalog ekskul</Link>
-          </nav>
+          <AdminNavigation activeItem="attendance" className={styles.navigation} />
 
           <div className={styles.accountActions}>
             <span className={styles.avatar} aria-hidden="true">
@@ -106,7 +140,7 @@ export default async function AdminAttendanceDashboard({
             </div>
             <form action={adminLogoutAction}>
               <button className={styles.logoutButton} type="submit">
-                Keluar
+                Keluar ↗
               </button>
             </form>
           </div>
@@ -114,8 +148,8 @@ export default async function AdminAttendanceDashboard({
       </header>
 
       <div className={styles.shell}>
-        <section className={`${styles.hero} ${styles.soloHero}`}>
-          <div>
+        <section className={styles.hero}>
+          <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>Monitoring harian / {data.formattedDate}</p>
             <h1>
               Kehadiran <span>terpantau.</span>
@@ -124,11 +158,164 @@ export default async function AdminAttendanceDashboard({
               Lihat siswa yang hadir, izin beserta alasannya, tidak hadir
               otomatis, dan yang belum mengisi untuk jadwal hari ini.
             </p>
-            <Link className={styles.reportCta} href="/admin/laporan">
-              Cek laporan Excel <span aria-hidden="true">→</span>
-            </Link>
+            <div className={styles.heroActions}>
+              <Link className={styles.reportCta} href="/admin/laporan">
+                Cek laporan Excel <span aria-hidden="true">→</span>
+              </Link>
+              {todayPrograms.length > 0 && (
+                <a className={styles.secondaryLink} href="#active-agendas">
+                  Lihat agenda ekskul <span aria-hidden="true">↓</span>
+                </a>
+              )}
+            </div>
+          </div>
+
+          <div className={styles.heroPoster} aria-label="Ringkasan monitoring harian">
+            <div className={styles.posterTop}>
+              <span>SMK Negeri 69 Jakarta</span>
+              <strong>Live Monitoring</strong>
+            </div>
+            <div className={styles.posterMain}>
+              <span className={styles.liveBadge}>
+                <span className={styles.liveDot} aria-hidden="true" /> Live Presensi
+              </span>
+              <strong>{data.stats.scheduled}</strong>
+              <p>Siswa Terjadwal Hari Ini</p>
+              <div className={styles.posterDetails}>
+                <span>Hadir: {data.stats.present}</span>
+                <span>Izin: {data.stats.excused}</span>
+                <span>Absen: {data.stats.absent}</span>
+              </div>
+            </div>
+            <div className={styles.posterBottom}>
+              <span>Pantau status & cetak laporan</span>
+              <Link href="/admin/laporan" aria-label="Ke halaman laporan">
+                ↗
+              </Link>
+            </div>
           </div>
         </section>
+
+        <section className={styles.stats} aria-label="Ringkasan statistik kehadiran">
+          <article>
+            <span className={styles.statIndex}>01</span>
+            <div>
+              <p>Terjadwal</p>
+              <strong>{data.stats.scheduled}</strong>
+            </div>
+          </article>
+          <article className={styles.presentStat}>
+            <span className={styles.statIndex}>02</span>
+            <div>
+              <p>Siswa hadir</p>
+              <strong>{data.stats.present}</strong>
+            </div>
+          </article>
+          <article className={styles.excusedStat}>
+            <span className={styles.statIndex}>03</span>
+            <div>
+              <p>Siswa izin</p>
+              <strong>{data.stats.excused}</strong>
+            </div>
+          </article>
+          <article className={styles.absentStat}>
+            <span className={styles.statIndex}>04</span>
+            <div>
+              <p>Tidak hadir</p>
+              <strong>{data.stats.absent}</strong>
+            </div>
+          </article>
+          <article className={styles.missingStat}>
+            <span className={styles.statIndex}>05</span>
+            <div>
+              <p>Belum mengisi</p>
+              <strong>{data.stats.missing}</strong>
+            </div>
+          </article>
+        </section>
+
+        {todayPrograms.length > 0 && (
+          <section
+            className={styles.agendaSection}
+            id="active-agendas"
+            aria-labelledby="active-agendas-title"
+          >
+            <div className={styles.agendaSectionHeading}>
+              <div>
+                <p className={styles.eyebrow}>Agenda hari ini</p>
+                <h2 id="active-agendas-title">Ekstrakurikuler aktif</h2>
+              </div>
+              <span>{todayPrograms.length} ekskul terjadwal</span>
+            </div>
+
+            <div className={styles.agendaGrid}>
+              {todayPrograms.map((program) => {
+                const presentation = programPresentation[program.name] ?? {
+                  tone: "blue",
+                };
+                const toneClass =
+                  programToneClasses[presentation.tone] ?? styles.programBlue;
+                const programRows = data.rows.filter(
+                  (r) => r.extracurricularName === program.name,
+                );
+                const presentCount = programRows.filter(
+                  (r) => r.status === "PRESENT",
+                ).length;
+                const totalCount = programRows.length;
+
+                return (
+                  <article
+                    className={`${styles.agendaCard} ${toneClass}`}
+                    key={program.id}
+                  >
+                    <div className={styles.agendaCardHeader}>
+                      {presentation.logo ? (
+                        <span className={styles.agendaLogo}>
+                          <Image
+                            alt={`Logo ${program.name}`}
+                            height={72}
+                            src={presentation.logo}
+                            width={72}
+                          />
+                        </span>
+                      ) : (
+                        <span className={styles.agendaBadge}>Ekskul</span>
+                      )}
+                      <span className={styles.agendaBadge}>
+                        {totalCount > 0
+                          ? `${presentCount}/${totalCount} hadir`
+                          : "Jadwal aktif"}
+                      </span>
+                    </div>
+
+                    <h3>{program.name}</h3>
+                    <p>
+                      Hari ini terjadwal latihan · Presensi dibuka untuk siswa
+                      terdaftar.
+                    </p>
+
+                    <div className={styles.agendaActions}>
+                      <Link
+                        className={styles.generateBtn}
+                        href={`/admin/esktrakulikuler/${slugify(program.name)}`}
+                      >
+                        Generate kode presensi <span aria-hidden="true">→</span>
+                      </Link>
+                      <Link
+                        className={styles.filterBtn}
+                        href={`/admin/dashboard?ekskul=${encodeURIComponent(
+                          program.id,
+                        )}#attendance-table`}
+                      >
+                        Filter presensi siswa <span aria-hidden="true">↓</span>
+                      </Link>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         <section className={styles.monitoringSection}>
           <div className={styles.sectionHeading}>

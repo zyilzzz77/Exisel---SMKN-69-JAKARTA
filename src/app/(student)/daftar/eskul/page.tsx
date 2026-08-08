@@ -99,7 +99,7 @@ export default async function ExtracurricularRegistrationPage({
                 alt="Logo SMK Negeri 69 Jakarta"
                 height={112}
                 priority
-                src="/logo-smkn69.png"
+                src="/logo-smkn69.webp"
                 width={88}
               />
             </span>

@@ -882,7 +882,9 @@ a {
 .program-card h3 {
   min-width: 0;
   margin: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
   font-family: var(--font-display), sans-serif;
   font-size: clamp(34px, 3.6vw, 50px);
   font-weight: 800;
@@ -1745,8 +1747,8 @@ a {
   }
 
   .program-card-body {
-    grid-template-columns: minmax(0, 1fr) 58px;
-    gap: 8px;
+    grid-template-columns: minmax(0, 1fr) 50px;
+    gap: 6px;
     margin-bottom: 14px;
   }
 
@@ -1755,12 +1757,12 @@ a {
   }
 
   .program-card h3 {
-    font-size: clamp(24px, 7.2vw, 30px);
-    line-height: 0.95;
+    font-size: clamp(16px, 4.9vw, 22px);
+    line-height: 1;
   }
 
   .program-logo {
-    width: 58px;
+    width: 50px;
     border-width: 2px;
     box-shadow: 3px 3px 0 var(--ink);
   }

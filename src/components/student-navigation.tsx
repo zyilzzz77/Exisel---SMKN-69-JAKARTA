@@ -13,6 +13,11 @@ const studentNavigationItems = [
     label: "Pilihan ekskul",
   },
   {
+    id: "community",
+    href: "/community",
+    label: "Community",
+  },
+  {
     id: "attendance",
     href: "/kehadiran",
     label: "Kehadiran",
@@ -44,6 +49,11 @@ const landingNavigationItems = [
     id: "explore",
     href: "#pilihan",
     label: "Explore",
+  },
+  {
+    id: "community",
+    href: "/community",
+    label: "Community",
   },
 ] as const;
 

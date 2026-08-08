@@ -1,0 +1,235 @@
+.cardSection {
+  margin-block: 40px;
+}
+
+.cardContainer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  align-items: center;
+  gap: 40px;
+  padding: 36px 40px;
+  border: 4px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: 10px 10px 0 var(--ink);
+  transition: box-shadow 180ms ease, transform 180ms ease;
+}
+
+.cardCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.headline {
+  margin: 0 0 16px;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1.05;
+}
+
+.description {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.metaStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  width: 100%;
+  padding-top: 20px;
+  border-top: 3px solid var(--ink);
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metaItem span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.metaItem strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.videoColumn {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.videoFrame {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 290px;
+  aspect-ratio: 9 / 16;
+  max-height: 510px;
+  border: 4px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--ink);
+  box-shadow: 7px 7px 0 var(--ink);
+}
+
+.videoElement {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+.playOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border: none;
+  background: rgba(11, 35, 95, 0.76);
+  backdrop-filter: blur(4px);
+  color: var(--white);
+  cursor: pointer;
+  transition: background-color 200ms ease;
+}
+
+.playOverlay:hover {
+  background: rgba(11, 35, 95, 0.88);
+}
+
+.playIconContainer {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.playOverlay:hover .playIconContainer {
+  transform: scale(1.08) rotate(-3deg);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.playTriangle {
+  width: 0;
+  height: 0;
+  margin-left: 4px;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-left: 18px solid var(--ink);
+}
+
+.playText {
+  padding: 6px 14px;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  background: var(--white);
+  box-shadow: 3px 3px 0 var(--ink);
+  color: var(--ink);
+  font-family: var(--font-display), sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badgeLabel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 12;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--white);
+  box-shadow: 2px 2px 0 var(--ink);
+  color: var(--ink);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+.soundToggleBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 15;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--orange);
+  box-shadow: 2px 2px 0 var(--ink);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: var(--font-display), sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.soundToggleBtn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4fe06f;
+  box-shadow: 0 0 6px #4fe06f;
+}
+
+@media (max-width: 860px) {
+  .cardContainer {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 28px 24px;
+  }
+
+  .videoColumn {
+    justify-content: center;
+  }
+
+  .videoFrame {
+    max-width: 280px;
+  }
+}

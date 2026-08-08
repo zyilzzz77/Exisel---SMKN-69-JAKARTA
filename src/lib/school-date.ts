@@ -38,6 +38,21 @@ export function shiftSchoolDateKey(dateKey: string, days: number) {
   return date.toISOString().slice(0, 10);
 }
 
+export function getSchoolWeekRange(nowDateKey = getJakartaDateKey()) {
+  const weekdayIndex = toDatabaseDate(nowDateKey).getUTCDay();
+  const isAfterFriday = weekdayIndex === 6 || weekdayIndex === 0;
+  const daysToMonday =
+    weekdayIndex === 6 ? 2 : weekdayIndex === 0 ? 1 : -((weekdayIndex + 6) % 7);
+  const mondayDateKey = shiftSchoolDateKey(nowDateKey, daysToMonday);
+  const fridayDateKey = shiftSchoolDateKey(mondayDateKey, 4);
+
+  return {
+    mondayDateKey,
+    fridayDateKey,
+    isAfterFriday,
+  };
+}
+
 export function getSchoolDay(dateKey: string): SchoolDay {
   return DAY_NAMES[toDatabaseDate(dateKey).getUTCDay()];
 }

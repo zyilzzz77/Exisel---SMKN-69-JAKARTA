@@ -76,3 +76,8 @@ export type AttendanceSession = Prisma.AttendanceSessionModel
  * 
  */
 export type LoginThrottle = Prisma.LoginThrottleModel
+/**
+ * Model CommunityMessage
+ * 
+ */
+export type CommunityMessage = Prisma.CommunityMessageModel

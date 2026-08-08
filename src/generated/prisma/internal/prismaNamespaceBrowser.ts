@@ -57,7 +57,8 @@ export const ModelName = {
   Enrollment: 'Enrollment',
   Attendance: 'Attendance',
   AttendanceSession: 'AttendanceSession',
-  LoginThrottle: 'LoginThrottle'
+  LoginThrottle: 'LoginThrottle',
+  CommunityMessage: 'CommunityMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -165,6 +166,20 @@ export const LoginThrottleScalarFieldEnum = {
 } as const
 
 export type LoginThrottleScalarFieldEnum = (typeof LoginThrottleScalarFieldEnum)[keyof typeof LoginThrottleScalarFieldEnum]
+
+
+export const CommunityMessageScalarFieldEnum = {
+  id: 'id',
+  extracurricularId: 'extracurricularId',
+  senderId: 'senderId',
+  content: 'content',
+  isEdited: 'isEdited',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type CommunityMessageScalarFieldEnum = (typeof CommunityMessageScalarFieldEnum)[keyof typeof CommunityMessageScalarFieldEnum]
 
 
 export const SortOrder = {

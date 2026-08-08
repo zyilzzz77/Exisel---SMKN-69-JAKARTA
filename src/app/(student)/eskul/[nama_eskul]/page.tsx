@@ -3,8 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
+import { PromoVideoPlayer } from "@/components/promo-video-player";
 import { StudentNavigation } from "@/components/student-navigation";
-import { getStudentDashboard } from "@/lib/auth/dal";
+import { getPublicExtracurricularData } from "@/lib/auth/dal";
 import styles from "./detail.module.css";
 
 type DetailPageProps = {
@@ -140,14 +141,87 @@ const programDetails: Record<
 };
 
 const programLogos: Record<string, string> = {
-  PMR: "/logo-pmr.png",
-  "English Club": "/logo-english-club.png",
-  Nihon: "/logo-nihon.png",
-  Basket: "/logo-basket.png",
-  ITC: "/logo-itc.png",
-  Paskibra: "/logo-paskibra.png",
-  Pramuka: "/logo-pramuka.png",
-  Futsal: "/logo-futsal.png",
+  PMR: "/logo-pmr.webp",
+  "English Club": "/logo-english-club.webp",
+  Nihon: "/logo-nihon.webp",
+  Basket: "/logo-basket.webp",
+  ITC: "/logo-itc.webp",
+  Paskibra: "/logo-paskibra.webp",
+  Pramuka: "/logo-pramuka.webp",
+  Futsal: "/logo-futsal.webp",
+};
+
+const programVideos: Record<
+  string,
+  {
+    src: string;
+    poster?: string;
+    eyebrow: string;
+    headline: string;
+    description: string;
+    metaItems: Array<{ label: string; value: string }>;
+  }
+> = {
+  Paskibra: {
+    src: "/videos/paskibra-promo.mp4",
+    poster: "/logo-paskibra.webp",
+    eyebrow: "Mengenal Paskibra",
+    headline: "Tegakkan disiplin. Pimpin lewat teladan.",
+    description:
+      "Paskibra SMKN 69 Jakarta mendidik kader muda yang tangguh, berkarakter, dan berjiwa kepemimpinan tinggi melalui keahlian baris-berbaris, variasi formasi, dan kedisiplinan yang solid.",
+    metaItems: [
+      { label: "Fokus Utama", value: "Kepemimpinan & PBB" },
+      { label: "Karakter", value: "Disiplin · Kompak · Tangguh" },
+    ],
+  },
+  PMR: {
+    src: "/videos/pmr-promo.mp4",
+    poster: "/logo-pmr.webp",
+    eyebrow: "Mengenal PMR Wira",
+    headline: "Belajar menolong. Bergerak untuk sesama.",
+    description:
+      "PMR SMKN 69 Jakarta adalah wadah relawan muda yang melatih pertolongan pertama, kesiapsiagaan darurat, dan aksi sosial kemanusiaan dengan empati serta kepedulian nyata.",
+    metaItems: [
+      { label: "Fokus Utama", value: "Pertolongan Pertama & Kesehatan" },
+      { label: "Karakter", value: "Siaga · Peduli · Tanggap" },
+    ],
+  },
+  Basket: {
+    src: "/videos/basket-promo.mp4",
+    poster: "/logo-basket.webp",
+    eyebrow: "Mengenal Basket",
+    headline: "Gerak cepat. Tumbuh kuat bersama tim.",
+    description:
+      "Tim Basket SMKN 69 Jakarta melatih fisik, teknik permainan, strategi lapangan, dan kerja sama tim yang solid untuk meraih prestasi olahraga.",
+    metaItems: [
+      { label: "Fokus Utama", value: "Teknik Olahraga & Stamina" },
+      { label: "Karakter", value: "Sportif · Kerja Tim · Tangguh" },
+    ],
+  },
+  ITC: {
+    src: "/videos/itc-promo.mp4",
+    poster: "/logo-itc.webp",
+    eyebrow: "Mengenal ITC",
+    headline: "Eksplorasi teknologi. Bangun karya nyata.",
+    description:
+      "ITC SMKN 69 Jakarta adalah komunitas penggemar teknologi yang mempelajari pemrograman, desain digital, analisis sistem, dan proyek teknologi aplikatif.",
+    metaItems: [
+      { label: "Fokus Utama", value: "Coding, Design & Technology" },
+      { label: "Karakter", value: "Inovatif · Logis · Solutif" },
+    ],
+  },
+  Pramuka: {
+    src: "/videos/pramuka-promo.mp4",
+    poster: "/logo-pramuka.webp",
+    eyebrow: "Mengenal Pramuka",
+    headline: "Bertumbuh tangguh. Mengabdi untuk negeri.",
+    description:
+      "Gerakan Pramuka SMKN 69 Jakarta membentuk kepribadian yang mandiri, berkarakter, mahir teknik kepramukaan, dan berjiwa kepemimpinan.",
+    metaItems: [
+      { label: "Fokus Utama", value: "Karakter & Scoutcraft" },
+      { label: "Karakter", value: "Mandiri · Memimpin · Berbakti" },
+    ],
+  },
 };
 
 const programDocumentation: Record<
@@ -167,7 +241,7 @@ const programDocumentation: Record<
   }
 > = {
   PMR: {
-    src: "/dokumentasi-pmr-agenda-2025.png",
+    src: "/dokumentasi-pmr-agenda-2025.webp",
     alt: "Kolase dokumentasi agenda PMR SMKN 69 Jakarta pada 20 Oktober 2025",
     title: "Belajar langsung lewat simulasi dan aksi.",
     description:
@@ -180,7 +254,7 @@ const programDocumentation: Record<
     height: 1600,
   },
   "English Club": {
-    src: "/dokumentasi-english-club.png",
+    src: "/dokumentasi-english-club.webp",
     alt: "Foto bersama anggota English Club dan guru di ruang kelas SMKN 69 Jakarta",
     title: "Berlatih bersama. Tumbuh lebih percaya diri.",
     description:
@@ -193,7 +267,7 @@ const programDocumentation: Record<
     landscape: true,
   },
   Nihon: {
-    src: "/dokumentasi-nihon.png",
+    src: "/dokumentasi-nihon.webp",
     alt: "Foto bersama anggota Nihon berkostum karakter Jepang dan guru SMKN 69 Jakarta di area sekolah",
     title: "Mengenal budaya. Menampilkan kreativitas.",
     description:
@@ -206,7 +280,7 @@ const programDocumentation: Record<
     fourThree: true,
   },
   Basket: {
-    src: "/dokumentasi-basket.png",
+    src: "/dokumentasi-basket.webp",
     alt: "Foto bersama anggota Basket putra dan putri SMKN 69 Jakarta di lapangan olahraga dalam ruangan",
     title: "Berlatih keras. Bertumbuh sebagai satu tim.",
     description:
@@ -274,7 +348,7 @@ export default async function ExtracurricularDetailPage({
   params,
 }: DetailPageProps) {
   const { nama_eskul } = await params;
-  const { user, extracurriculars } = await getStudentDashboard();
+  const { user, extracurriculars } = await getPublicExtracurricularData();
   const requestedSlug = normalizeSlug(nama_eskul);
   const program = extracurriculars.find(
     (item) => slugify(item.name) === requestedSlug,
@@ -317,8 +391,8 @@ export default async function ExtracurricularDetailPage({
               "Kembangkan keberanian untuk mencoba, tampil, dan terus memperbaiki diri.",
           },
         ];
-  const enrollment = user.enrollments.find(
-    (item) => item.extracurricular.id === program.id,
+  const enrollment = user?.enrollments?.find(
+    (item) => item.extracurricularId === program.id,
   );
   const isEnrolled = Boolean(enrollment);
   const remainingSeats = Math.max(
@@ -331,6 +405,7 @@ export default async function ExtracurricularDetailPage({
   );
   const logo = programLogos[program.name];
   const documentation = programDocumentation[program.name];
+  const video = programVideos[program.name];
 
   return (
     <main className={styles.page}>
@@ -354,7 +429,7 @@ export default async function ExtracurricularDetailPage({
                 alt="Logo SMK Negeri 69 Jakarta"
                 height={948}
                 priority
-                src="/logo-smkn69.png"
+                src="/logo-smkn69.webp"
                 width={758}
               />
             </span>
@@ -370,10 +445,18 @@ export default async function ExtracurricularDetailPage({
           />
 
           <div className={styles.accountActions}>
-            <span className={styles.avatar} aria-hidden="true">
-              {initials(user.name)}
-            </span>
-            <ConfirmLogoutButton className={styles.logoutButton} />
+            {user ? (
+              <>
+                <span className={styles.avatar} aria-hidden="true">
+                  {initials(user.name)}
+                </span>
+                <ConfirmLogoutButton className={styles.logoutButton} />
+              </>
+            ) : (
+              <Link className={styles.logoutButton} href="/login">
+                Masuk <span aria-hidden="true">↗</span>
+              </Link>
+            )}
           </div>
         </div>
       </header>
@@ -443,6 +526,18 @@ export default async function ExtracurricularDetailPage({
             </div>
           </div>
         </section>
+
+        {video ? (
+          <PromoVideoPlayer
+            description={video.description}
+            eyebrow={video.eyebrow}
+            headline={video.headline}
+            metaItems={video.metaItems}
+            poster={video.poster ?? logo ?? "/logo-smkn69.webp"}
+            src={video.src}
+            title={`Profil & Video ${program.name}`}
+          />
+        ) : null}
 
         <section className={styles.factStrip} aria-label="Informasi utama ekskul">
           <article>

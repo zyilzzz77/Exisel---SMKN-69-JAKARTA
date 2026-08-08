@@ -403,7 +403,8 @@ export const ModelName = {
   Enrollment: 'Enrollment',
   Attendance: 'Attendance',
   AttendanceSession: 'AttendanceSession',
-  LoginThrottle: 'LoginThrottle'
+  LoginThrottle: 'LoginThrottle',
+  CommunityMessage: 'CommunityMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "extracurricular" | "schedule" | "enrollment" | "attendance" | "attendanceSession" | "loginThrottle"
+    modelProps: "user" | "extracurricular" | "schedule" | "enrollment" | "attendance" | "attendanceSession" | "loginThrottle" | "communityMessage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -941,6 +942,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CommunityMessage: {
+      payload: Prisma.$CommunityMessagePayload<ExtArgs>
+      fields: Prisma.CommunityMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommunityMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommunityMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.CommunityMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommunityMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityMessagePayload>
+        }
+        findMany: {
+          args: Prisma.CommunityMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityMessagePayload>[]
+        }
+        create: {
+          args: Prisma.CommunityMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityMessagePayload>
+        }
+        createMany: {
+          args: Prisma.CommunityMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CommunityMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.CommunityMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityMessagePayload>
+        }
+        update: {
+          args: Prisma.CommunityMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.CommunityMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommunityMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CommunityMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.CommunityMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.CommunityMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommunityMessage>
+        }
+        groupBy: {
+          args: Prisma.CommunityMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunityMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommunityMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunityMessageCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1069,6 +1144,20 @@ export const LoginThrottleScalarFieldEnum = {
 } as const
 
 export type LoginThrottleScalarFieldEnum = (typeof LoginThrottleScalarFieldEnum)[keyof typeof LoginThrottleScalarFieldEnum]
+
+
+export const CommunityMessageScalarFieldEnum = {
+  id: 'id',
+  extracurricularId: 'extracurricularId',
+  senderId: 'senderId',
+  content: 'content',
+  isEdited: 'isEdited',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type CommunityMessageScalarFieldEnum = (typeof CommunityMessageScalarFieldEnum)[keyof typeof CommunityMessageScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1377,6 +1466,7 @@ export type GlobalOmitConfig = {
   attendance?: Prisma.AttendanceOmit
   attendanceSession?: Prisma.AttendanceSessionOmit
   loginThrottle?: Prisma.LoginThrottleOmit
+  communityMessage?: Prisma.CommunityMessageOmit
 }
 
 /* Types for Logging */

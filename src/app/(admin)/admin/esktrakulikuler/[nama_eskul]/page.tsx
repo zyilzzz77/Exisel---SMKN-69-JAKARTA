@@ -27,12 +27,12 @@ const dayLabels: Record<string, string> = {
 };
 
 const logos: Record<string, string> = {
-  Pramuka: "/logo-pramuka.png",
-  Nihon: "/logo-nihon.png",
-  Basket: "/logo-basket.png",
-  ITC: "/logo-itc.png",
-  "English Club": "/logo-english-club.png",
-  Futsal: "/logo-futsal.png",
+  Pramuka: "/logo-pramuka.webp",
+  Nihon: "/logo-nihon.webp",
+  Basket: "/logo-basket.webp",
+  ITC: "/logo-itc.webp",
+  "English Club": "/logo-english-club.webp",
+  Futsal: "/logo-futsal.webp",
 };
 
 function slugify(value: string) {
@@ -88,7 +88,7 @@ export default async function AdminExtracurricularSessionPage({ params }: PagePr
       <div className={styles.announcement}>Portal pembina / kode kehadiran <span>Waktu Jakarta</span></div>
       <header className={styles.header}>
         <Link className={styles.brand} href="/admin/dashboard">
-          <Image alt="Logo SMK Negeri 69 Jakarta" height={948} src="/logo-smkn69.png" width={758} />
+          <Image alt="Logo SMK Negeri 69 Jakarta" height={948} src="/logo-smkn69.webp" width={758} />
           <span><strong>EXISEL</strong><small>Generator sesi kehadiran</small></span>
         </Link>
         <nav aria-label="Navigasi admin">

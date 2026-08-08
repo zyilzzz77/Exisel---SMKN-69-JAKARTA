@@ -66,12 +66,13 @@
   display: inline-flex;
   width: fit-content;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  transform: translateX(10px);
 }
 
 .brandLogo {
-  width: 44px;
-  height: 56px;
+  width: 36px;
+  height: 46px;
 }
 
 .brandLogo img {
@@ -87,13 +88,13 @@
 
 .brandCopy strong {
   font-family: var(--font-display), sans-serif;
-  font-size: 21px;
+  font-size: 18px;
 }
 
 .brandCopy small {
   margin-top: 5px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 7px;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -861,6 +862,16 @@
 
   .brand {
     min-width: 0;
+    transform: translateX(4px);
+  }
+
+  .brandLogo {
+    width: 32px;
+    height: 40px;
+  }
+
+  .brandCopy strong {
+    font-size: 16px;
   }
 
   .accountActions {

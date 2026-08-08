@@ -236,6 +236,7 @@ export type ExtracurricularWhereInput = {
   enrollments?: Prisma.EnrollmentListRelationFilter
   attendances?: Prisma.AttendanceListRelationFilter
   attendanceSessions?: Prisma.AttendanceSessionListRelationFilter
+  communityMessages?: Prisma.CommunityMessageListRelationFilter
 }
 
 export type ExtracurricularOrderByWithRelationInput = {
@@ -250,6 +251,7 @@ export type ExtracurricularOrderByWithRelationInput = {
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   attendances?: Prisma.AttendanceOrderByRelationAggregateInput
   attendanceSessions?: Prisma.AttendanceSessionOrderByRelationAggregateInput
+  communityMessages?: Prisma.CommunityMessageOrderByRelationAggregateInput
 }
 
 export type ExtracurricularWhereUniqueInput = Prisma.AtLeast<{
@@ -267,6 +269,7 @@ export type ExtracurricularWhereUniqueInput = Prisma.AtLeast<{
   enrollments?: Prisma.EnrollmentListRelationFilter
   attendances?: Prisma.AttendanceListRelationFilter
   attendanceSessions?: Prisma.AttendanceSessionListRelationFilter
+  communityMessages?: Prisma.CommunityMessageListRelationFilter
 }, "id" | "name">
 
 export type ExtracurricularOrderByWithAggregationInput = {
@@ -309,6 +312,7 @@ export type ExtracurricularCreateInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutExtracurricularInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutExtracurricularInput
   attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutExtracurricularInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutExtracurricularInput
 }
 
 export type ExtracurricularUncheckedCreateInput = {
@@ -323,6 +327,7 @@ export type ExtracurricularUncheckedCreateInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutExtracurricularInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutExtracurricularInput
   attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutExtracurricularInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutExtracurricularInput
 }
 
 export type ExtracurricularUpdateInput = {
@@ -337,6 +342,7 @@ export type ExtracurricularUpdateInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutExtracurricularNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutExtracurricularNestedInput
   attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutExtracurricularNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutExtracurricularNestedInput
 }
 
 export type ExtracurricularUncheckedUpdateInput = {
@@ -351,6 +357,7 @@ export type ExtracurricularUncheckedUpdateInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutExtracurricularNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutExtracurricularNestedInput
   attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutExtracurricularNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutExtracurricularNestedInput
 }
 
 export type ExtracurricularCreateManyInput = {
@@ -490,6 +497,20 @@ export type ExtracurricularUpdateOneRequiredWithoutAttendanceSessionsNestedInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ExtracurricularUpdateToOneWithWhereWithoutAttendanceSessionsInput, Prisma.ExtracurricularUpdateWithoutAttendanceSessionsInput>, Prisma.ExtracurricularUncheckedUpdateWithoutAttendanceSessionsInput>
 }
 
+export type ExtracurricularCreateNestedOneWithoutCommunityMessagesInput = {
+  create?: Prisma.XOR<Prisma.ExtracurricularCreateWithoutCommunityMessagesInput, Prisma.ExtracurricularUncheckedCreateWithoutCommunityMessagesInput>
+  connectOrCreate?: Prisma.ExtracurricularCreateOrConnectWithoutCommunityMessagesInput
+  connect?: Prisma.ExtracurricularWhereUniqueInput
+}
+
+export type ExtracurricularUpdateOneRequiredWithoutCommunityMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.ExtracurricularCreateWithoutCommunityMessagesInput, Prisma.ExtracurricularUncheckedCreateWithoutCommunityMessagesInput>
+  connectOrCreate?: Prisma.ExtracurricularCreateOrConnectWithoutCommunityMessagesInput
+  upsert?: Prisma.ExtracurricularUpsertWithoutCommunityMessagesInput
+  connect?: Prisma.ExtracurricularWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ExtracurricularUpdateToOneWithWhereWithoutCommunityMessagesInput, Prisma.ExtracurricularUpdateWithoutCommunityMessagesInput>, Prisma.ExtracurricularUncheckedUpdateWithoutCommunityMessagesInput>
+}
+
 export type ExtracurricularCreateWithoutSchedulesInput = {
   id?: string
   name: string
@@ -501,6 +522,7 @@ export type ExtracurricularCreateWithoutSchedulesInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutExtracurricularInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutExtracurricularInput
   attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutExtracurricularInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutExtracurricularInput
 }
 
 export type ExtracurricularUncheckedCreateWithoutSchedulesInput = {
@@ -514,6 +536,7 @@ export type ExtracurricularUncheckedCreateWithoutSchedulesInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutExtracurricularInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutExtracurricularInput
   attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutExtracurricularInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutExtracurricularInput
 }
 
 export type ExtracurricularCreateOrConnectWithoutSchedulesInput = {
@@ -543,6 +566,7 @@ export type ExtracurricularUpdateWithoutSchedulesInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutExtracurricularNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutExtracurricularNestedInput
   attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutExtracurricularNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutExtracurricularNestedInput
 }
 
 export type ExtracurricularUncheckedUpdateWithoutSchedulesInput = {
@@ -556,6 +580,7 @@ export type ExtracurricularUncheckedUpdateWithoutSchedulesInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutExtracurricularNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutExtracurricularNestedInput
   attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutExtracurricularNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutExtracurricularNestedInput
 }
 
 export type ExtracurricularCreateWithoutEnrollmentsInput = {
@@ -569,6 +594,7 @@ export type ExtracurricularCreateWithoutEnrollmentsInput = {
   schedules?: Prisma.ScheduleCreateNestedManyWithoutExtracurricularInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutExtracurricularInput
   attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutExtracurricularInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutExtracurricularInput
 }
 
 export type ExtracurricularUncheckedCreateWithoutEnrollmentsInput = {
@@ -582,6 +608,7 @@ export type ExtracurricularUncheckedCreateWithoutEnrollmentsInput = {
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutExtracurricularInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutExtracurricularInput
   attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutExtracurricularInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutExtracurricularInput
 }
 
 export type ExtracurricularCreateOrConnectWithoutEnrollmentsInput = {
@@ -611,6 +638,7 @@ export type ExtracurricularUpdateWithoutEnrollmentsInput = {
   schedules?: Prisma.ScheduleUpdateManyWithoutExtracurricularNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutExtracurricularNestedInput
   attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutExtracurricularNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutExtracurricularNestedInput
 }
 
 export type ExtracurricularUncheckedUpdateWithoutEnrollmentsInput = {
@@ -624,6 +652,7 @@ export type ExtracurricularUncheckedUpdateWithoutEnrollmentsInput = {
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutExtracurricularNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutExtracurricularNestedInput
   attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutExtracurricularNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutExtracurricularNestedInput
 }
 
 export type ExtracurricularCreateWithoutAttendancesInput = {
@@ -637,6 +666,7 @@ export type ExtracurricularCreateWithoutAttendancesInput = {
   schedules?: Prisma.ScheduleCreateNestedManyWithoutExtracurricularInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutExtracurricularInput
   attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutExtracurricularInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutExtracurricularInput
 }
 
 export type ExtracurricularUncheckedCreateWithoutAttendancesInput = {
@@ -650,6 +680,7 @@ export type ExtracurricularUncheckedCreateWithoutAttendancesInput = {
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutExtracurricularInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutExtracurricularInput
   attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutExtracurricularInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutExtracurricularInput
 }
 
 export type ExtracurricularCreateOrConnectWithoutAttendancesInput = {
@@ -679,6 +710,7 @@ export type ExtracurricularUpdateWithoutAttendancesInput = {
   schedules?: Prisma.ScheduleUpdateManyWithoutExtracurricularNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutExtracurricularNestedInput
   attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutExtracurricularNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutExtracurricularNestedInput
 }
 
 export type ExtracurricularUncheckedUpdateWithoutAttendancesInput = {
@@ -692,6 +724,7 @@ export type ExtracurricularUncheckedUpdateWithoutAttendancesInput = {
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutExtracurricularNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutExtracurricularNestedInput
   attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutExtracurricularNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutExtracurricularNestedInput
 }
 
 export type ExtracurricularCreateWithoutAttendanceSessionsInput = {
@@ -705,6 +738,7 @@ export type ExtracurricularCreateWithoutAttendanceSessionsInput = {
   schedules?: Prisma.ScheduleCreateNestedManyWithoutExtracurricularInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutExtracurricularInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutExtracurricularInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutExtracurricularInput
 }
 
 export type ExtracurricularUncheckedCreateWithoutAttendanceSessionsInput = {
@@ -718,6 +752,7 @@ export type ExtracurricularUncheckedCreateWithoutAttendanceSessionsInput = {
   schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutExtracurricularInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutExtracurricularInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutExtracurricularInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutExtracurricularInput
 }
 
 export type ExtracurricularCreateOrConnectWithoutAttendanceSessionsInput = {
@@ -747,6 +782,7 @@ export type ExtracurricularUpdateWithoutAttendanceSessionsInput = {
   schedules?: Prisma.ScheduleUpdateManyWithoutExtracurricularNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutExtracurricularNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutExtracurricularNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutExtracurricularNestedInput
 }
 
 export type ExtracurricularUncheckedUpdateWithoutAttendanceSessionsInput = {
@@ -760,6 +796,79 @@ export type ExtracurricularUncheckedUpdateWithoutAttendanceSessionsInput = {
   schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutExtracurricularNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutExtracurricularNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutExtracurricularNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutExtracurricularNestedInput
+}
+
+export type ExtracurricularCreateWithoutCommunityMessagesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  capacity: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  schedules?: Prisma.ScheduleCreateNestedManyWithoutExtracurricularInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutExtracurricularInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutExtracurricularInput
+  attendanceSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutExtracurricularInput
+}
+
+export type ExtracurricularUncheckedCreateWithoutCommunityMessagesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  capacity: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  schedules?: Prisma.ScheduleUncheckedCreateNestedManyWithoutExtracurricularInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutExtracurricularInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutExtracurricularInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutExtracurricularInput
+}
+
+export type ExtracurricularCreateOrConnectWithoutCommunityMessagesInput = {
+  where: Prisma.ExtracurricularWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExtracurricularCreateWithoutCommunityMessagesInput, Prisma.ExtracurricularUncheckedCreateWithoutCommunityMessagesInput>
+}
+
+export type ExtracurricularUpsertWithoutCommunityMessagesInput = {
+  update: Prisma.XOR<Prisma.ExtracurricularUpdateWithoutCommunityMessagesInput, Prisma.ExtracurricularUncheckedUpdateWithoutCommunityMessagesInput>
+  create: Prisma.XOR<Prisma.ExtracurricularCreateWithoutCommunityMessagesInput, Prisma.ExtracurricularUncheckedCreateWithoutCommunityMessagesInput>
+  where?: Prisma.ExtracurricularWhereInput
+}
+
+export type ExtracurricularUpdateToOneWithWhereWithoutCommunityMessagesInput = {
+  where?: Prisma.ExtracurricularWhereInput
+  data: Prisma.XOR<Prisma.ExtracurricularUpdateWithoutCommunityMessagesInput, Prisma.ExtracurricularUncheckedUpdateWithoutCommunityMessagesInput>
+}
+
+export type ExtracurricularUpdateWithoutCommunityMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUpdateManyWithoutExtracurricularNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutExtracurricularNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutExtracurricularNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUpdateManyWithoutExtracurricularNestedInput
+}
+
+export type ExtracurricularUncheckedUpdateWithoutCommunityMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedules?: Prisma.ScheduleUncheckedUpdateManyWithoutExtracurricularNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutExtracurricularNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutExtracurricularNestedInput
+  attendanceSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutExtracurricularNestedInput
 }
 
 
@@ -772,6 +881,7 @@ export type ExtracurricularCountOutputType = {
   enrollments: number
   attendances: number
   attendanceSessions: number
+  communityMessages: number
 }
 
 export type ExtracurricularCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -779,6 +889,7 @@ export type ExtracurricularCountOutputTypeSelect<ExtArgs extends runtime.Types.E
   enrollments?: boolean | ExtracurricularCountOutputTypeCountEnrollmentsArgs
   attendances?: boolean | ExtracurricularCountOutputTypeCountAttendancesArgs
   attendanceSessions?: boolean | ExtracurricularCountOutputTypeCountAttendanceSessionsArgs
+  communityMessages?: boolean | ExtracurricularCountOutputTypeCountCommunityMessagesArgs
 }
 
 /**
@@ -819,6 +930,13 @@ export type ExtracurricularCountOutputTypeCountAttendanceSessionsArgs<ExtArgs ex
   where?: Prisma.AttendanceSessionWhereInput
 }
 
+/**
+ * ExtracurricularCountOutputType without action
+ */
+export type ExtracurricularCountOutputTypeCountCommunityMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommunityMessageWhereInput
+}
+
 
 export type ExtracurricularSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -832,6 +950,7 @@ export type ExtracurricularSelect<ExtArgs extends runtime.Types.Extensions.Inter
   enrollments?: boolean | Prisma.Extracurricular$enrollmentsArgs<ExtArgs>
   attendances?: boolean | Prisma.Extracurricular$attendancesArgs<ExtArgs>
   attendanceSessions?: boolean | Prisma.Extracurricular$attendanceSessionsArgs<ExtArgs>
+  communityMessages?: boolean | Prisma.Extracurricular$communityMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.ExtracurricularCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["extracurricular"]>
 
@@ -871,6 +990,7 @@ export type ExtracurricularInclude<ExtArgs extends runtime.Types.Extensions.Inte
   enrollments?: boolean | Prisma.Extracurricular$enrollmentsArgs<ExtArgs>
   attendances?: boolean | Prisma.Extracurricular$attendancesArgs<ExtArgs>
   attendanceSessions?: boolean | Prisma.Extracurricular$attendanceSessionsArgs<ExtArgs>
+  communityMessages?: boolean | Prisma.Extracurricular$communityMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.ExtracurricularCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ExtracurricularIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -883,6 +1003,7 @@ export type $ExtracurricularPayload<ExtArgs extends runtime.Types.Extensions.Int
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     attendances: Prisma.$AttendancePayload<ExtArgs>[]
     attendanceSessions: Prisma.$AttendanceSessionPayload<ExtArgs>[]
+    communityMessages: Prisma.$CommunityMessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1290,6 +1411,7 @@ export interface Prisma__ExtracurricularClient<T, Null = never, ExtArgs extends 
   enrollments<T extends Prisma.Extracurricular$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Extracurricular$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attendances<T extends Prisma.Extracurricular$attendancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Extracurricular$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attendanceSessions<T extends Prisma.Extracurricular$attendanceSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Extracurricular$attendanceSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendanceSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  communityMessages<T extends Prisma.Extracurricular$communityMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Extracurricular$communityMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommunityMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1812,6 +1934,30 @@ export type Extracurricular$attendanceSessionsArgs<ExtArgs extends runtime.Types
   take?: number
   skip?: number
   distinct?: Prisma.AttendanceSessionScalarFieldEnum | Prisma.AttendanceSessionScalarFieldEnum[]
+}
+
+/**
+ * Extracurricular.communityMessages
+ */
+export type Extracurricular$communityMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommunityMessage
+   */
+  select?: Prisma.CommunityMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommunityMessage
+   */
+  omit?: Prisma.CommunityMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommunityMessageInclude<ExtArgs> | null
+  where?: Prisma.CommunityMessageWhereInput
+  orderBy?: Prisma.CommunityMessageOrderByWithRelationInput | Prisma.CommunityMessageOrderByWithRelationInput[]
+  cursor?: Prisma.CommunityMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommunityMessageScalarFieldEnum | Prisma.CommunityMessageScalarFieldEnum[]
 }
 
 /**

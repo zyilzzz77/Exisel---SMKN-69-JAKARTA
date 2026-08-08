@@ -49,6 +49,7 @@ model User {
   enrollments        Enrollment[]
   attendances        Attendance[]
   createdSessions     AttendanceSession[] @relation("CreatedAttendanceSessions")
+  communityMessages   CommunityMessage[]
 
   @@index([name])
   @@index([className])
@@ -67,6 +68,7 @@ model Extracurricular {
   enrollments Enrollment[]
   attendances Attendance[]
   attendanceSessions AttendanceSession[]
+  communityMessages CommunityMessage[]
 
   @@map("extracurriculars")
 }
@@ -142,3 +144,20 @@ model LoginThrottle {
   @@index([blockedUntil])
   @@map("login_throttles")
 }
+
+model CommunityMessage {
+  id                String          @id @default(uuid()) @db.Uuid
+  extracurricularId String          @map("extracurricular_id") @db.Uuid
+  senderId          String          @map("sender_id") @db.Uuid
+  content           String          @db.VarChar(2000)
+  isEdited          Boolean         @default(false) @map("is_edited")
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt         DateTime?       @map("deleted_at") @db.Timestamptz(3)
+  extracurricular   Extracurricular @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
+  sender            User            @relation(fields: [senderId], references: [id], onDelete: Restrict)
+
+  @@index([extracurricularId, createdAt])
+  @@map("community_messages")
+}
+

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { adminLogoutAction } from "@/actions/auth";
+import { AdminNavigation } from "@/components/admin-navigation";
 import { getAdminAttendanceReports } from "@/lib/attendance/dal";
 import styles from "../dashboard/admin-dashboard.module.css";
 
@@ -79,7 +80,7 @@ export default async function AdminAttendanceReports({
                 alt="Logo SMK Negeri 69 Jakarta"
                 height={948}
                 priority
-                src="/logo-smkn69.png"
+                src="/logo-smkn69.webp"
                 width={758}
               />
             </span>
@@ -89,13 +90,7 @@ export default async function AdminAttendanceReports({
             </span>
           </Link>
 
-          <nav className={styles.navigation} aria-label="Navigasi admin">
-            <Link href="/admin/dashboard">Kehadiran</Link>
-            <Link className={styles.activeNav} href="/admin/laporan">
-              Laporan
-            </Link>
-            <Link href="/ekstrakurikuler">Katalog ekskul</Link>
-          </nav>
+          <AdminNavigation activeItem="reports" className={styles.navigation} />
 
           <div className={styles.accountActions}>
             <span className={styles.avatar} aria-hidden="true">
@@ -107,7 +102,7 @@ export default async function AdminAttendanceReports({
             </div>
             <form action={adminLogoutAction}>
               <button className={styles.logoutButton} type="submit">
-                Keluar
+                Keluar ↗
               </button>
             </form>
           </div>

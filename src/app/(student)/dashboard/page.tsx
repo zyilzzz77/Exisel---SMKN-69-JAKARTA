@@ -3,10 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
 import { StudentNavigation } from "@/components/student-navigation";
+import { TypewriterGreeting } from "@/components/typewriter-greeting";
 import { getStudentDashboard } from "@/lib/auth/dal";
 import {
   getJakartaDateKey,
   getSchoolDay,
+  getSchoolWeekRange,
   shiftSchoolDateKey,
   toDatabaseDate,
 } from "@/lib/school-date";
@@ -48,14 +50,14 @@ const programPresentation: Record<
     logo?: string;
   }
 > = {
-  PMR: { tone: "blue", logo: "/logo-pmr.png" },
-  "English Club": { tone: "pink", logo: "/logo-english-club.png" },
-  Nihon: { tone: "white", logo: "/logo-nihon.png" },
-  Basket: { tone: "lavender", logo: "/logo-basket.png" },
-  ITC: { tone: "navy", logo: "/logo-itc.png" },
-  Paskibra: { tone: "blue", logo: "/logo-paskibra.png" },
-  Pramuka: { tone: "orange", logo: "/logo-pramuka.png" },
-  Futsal: { tone: "white", logo: "/logo-futsal.png" },
+  PMR: { tone: "blue", logo: "/logo-pmr.webp" },
+  "English Club": { tone: "pink", logo: "/logo-english-club.webp" },
+  Nihon: { tone: "white", logo: "/logo-nihon.webp" },
+  Basket: { tone: "lavender", logo: "/logo-basket.webp" },
+  ITC: { tone: "navy", logo: "/logo-itc.webp" },
+  Paskibra: { tone: "blue", logo: "/logo-paskibra.webp" },
+  Pramuka: { tone: "orange", logo: "/logo-pramuka.webp" },
+  Futsal: { tone: "white", logo: "/logo-futsal.webp" },
 };
 
 const programToneClasses = {
@@ -128,12 +130,8 @@ export default async function DashboardPage() {
   );
   const activeEnrollment = todayEnrollment ?? fallbackEnrollment;
   const todayAttendance = todayEnrollment?.extracurricular.attendances[0];
-  const weekdayIndex = toDatabaseDate(jakartaDateKey).getUTCDay();
-  const mondayDateKey = shiftSchoolDateKey(
-    jakartaDateKey,
-    -((weekdayIndex + 6) % 7),
-  );
-  const fridayDateKey = shiftSchoolDateKey(mondayDateKey, 4);
+  const { mondayDateKey, fridayDateKey, isAfterFriday } =
+    getSchoolWeekRange(jakartaDateKey);
   const weekDays = schoolWeekDays.map((weekDay, index) => {
     const dateKey = shiftSchoolDateKey(mondayDateKey, index);
     const events = approvedEnrollments.flatMap((enrollment) =>
@@ -175,7 +173,7 @@ export default async function DashboardPage() {
           <Link className={styles.brand} href="/" aria-label="EXISEL, kembali ke beranda">
             <span className={styles.brandLogo}>
               <Image
-                src="/logo-smkn69.png"
+                src="/logo-smkn69.webp"
                 alt="Logo SMK Negeri 69 Jakarta"
                 width={758}
                 height={948}
@@ -207,9 +205,7 @@ export default async function DashboardPage() {
         <section className={styles.hero} aria-labelledby="welcome-title">
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>Dashboard siswa / {user.className || "Kelas"}</p>
-            <h1 id="welcome-title">
-              Halo, <span>{firstName}!</span>
-            </h1>
+            <TypewriterGreeting id="welcome-title" name={firstName} />
             <p>
               Kelola pilihan ekskul, cek jadwal latihan, dan pantau statusmu
               dari satu tempat.
@@ -303,7 +299,8 @@ export default async function DashboardPage() {
                   </div>
                 ) : (
                   <a href="#jadwal" className={styles.secondaryButton}>
-                    Cek jadwal minggu ini <span aria-hidden="true">→</span>
+                    {isAfterFriday ? "Cek jadwal minggu depan" : "Cek jadwal minggu ini"}{" "}
+                    <span aria-hidden="true">→</span>
                   </a>
                 )}
               </div>
@@ -331,17 +328,23 @@ export default async function DashboardPage() {
               <div className={styles.scheduleHeading}>
                 <div>
                   <p className={styles.cardEyebrow}>Senin sampai Jumat</p>
-                  <h2 id="schedule-title">Agenda ekskul minggu ini</h2>
+                  <h2 id="schedule-title">
+                    {isAfterFriday ? "Agenda ekskul minggu depan" : "Agenda ekskul minggu ini"}
+                  </h2>
                 </div>
                 <span>{weeklyScheduleCount} agenda</span>
               </div>
 
-              <div className={styles.weekCalendar} aria-label="Kalender ekskul minggu ini">
+              <div
+                className={styles.weekCalendar}
+                aria-label={
+                  isAfterFriday ? "Kalender ekskul minggu depan" : "Kalender ekskul minggu ini"
+                }
+              >
                 {weekDays.map((weekDay) => (
                   <article
-                    className={`${styles.weekDay} ${
-                      weekDay.events.length > 0 ? styles.weekDayActive : ""
-                    } ${weekDay.isToday ? styles.weekDayToday : ""}`}
+                    className={`${styles.weekDay} ${weekDay.events.length > 0 ? styles.weekDayActive : ""
+                      } ${weekDay.isToday ? styles.weekDayToday : ""}`}
                     key={weekDay.dateKey}
                     aria-current={weekDay.isToday ? "date" : undefined}
                   >
@@ -425,9 +428,8 @@ export default async function DashboardPage() {
                     <span className={styles.seatBadge}>{remainingSeats} kursi</span>
                   </div>
                   <div
-                    className={`${styles.programBody} ${
-                      presentation.logo ? styles.programBodyWithLogo : ""
-                    }`}
+                    className={`${styles.programBody} ${presentation.logo ? styles.programBodyWithLogo : ""
+                      }`}
                   >
                     <div className={styles.programCopy}>
                       <h3>{program.name}</h3>

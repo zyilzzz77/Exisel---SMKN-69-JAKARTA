@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
 import { StudentNavigation } from "@/components/student-navigation";
-import { getStudentDashboard } from "@/lib/auth/dal";
+import { TypewriterHeading } from "@/components/typewriter-heading";
+import { getPublicExtracurricularData } from "@/lib/auth/dal";
 import styles from "./ekstrakurikuler.module.css";
 
 export const metadata: Metadata = {
@@ -46,56 +47,56 @@ const programPresentation: Record<
     number: "01",
     category: "Kemanusiaan",
     tone: "blue",
-    logo: "/logo-pmr.png",
+    logo: "/logo-pmr.webp",
   },
   "English Club": {
     order: 2,
     number: "02",
     category: "Bahasa",
     tone: "pink",
-    logo: "/logo-english-club.png",
+    logo: "/logo-english-club.webp",
   },
   Nihon: {
     order: 3,
     number: "03",
     category: "Bahasa & Budaya",
     tone: "white",
-    logo: "/logo-nihon.png",
+    logo: "/logo-nihon.webp",
   },
   Basket: {
     order: 4,
     number: "04",
     category: "Olahraga",
     tone: "lavender",
-    logo: "/logo-basket.png",
+    logo: "/logo-basket.webp",
   },
   ITC: {
     order: 5,
     number: "05",
     category: "Teknologi",
-    tone: "navy",
-    logo: "/logo-itc.png",
+    tone: "blue",
+    logo: "/logo-itc.webp",
   },
   Paskibra: {
     order: 6,
     number: "06",
     category: "Kepemimpinan",
     tone: "blue",
-    logo: "/logo-paskibra.png",
+    logo: "/logo-paskibra.webp",
   },
   Pramuka: {
     order: 7,
     number: "07",
     category: "Kepanduan",
     tone: "orange",
-    logo: "/logo-pramuka.png",
+    logo: "/logo-pramuka.webp",
   },
   Futsal: {
     order: 8,
     number: "08",
     category: "Olahraga",
     tone: "white",
-    logo: "/logo-futsal.png",
+    logo: "/logo-futsal.webp",
   },
 };
 
@@ -142,7 +143,7 @@ type ExtracurricularPageProps = {
 export default async function ExtracurricularPage({
   searchParams,
 }: ExtracurricularPageProps) {
-  const { user, extracurriculars } = await getStudentDashboard();
+  const { user, extracurriculars } = await getPublicExtracurricularData();
   const params = await searchParams;
   const query = typeof params.q === "string" ? params.q.trim() : "";
   const requestedDay = typeof params.hari === "string" ? params.hari : "ALL";
@@ -151,7 +152,7 @@ export default async function ExtracurricularPage({
     : "ALL";
   const normalizedQuery = query.toLocaleLowerCase("id-ID");
   const enrolledProgramIds = new Set(
-    user.enrollments.map((enrollment) => enrollment.extracurricular.id),
+    user?.enrollments?.map((enrollment) => enrollment.extracurricularId) ?? [],
   );
   const orderedPrograms = [...extracurriculars].sort(
     (left, right) =>
@@ -216,7 +217,7 @@ export default async function ExtracurricularPage({
           <Link className={styles.brand} href="/" aria-label="EXISEL, kembali ke beranda">
             <span className={styles.brandLogo}>
               <Image
-                src="/logo-smkn69.png"
+                src="/logo-smkn69.webp"
                 alt="Logo SMK Negeri 69 Jakarta"
                 width={758}
                 height={948}
@@ -235,10 +236,18 @@ export default async function ExtracurricularPage({
           />
 
           <div className={styles.accountActions}>
-            <span className={styles.avatar} aria-hidden="true">
-              {initials(user.name)}
-            </span>
-            <ConfirmLogoutButton className={styles.logoutButton} />
+            {user ? (
+              <>
+                <span className={styles.avatar} aria-hidden="true">
+                  {initials(user.name)}
+                </span>
+                <ConfirmLogoutButton className={styles.logoutButton} />
+              </>
+            ) : (
+              <Link className={styles.logoutButton} href="/login">
+                Masuk <span aria-hidden="true">↗</span>
+              </Link>
+            )}
           </div>
         </div>
       </header>
@@ -246,11 +255,11 @@ export default async function ExtracurricularPage({
       <section className={styles.hero} aria-labelledby="catalog-title">
         <div className={styles.heroCopy}>
           <p className={styles.eyebrow}>Eksplorasi / Semester ganjil</p>
-          <h1 id="catalog-title">
-            Tujuh arena.
-            <br />
-            <span>Satu pilihanmu.</span>
-          </h1>
+          <TypewriterHeading
+            highlightText="Satu pilihanmu."
+            id="catalog-title"
+            mainText="Tujuh arena."
+          />
           <p>
             Bandingkan fokus kegiatan, jadwal, lokasi, dan sisa kuota sebelum
             menentukan ruang terbaik untuk berkembang.
@@ -421,11 +430,7 @@ export default async function ExtracurricularPage({
                     ))}
                   </div>
 
-                  <div
-                    className={`${styles.capacityBlock} ${
-                      program.name === "ITC" ? styles.itcStatusArea : ""
-                    }`}
-                  >
+                  <div className={styles.capacityBlock}>
                     <div>
                       <span>Kuota terisi</span>
                       <strong>
@@ -437,11 +442,7 @@ export default async function ExtracurricularPage({
                     </div>
                   </div>
 
-                  <div
-                    className={`${styles.cardFooter} ${
-                      program.name === "ITC" ? styles.itcStatusArea : ""
-                    }`}
-                  >
+                  <div className={styles.cardFooter}>
                     {isEnrolled ? (
                       <Link className={styles.enrolledState} href="/dashboard">
                         Pilihanmu <span aria-hidden="true">→</span>

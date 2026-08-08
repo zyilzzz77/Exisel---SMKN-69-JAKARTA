@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
 import { AttendanceForm } from "@/components/forms/attendance-form";
 import { StudentNavigation } from "@/components/student-navigation";
+import { TypewriterHeading } from "@/components/typewriter-heading";
 import { getStudentAttendanceData } from "@/lib/attendance/dal";
 import styles from "./attendance.module.css";
 
@@ -68,7 +69,7 @@ export default async function AttendancePage({
                 alt="Logo SMK Negeri 69 Jakarta"
                 height={948}
                 priority
-                src="/logo-smkn69.png"
+                src="/logo-smkn69.webp"
                 width={758}
               />
             </span>
@@ -96,10 +97,10 @@ export default async function AttendancePage({
         <section className={styles.hero}>
           <div>
             <p className={styles.eyebrow}>Presensi mandiri / Hari kegiatan</p>
-            <h1>
-              Isi kehadiran.
-              <span>Jujur & tepat.</span>
-            </h1>
+            <TypewriterHeading
+              highlightText="Jujur & tepat."
+              mainText="Isi kehadiran."
+            />
           </div>
           <div className={styles.heroNote}>
             <span aria-hidden="true">01</span>
