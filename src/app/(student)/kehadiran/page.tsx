@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
 import { AttendanceForm } from "@/components/forms/attendance-form";
-import { StudentNavigation } from "@/components/student-navigation";
+import { StudentHeaderNav } from "@/components/landing-navigation";
 import { TypewriterHeading } from "@/components/typewriter-heading";
 import { getStudentAttendanceData } from "@/lib/attendance/dal";
 import styles from "./attendance.module.css";
@@ -79,10 +79,7 @@ export default async function AttendancePage({
             </span>
           </Link>
 
-          <StudentNavigation
-            activeItem="attendance"
-            className={styles.navigation}
-          />
+          <StudentHeaderNav activeItem="attendance" />
 
           <div className={styles.accountActions}>
             <span className={styles.avatar} aria-hidden="true">

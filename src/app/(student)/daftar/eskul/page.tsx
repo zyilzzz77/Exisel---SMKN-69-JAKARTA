@@ -4,7 +4,7 @@ import Link from "next/link";
 import { registerExtracurricularAction } from "@/actions/enrollment";
 import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
 import { EnrollmentSubmitButton } from "@/components/forms/enrollment-submit-button";
-import { StudentNavigation } from "@/components/student-navigation";
+import { StudentHeaderNav } from "@/components/landing-navigation";
 import { getStudentRegistrationData } from "@/lib/auth/dal";
 import styles from "./registration.module.css";
 
@@ -109,10 +109,7 @@ export default async function ExtracurricularRegistrationPage({
             </span>
           </Link>
 
-          <StudentNavigation
-            activeItem="programs"
-            className={styles.nav}
-          />
+          <StudentHeaderNav activeItem="programs" />
 
           <div className={styles.accountArea}>
             <span className={styles.avatar} aria-hidden="true">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
-import { StudentNavigation } from "@/components/student-navigation";
+import { StudentHeaderNav } from "@/components/landing-navigation";
 import { TypewriterHeading } from "@/components/typewriter-heading";
 import { getPublicExtracurricularData } from "@/lib/auth/dal";
 import styles from "./ekstrakurikuler.module.css";
@@ -230,10 +230,7 @@ export default async function ExtracurricularPage({
             </span>
           </Link>
 
-          <StudentNavigation
-            activeItem="programs"
-            className={styles.navigation}
-          />
+          <StudentHeaderNav activeItem="programs" />
 
           <div className={styles.accountActions}>
             {user ? (
@@ -258,7 +255,7 @@ export default async function ExtracurricularPage({
           <TypewriterHeading
             highlightText="Satu pilihanmu."
             id="catalog-title"
-            mainText="Tujuh arena."
+            mainText="Delapan arena."
           />
           <p>
             Bandingkan fokus kegiatan, jadwal, lokasi, dan sisa kuota sebelum

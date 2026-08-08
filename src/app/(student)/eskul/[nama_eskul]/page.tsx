@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
 import { PromoVideoPlayer } from "@/components/promo-video-player";
-import { StudentNavigation } from "@/components/student-navigation";
+import { StudentHeaderNav } from "@/components/landing-navigation";
 import { getPublicExtracurricularData } from "@/lib/auth/dal";
 import styles from "./detail.module.css";
 
@@ -83,7 +83,32 @@ const programDetails: Record<
     category: "Olahraga",
     kicker: "Teknik · Tim · Mental",
     headline: "Gerak cepat. Tumbuh kuat bersama tim.",
-    skills: [],
+    skills: [
+      {
+        number: "01",
+        title: "Teknik & Dribble",
+        description:
+          "Melatih penguasaan bola, lay-up, shooting, dan footwork dasar hingga variasi tingkat lanjut.",
+      },
+      {
+        number: "02",
+        title: "Stamina & Fisik",
+        description:
+          "Membangun ketahanan fisik, kecepatan sprint, agility, dan kelincahan gerakan di lapangan.",
+      },
+      {
+        number: "03",
+        title: "Strategi & Formasi",
+        description:
+          "Memahami pola penyerangan (offense), pertahanan (zone & man-to-man defense), dan transisi tim.",
+      },
+      {
+        number: "04",
+        title: "Kerja Sama & Mental",
+        description:
+          "Menanamkan jiwa sportif, disiplin latihan, komunikasi aktif, dan mental pemenang dalam kompetisi.",
+      },
+    ],
   },
   ITC: {
     number: "05",
@@ -405,7 +430,12 @@ export default async function ExtracurricularDetailPage({
   );
   const logo = programLogos[program.name];
   const documentation = programDocumentation[program.name];
-  const video = programVideos[program.name];
+  const video =
+    programVideos[program.name] ??
+    programVideos[
+      program.name.replace(/^ekstrakurikuler\s+/i, "").trim()
+    ] ??
+    (program.name.toLowerCase().includes("basket") ? programVideos["Basket"] : null);
 
   return (
     <main className={styles.page}>
@@ -439,10 +469,7 @@ export default async function ExtracurricularDetailPage({
             </span>
           </Link>
 
-          <StudentNavigation
-            activeItem="programs"
-            className={styles.navigation}
-          />
+          <StudentHeaderNav activeItem="programs" />
 
           <div className={styles.accountActions}>
             {user ? (
