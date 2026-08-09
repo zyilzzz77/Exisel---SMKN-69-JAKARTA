@@ -8,6 +8,11 @@ const studentNavigationItems = [
     label: "Dashboard",
   },
   {
+    id: "schedule",
+    href: "/dashboard#jadwal",
+    label: "Jadwal",
+  },
+  {
     id: "programs",
     href: "/ekstrakurikuler",
     label: "Pilihan ekskul",
@@ -21,11 +26,6 @@ const studentNavigationItems = [
     id: "attendance",
     href: "/kehadiran",
     label: "Kehadiran",
-  },
-  {
-    id: "schedule",
-    href: "/dashboard#jadwal",
-    label: "Jadwal",
   },
   {
     id: "account",
@@ -57,7 +57,9 @@ const landingNavigationItems = [
   },
 ] as const;
 
-type NavigationItemId = (typeof studentNavigationItems)[number]["id"];
+type NavigationItemId =
+  | (typeof studentNavigationItems)[number]["id"]
+  | (typeof landingNavigationItems)[number]["id"];
 
 type StudentNavigationProps = {
   activeItem?: NavigationItemId;

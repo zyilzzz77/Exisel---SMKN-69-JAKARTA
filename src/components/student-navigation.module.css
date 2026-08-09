@@ -48,6 +48,7 @@
 }
 
 .nav .active {
+  animation: navigation-active-enter 180ms ease-out;
   background: var(--blue);
   color: var(--white);
 }
@@ -58,6 +59,24 @@
   box-shadow: 4px 4px 0 var(--ink);
   color: var(--white);
   transform: none;
+}
+
+@keyframes navigation-active-enter {
+  from {
+    box-shadow: 1px 1px 0 var(--ink);
+    transform: translate(3px, 3px) scale(0.97);
+  }
+
+  to {
+    box-shadow: 4px 4px 0 var(--ink);
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav .active {
+    animation: none;
+  }
 }
 
 @media (max-width: 720px) {

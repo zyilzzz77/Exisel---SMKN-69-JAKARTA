@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Allow phones on the current school Wi-Fi address to load Next.js dev
   // assets and hydrate Client Components such as the password visibility toggle.
-  allowedDevOrigins: ["10.100.14.190"],
+  allowedDevOrigins: ["127.0.0.1", "10.100.14.190", "192.168.110.14"],
 };
 
 export default nextConfig;

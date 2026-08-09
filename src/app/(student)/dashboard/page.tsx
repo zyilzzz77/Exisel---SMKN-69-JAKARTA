@@ -41,6 +41,8 @@ const schoolWeekDays = [
   { day: "WEDNESDAY", label: "Rabu" },
   { day: "THURSDAY", label: "Kamis" },
   { day: "FRIDAY", label: "Jumat" },
+  { day: "SATURDAY", label: "Sabtu" },
+  { day: "SUNDAY", label: "Minggu" },
 ] as const;
 
 const programPresentation: Record<
@@ -130,8 +132,7 @@ export default async function DashboardPage() {
   );
   const activeEnrollment = todayEnrollment ?? fallbackEnrollment;
   const todayAttendance = todayEnrollment?.extracurricular.attendances[0];
-  const { mondayDateKey, fridayDateKey, isAfterFriday } =
-    getSchoolWeekRange(jakartaDateKey);
+  const { mondayDateKey, sundayDateKey } = getSchoolWeekRange(jakartaDateKey);
   const weekDays = schoolWeekDays.map((weekDay, index) => {
     const dateKey = shiftSchoolDateKey(mondayDateKey, index);
     const events = approvedEnrollments.flatMap((enrollment) =>
@@ -186,7 +187,7 @@ export default async function DashboardPage() {
             </span>
           </Link>
 
-          <StudentHeaderNav activeItem="dashboard" />
+          <StudentHeaderNav activeItem="dashboard" followDashboardScroll />
 
           <div className={styles.accountActions}>
             <span className={styles.avatar} aria-hidden="true">
@@ -295,7 +296,7 @@ export default async function DashboardPage() {
                   </div>
                 ) : (
                   <a href="#jadwal" className={styles.secondaryButton}>
-                    {isAfterFriday ? "Cek jadwal minggu depan" : "Cek jadwal minggu ini"}{" "}
+                    Cek jadwal minggu ini{" "}
                     <span aria-hidden="true">→</span>
                   </a>
                 )}
@@ -318,24 +319,20 @@ export default async function DashboardPage() {
           <article className={styles.scheduleCard} id="jadwal" aria-labelledby="schedule-title">
             <div className={styles.sectionLabel}>
               <span>02 / JADWAL</span>
-              <span>{formatWeekRange(mondayDateKey, fridayDateKey)}</span>
+              <span>{formatWeekRange(mondayDateKey, sundayDateKey)}</span>
             </div>
             <div className={styles.scheduleContent}>
               <div className={styles.scheduleHeading}>
                 <div>
-                  <p className={styles.cardEyebrow}>Senin sampai Jumat</p>
-                  <h2 id="schedule-title">
-                    {isAfterFriday ? "Agenda ekskul minggu depan" : "Agenda ekskul minggu ini"}
-                  </h2>
+                  <p className={styles.cardEyebrow}>Senin sampai Minggu</p>
+                  <h2 id="schedule-title">Agenda ekskul minggu ini</h2>
                 </div>
                 <span>{weeklyScheduleCount} agenda</span>
               </div>
 
               <div
                 className={styles.weekCalendar}
-                aria-label={
-                  isAfterFriday ? "Kalender ekskul minggu depan" : "Kalender ekskul minggu ini"
-                }
+                aria-label="Kalender ekskul minggu ini"
               >
                 {weekDays.map((weekDay) => (
                   <article

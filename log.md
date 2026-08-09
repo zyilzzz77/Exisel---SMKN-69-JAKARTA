@@ -6371,5 +6371,571 @@ Memperbaiki posisi tombol hamburger 3-garis (`mobile-menu-toggle`) pada halaman 
 
 ---
 
+## EXISEL-20260809-001 — Jawaban Ringkas Pembagian Tugas Tim
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Project Documentation Assistant
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “kasih saya jawaban yang simple untuk project web saya: Haqqi Annazili yang ngoding, Irvan Juliansyah UI/UX, Aldi prompt engineering”
+
+### TLDR AI agents done
+
+Menyusun pembagian tugas anggota secara singkat: Haqqi sebagai programmer, Irvan sebagai UI/UX designer, dan Aldi sebagai prompt engineer.
+
+### Changes
+
+- Tidak ada file aplikasi yang diubah.
+- Hasil diberikan sebagai jawaban dokumentasi yang dapat ditempel ke tabel pembagian tugas.
+
+### Verification
+
+- Nama dan peran diselaraskan dengan informasi yang diberikan pengguna.
+
+### Security note
+
+- Tidak ada data rahasia yang diproses atau ditulis ke repository.
+
+---
+
+## EXISEL-20260809-002 — Menjalankan Localhost dan PostgreSQL Tanpa Docker
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Local Development Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “nyalain localhost nya dan databasenya tanpa docker”
+
+### TLDR AI agents done
+
+Menjalankan PostgreSQL lokal non-Docker di port `5433`, menyiapkan Prisma, menjalankan migration, lalu menyalakan Next.js development server pada `http://localhost:3000`.
+
+### Changes
+
+- Menjalankan alur database lokal melalui script project.
+- Menggunakan override koneksi database proses ke port `5433` untuk instance PostgreSQL lokal.
+- Menjalankan Prisma Client generation dan database migration.
+- Menyalakan Next.js development server sebagai proses latar.
+
+### Verification
+
+- PostgreSQL lokal menerima koneksi.
+- Prisma migration selesai dijalankan.
+- Aplikasi merespons dari `http://localhost:3000`.
+
+### Security note
+
+- Nilai kredensial database dari environment tidak dicatat ke log.
+
+---
+
+## EXISEL-20260809-003 — Migration Tabel Community Messages
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Full-stack & Database Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> Pengguna melaporkan `PrismaClientKnownRequestError`: tabel `public.community_messages` tidak ada saat membuka halaman Community.
+
+### TLDR AI agents done
+
+Menambahkan migration PostgreSQL untuk tabel `community_messages`, indeks, dan foreign key yang sesuai dengan Prisma schema, kemudian menerapkannya ke database lokal.
+
+### Changes
+
+- **Files added:**
+  - `prisma/migrations/migration_lock.toml`
+  - `prisma/migrations/202608090001_add_community_messages/migration.sql`
+- Membuat kolom pesan, status edit, timestamp, dan soft-delete.
+- Membuat indeks gabungan `extracurricular_id` dan `created_at`.
+- Menambahkan relasi ke tabel `extracurriculars` dan `users`.
+
+### Verification
+
+- Migration berhasil diterapkan pada PostgreSQL lokal.
+- Halaman `/community` kembali merespons HTTP 200 tanpa error tabel hilang.
+
+### Security note
+
+- Migration tidak memuat kredensial atau data pengguna.
+
+---
+
+## EXISEL-20260809-004 — Penyelarasan Tombol Masuk Community Mobile
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Mobile UI/UX Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “dipages community ditampilan mobile tolong dibenerin ui/ux tombol masuk nya agar sesuai dengan pages dashboard ditampilan mobile hp”
+
+### TLDR AI agents done
+
+Menyelaraskan gaya dan posisi tombol Masuk pada header mobile Community dengan pola visual halaman Dashboard.
+
+### Changes
+
+- **File changed:** `src/components/community/community.module.css`
+- Menyesuaikan grid header, ukuran kontrol, warna, border, dan alignment untuk viewport mobile.
+
+### Verification
+
+- Header Community tetap muat pada lebar layar ponsel tanpa kontrol saling bertumpuk.
+
+### Security note
+
+- Perubahan hanya pada presentasi CSS.
+
+---
+
+## EXISEL-20260809-005 — Konsistensi Tombol Masuk dan Hamburger Community
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Mobile UI/UX Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “maksud saya tampilan masuk dan garis 3 nya harus konsisten tiap pages seperti pages dashboard mobile yang gambar saya berikan”
+
+### TLDR AI agents done
+
+Memperjelas implementasi sebelumnya dengan membuat tombol Masuk dan hamburger Community mengikuti dimensi, urutan, serta posisi header Dashboard.
+
+### Changes
+
+- **File changed:** `src/components/community/community.module.css`
+- Menggunakan susunan mobile tiga kolom: brand, aksi akun, dan hamburger.
+- Menetapkan tombol Masuk berlatar putih serta hamburger persegi yang konsisten.
+
+### Verification
+
+- Kontrol header Community tersusun sejajar pada tampilan mobile.
+
+### Security note
+
+- Tidak ada perubahan autentikasi; hanya tampilan tombol.
+
+---
+
+## EXISEL-20260809-006 — Perbaikan Navbar Mobile dan Kompatibilitas iPhone
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Responsive Front-end Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “dimobile navbar nya masih berantakan aku mau navbar nya setara dan konsisten di tengah atau center, dan pada saat aku pakai di iphone navbar tidak muncul tolong di fix ya tanpa ada kesalahan”
+
+### TLDR AI agents done
+
+Memperkuat breakpoint mobile hingga `980px`, memastikan hamburger memiliki ukuran eksplisit, dan merapikan menu drawer agar navbar terlihat serta dapat dipakai pada layar iPhone.
+
+### Changes
+
+- **File changed:** `src/components/community/community.module.css`
+- Menetapkan alignment vertikal/tengah, tombol hamburger `42px`, dan layout drawer mobile.
+
+### Verification
+
+- CSS responsive tidak lagi bergantung pada ukuran konten dan tetap aktif pada rentang viewport ponsel/tablet kecil.
+
+### Security note
+
+- Tidak ada data atau hak akses yang diubah.
+
+---
+
+## EXISEL-20260809-007 — Hamburger Dashboard Sejajar Tombol Keluar
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Mobile UI/UX Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “dipages dashboard tombol garis tiga nyaa dipojok kanan atas disamping tombol keluar bukan dibawah”
+
+### TLDR AI agents done
+
+Memindahkan hamburger Dashboard ke pojok kanan atas, tepat di samping tombol Keluar, tanpa jatuh ke baris kedua.
+
+### Changes
+
+- **File changed:** `src/app/(student)/dashboard/dashboard.module.css`
+- Menyesuaikan grid header mobile, ukuran hamburger, posisi aksi akun, dan drawer navigasi.
+
+### Verification
+
+- Development server dijalankan ulang secara bersih.
+- Posisi header diperiksa pada viewport responsif Dashboard.
+
+### Security note
+
+- Tombol Keluar tetap menggunakan alur logout yang sudah ada.
+
+---
+
+## EXISEL-20260809-008 — Navbar Mobile Kehadiran Mengikuti Dashboard
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Responsive Front-end Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “dipages kehadiran http://localhost:3000/kehadiran masih berantakan dibenerin yaa kayak pages dashboard karena pages dashboard sudah bener”
+
+### TLDR AI agents done
+
+Menyamakan struktur header mobile halaman Kehadiran dengan Dashboard.
+
+### Changes
+
+- **File changed:** `src/app/(student)/kehadiran/attendance.module.css`
+- Menyetarakan grid logo/akun/hamburger, posisi tombol, dan menu drawer.
+
+### Verification
+
+- Header Kehadiran tetap satu baris pada viewport mobile.
+
+### Security note
+
+- Tidak ada perubahan pada validasi absensi di entry ini.
+
+---
+
+## EXISEL-20260809-009 — Navbar Mobile Katalog Ekstrakurikuler Mengikuti Dashboard
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Responsive Front-end Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “http://localhost:3000/ekstrakurikuler dipages itu juga navbar nya masih berantakan tolong samain kayak pages dasboard”
+
+### TLDR AI agents done
+
+Menyamakan navbar mobile halaman Ekstrakurikuler dengan struktur header Dashboard.
+
+### Changes
+
+- **File changed:** `src/app/(student)/ekstrakurikuler/ekstrakurikuler.module.css`
+- Merapikan susunan logo, tombol akun/logout, hamburger, dan drawer mobile.
+
+### Verification
+
+- Header Ekstrakurikuler tersusun satu baris pada viewport mobile.
+
+### Security note
+
+- Perubahan terbatas pada UI/CSS.
+
+---
+
+## EXISEL-20260809-010 — Sticky Navbar dan Scrollspy Landing/Dashboard
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Front-end Interaction Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “navbar nyaa dideksop maupun mobile tetap stay saat discroll dan saat kita scroll ke pages about navbar nya ngikut gitu meskipun ngga diklik”
+
+### TLDR AI agents done
+
+Membuat navbar tetap melekat saat scroll dan menambahkan scrollspy sehingga status tombol navigasi mengikuti section yang sedang terlihat, termasuk About.
+
+### Changes
+
+- **Files changed:**
+  - `src/components/landing-navigation.tsx`
+  - `src/components/student-navigation.tsx`
+  - `src/components/community/community.module.css`
+  - `src/app/(student)/dashboard/dashboard.module.css`
+  - `src/app/(student)/ekstrakurikuler/ekstrakurikuler.module.css`
+  - `src/app/layout.tsx`
+  - `next.config.ts`
+- Menambahkan observasi scroll section Landing/Explore/About dan sinkronisasi active nav.
+- Mengganti wrapper yang mengganggu sticky dari overflow umum menjadi `overflow-x: clip`.
+- Mengaktifkan smooth scroll melalui atribut root layout.
+- Menambahkan origin development lokal/LAN yang dibutuhkan agar Client Components terhidrasi saat dites dari perangkat lain.
+
+### Verification
+
+- Sticky header tetap pada posisi atas setelah scroll.
+- Status aktif berpindah mengikuti section Explore dan About.
+- Aset development dapat dimuat dari `127.0.0.1` dan alamat LAN yang dikonfigurasi.
+
+### Security note
+
+- `allowedDevOrigins` hanya memengaruhi development server, bukan daftar origin produksi.
+
+---
+
+## EXISEL-20260809-011 — Urutan Jadwal dan Animasi Active Navigation
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Front-end Interaction Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “pindahin tombol jadwal disamping tombol dashboard dan saat discroling ada animasi juga perpindahan kayak pages sebelumnyaa”
+
+### TLDR AI agents done
+
+Memindahkan tombol Jadwal tepat setelah Dashboard dan menambahkan perpindahan status aktif berdasarkan scroll dengan animasi yang tetap menghormati preferensi reduced motion.
+
+### Changes
+
+- **Files changed:**
+  - `src/components/student-navigation.tsx`
+  - `src/components/student-navigation.module.css`
+  - `src/app/(student)/dashboard/page.tsx`
+- Urutan menjadi Dashboard, Jadwal, Pilihan ekskul, Community, Kehadiran, dan Akun.
+- Dashboard memantau section `dashboard-content`, `jadwal`, dan `akun`.
+- Menambahkan transisi visual active item dan fallback `prefers-reduced-motion`.
+
+### Verification
+
+- Urutan navigasi sesuai permintaan.
+- Active item mengikuti section Dashboard/Jadwal/Akun saat halaman digulir.
+
+### Security note
+
+- Tidak ada perubahan kontrol akses.
+
+---
+
+## EXISEL-20260809-012 — Jadwal Paskibra Hari Minggu dan Rentang Absensi
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Full-stack & Database Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “eskul paskibra ada dihari minggu dilapangan sekolah juga dan fitur absensi berfungsi”
+
+### TLDR AI agents done
+
+Mengubah jadwal Paskibra menjadi Minggu di Lapangan Sekolah dan memperluas rentang minggu sekolah hingga Minggu agar jadwal serta absensi akhir pekan tetap masuk perhitungan.
+
+### Changes
+
+- **File added:** `prisma/migrations/202608090002_update_paskibra_sunday_schedule/migration.sql`
+- **Files changed:**
+  - `src/app/page.tsx`
+  - `src/app/(student)/dashboard/page.tsx`
+  - `src/lib/chatbot/eskul-keyword-dataset.ts`
+  - `src/lib/school-date.ts`
+- Migration mengubah Paskibra ke `SUNDAY` dan `Lapangan Sekolah`.
+- Tampilan jadwal Dashboard mencakup Sabtu dan Minggu.
+- Rentang minggu diubah dari Senin–Jumat menjadi Senin–Minggu.
+- Informasi statis Landing dan dataset chatbot diselaraskan.
+
+### Verification
+
+- Migration berhasil diterapkan.
+- Query database menghasilkan `Paskibra | SUNDAY | Lapangan Sekolah | aktif`.
+- Ditemukan pendaftar Paskibra berstatus approved yang memenuhi syarat memakai alur absensi Minggu.
+
+### Security note
+
+- Migration hanya memperbarui jadwal; tidak mengubah riwayat attendance atau data akun.
+
+---
+
+## EXISEL-20260809-013 — Perbaikan Black Screen Kamera QR
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Browser Media & Front-end Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “saya nyoba fitur camera dilocalhost udh diiizin tapi tetap black screen tolong difixed bugnyaa”
+
+### TLDR AI agents done
+
+Memperbaiki inisialisasi stream kamera QR, fallback constraint kamera, proses playback video, pembersihan track, dan pesan error agar kegagalan tidak lagi tampil sebagai layar hitam tanpa penjelasan.
+
+### Changes
+
+- **File changed:** `src/components/attendance-qr-scanner.tsx`
+- Membuka `getUserMedia` secara eksplisit dengan preferensi kamera belakang dan fallback kamera apa pun.
+- Menetapkan `autoplay`, `muted`, dan `playsInline`, lalu menunggu `video.play()` sebelum scanner aktif.
+- Menghentikan semua track ketika komponen dibongkar, scan selesai, atau terjadi error.
+- Memvalidasi secure context dan menyediakan pesan khusus untuk izin ditolak, kamera tidak ditemukan, atau kamera sedang dipakai aplikasi lain.
+- Menggunakan pemindaian pada elemen video yang stream-nya sudah aktif untuk mencegah duplikasi lifecycle playback.
+
+### Verification
+
+- `pnpm typecheck`: passed.
+- Targeted ESLint untuk scanner: passed.
+- Pada akses iPhone melalui alamat IP HTTP, UI kini menjelaskan kebutuhan HTTPS/localhost alih-alih menampilkan black screen.
+
+### Security note
+
+- Stream kamera tetap lokal di browser dan tidak diunggah oleh perubahan ini.
+
+---
+
+## EXISEL-20260809-014 — Navbar Admin Mobile dengan Hamburger dan Keluar
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Admin UI/UX Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “fixed navbar dipages http://localhost:3000/admin/dashboard buat mirip navbar dashboard user yang tadi dijadiin garis tiga dan ada tombol keluar”
+
+### TLDR AI agents done
+
+Mengubah navigasi admin menjadi komponen interaktif dengan hamburger mobile dan tombol Keluar yang sejajar, mengikuti pola Dashboard siswa.
+
+### Changes
+
+- **Files changed:**
+  - `src/components/admin-navigation.tsx`
+  - `src/app/(admin)/admin/dashboard/admin-dashboard.module.css`
+- Menambahkan state buka/tutup, atribut ARIA, penutupan dengan Escape, serta menu yang menutup setelah link dipilih.
+- Menyusun header mobile tiga kolom dan drawer navigasi dua kolom.
+- Menjaga navbar admin sticky dan menyembunyikan avatar pada viewport sempit agar aksi utama tetap muat.
+
+### Verification
+
+- `pnpm typecheck`: passed.
+- Targeted ESLint untuk navigasi admin: passed.
+- Perubahan juga konsisten pada halaman admin lain yang memakai stylesheet/header bersama.
+
+### Security note
+
+- Tombol Keluar tetap memakai server action logout yang sudah ada; tidak ada bypass autentikasi.
+
+---
+
+## EXISEL-20260809-015 — Akun Dummy Siswa Pandu dan Admin Agung
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Local Database Administrator
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “buatkan saya akun siswa dan admin dummy dengan nama siswa: Pandu, Nama Admin: Agung, password kedua nya sama: [REDACTED]”
+
+### TLDR AI agents done
+
+Membuat satu akun dummy siswa Pandu dan satu akun dummy admin Agung pada database lokal dengan password sama yang diberikan pengguna dan disimpan sebagai hash Argon2id.
+
+### Changes
+
+- Membuat akun lokal siswa Pandu dengan email dummy `pandu@exisel.local`, identitas sekolah dummy, role `STUDENT`, dan status aktif.
+- Membuat akun lokal Agung dengan email dummy `agung@exisel.local`, role `ADMIN`, dan status aktif.
+- Menetapkan `must_change_password=false` untuk kebutuhan pengujian lokal.
+- Tidak ada seed berkredensial yang ditambahkan ke Git; akun tidak otomatis dibuat di database VPS/production.
+
+### Verification
+
+- Kedua record ditemukan kembali di database lokal dengan role yang benar.
+- Verifikasi Argon2id terhadap password masukan pengguna berhasil untuk kedua akun.
+
+### Security note
+
+- Password sengaja disensor dari prompt log dan tidak disimpan dalam plaintext di repository.
+- Hash password tidak dicatat ke log.
+- Kredensial dummy hanya berada pada database lokal saat eksekusi ini.
+
+---
+
 _End of log. Future changes must append a new execution entry with Identity,
 Human Prompt, TLDR AI agents done, Changes, Verification, and Security note._

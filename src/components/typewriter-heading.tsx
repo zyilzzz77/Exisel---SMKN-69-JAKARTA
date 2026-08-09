@@ -56,8 +56,6 @@ export function TypewriterHeading({
     if (!isVisible) return;
 
     let index = 0;
-    setDisplayedText("");
-    setIsDone(false);
 
     const timer = setInterval(() => {
       index++;

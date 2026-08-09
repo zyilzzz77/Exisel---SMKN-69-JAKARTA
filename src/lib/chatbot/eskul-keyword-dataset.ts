@@ -71,8 +71,8 @@ export const extracurricularKeywordDataset: KeywordEntry[] = [
     aliases: ["paskibra", "paskibraka", "baris berbaris", "pbb", "paskib"],
     interests: ["disiplin", "kepemimpinan", "baris berbaris", "pbb", "upacara", "fisik", "nasionalisme", "paskib", "baris"],
     description: "Paskibra membangun disiplin, kepemimpinan, kekompakan, ketangkasan, dan kemampuan baris-berbaris.",
-    schedule: "Selasa, pukul 15:45–17:00",
-    location: "Lapangan Upacara",
+    schedule: "Minggu, pukul 15:45–17:00",
+    location: "Lapangan Sekolah",
     capacity: 36,
   },
   {
@@ -356,7 +356,7 @@ export function getEskulChatbotReply(message: string): ChatbotReply {
 
   if (containsAny(query, ["lokasi", "tempat", "ruang", "dimana", "di mana"])) {
     return {
-      text: "Lokasi latihan: PMR di Ruang UKS; English Club di Lab Bahasa; Nihon di Ruang Bahasa Jepang; Basket di Lapangan Basket; ITC di Lab Komputer 2; Paskibra & Pramuka di Lapangan Upacara; Futsal di Lapangan Futsal.",
+      text: "Lokasi latihan: PMR di Ruang UKS; English Club di Lab Bahasa; Nihon di Ruang Bahasa Jepang; Basket di Lapangan Basket; ITC di Lab Komputer 2; Paskibra di Lapangan Sekolah; Pramuka di Lapangan Upacara; Futsal di Lapangan Futsal.",
       action: { href: "/ekstrakulikuler", label: "Detail Lokasi" },
     };
   }
@@ -378,7 +378,7 @@ export function getEskulChatbotReply(message: string): ChatbotReply {
 
   if (containsAny(query, ["jadwal", "hari", "kapan"])) {
     return {
-      text: "Jadwal ekskul: PMR (Senin & Selasa), Basket (Senin), Nihon & Paskibra (Selasa), Pramuka (Rabu), English Club (Kamis), serta ITC & Futsal (Jumat). Semua mulai pukul 15:45.",
+      text: "Jadwal ekskul: PMR (Senin & Selasa), Basket (Senin), Nihon (Selasa), Pramuka (Rabu), English Club (Kamis), ITC & Futsal (Jumat), serta Paskibra (Minggu). Semua mulai pukul 15:45.",
       action: { href: "/ekstrakulikuler", label: "Lihat Jadwal Lengkap" },
     };
   }

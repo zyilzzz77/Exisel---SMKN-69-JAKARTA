@@ -87,29 +87,54 @@
   font-weight: 800;
 }
 
-.loginBtn {
+.loginBtn,
+.logoutBtn {
   display: inline-flex;
-  min-height: 44px;
+  min-height: 46px;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 8px 16px;
+  gap: 10px;
+  padding: 9px 16px;
   border: 3px solid var(--ink);
-  border-radius: 8px;
-  background: var(--orange);
+  border-radius: var(--radius);
   box-shadow: 4px 4px 0 var(--ink);
   color: var(--ink);
-  font-family: var(--font-display), sans-serif;
+  cursor: pointer;
+  font-family: var(--font-body), sans-serif;
   font-size: 12px;
   font-weight: 800;
   text-decoration: none;
+  transition: box-shadow 140ms ease, transform 140ms ease;
+}
+
+.loginBtn {
+  background: var(--white);
+}
+
+.logoutBtn {
+  background: var(--white);
+}
+
+.loginBtn:hover,
+.loginBtn:focus-visible,
+.logoutBtn:hover,
+.logoutBtn:focus-visible {
+  box-shadow: 7px 7px 0 var(--ink);
+  outline: none;
+  transform: translate(-2px, -2px);
+}
+
+.loginBtn:active,
+.logoutBtn:active {
+  box-shadow: none;
+  transform: translate(4px, 4px);
 }
 
 .container {
   display: flex;
   min-height: calc(100dvh - 82px);
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow-x: clip;
   flex-direction: column;
   background: var(--paper);
   color: var(--ink);
@@ -650,14 +675,6 @@
 }
 
 @media (max-width: 980px) {
-  .headerShell {
-    grid-template-columns: 1fr auto;
-    width: calc(100% - 32px);
-    gap: 12px;
-  }
-}
-
-@media (max-width: 768px) {
   .appHeader {
     position: sticky;
     top: 0;
@@ -665,46 +682,110 @@
   }
 
   .headerShell {
-    display: flex;
-    min-height: 64px;
+    display: grid;
+    min-height: 68px;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
-    justify-content: space-between;
     width: calc(100% - 32px);
-    gap: 12px;
+    gap: 8px;
+  }
+
+  .headerShell > :global(.mobile-menu-toggle) {
+    display: inline-flex !important;
+    width: 42px;
+    height: 42px;
+    grid-column: 3;
+    grid-row: 1;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    justify-self: end;
+    gap: 5px;
+    order: initial !important;
+    margin-left: 0 !important;
+    padding: 0;
+    border: 3px solid var(--ink);
+    border-radius: 9px;
+    background: var(--white);
+    box-shadow: 3px 3px 0 var(--ink);
+    color: var(--ink);
+  }
+
+  .headerShell > :global(.mobile-menu-toggle) span {
+    display: block;
+    width: 20px;
+    height: 3px;
+    border-radius: 999px;
+    background: currentColor;
+  }
+
+  .headerShell > :global(.desktop-nav) {
+    display: none !important;
+  }
+
+  .headerShell > :global(.desktop-nav.mobile-menu-open) {
+    display: grid !important;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 14px 16px;
+    border-bottom: 4px solid var(--ink);
+    background: var(--paper);
+    box-shadow: 0 8px 0 var(--ink);
+    white-space: normal;
+  }
+
+  .headerShell > :global(.desktop-nav.mobile-menu-open) a {
+    width: 100%;
+    min-height: 40px;
+    justify-content: center;
+    padding: 7px 6px;
+    text-align: center;
   }
 
   .accountActions {
-    order: 2;
-    margin-left: auto;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    justify-self: end;
+    margin-left: 0;
+  }
+
+  .brand {
+    min-width: 0;
+    align-self: center;
   }
 
   .brandLogo {
-    width: 36px;
-    height: 46px;
+    width: 40px;
+    height: 48px;
   }
 
   .brandCopy strong {
-    font-size: 17px;
+    font-size: 19px;
   }
 
   .brandCopy small,
-  .userAvatar,
-  .logoutBtn span {
+  .userAvatar {
     display: none;
   }
 
-  .logoutBtn {
-    min-height: 38px;
-    padding: 6px 10px;
-    font-size: 11px;
-  }
-
+  .logoutBtn,
   .loginBtn {
     min-height: 38px;
-    padding: 6px 12px;
-    font-size: 11px;
+    padding: 7px 12px;
+    border-width: 3px;
+    box-shadow: 3px 3px 0 var(--ink);
   }
+}
 
+@media (max-width: 768px) {
   .mainLayout {
     grid-template-columns: 1fr;
   }

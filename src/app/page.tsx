@@ -49,7 +49,7 @@ const extracurriculars = [
     number: "06",
     name: "Paskibra",
     category: "Kepemimpinan",
-    day: "Selasa",
+    day: "Minggu",
     tone: "blue",
     logo: "/logo-paskibra.webp",
   },
