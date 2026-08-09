@@ -6937,5 +6937,80 @@ Membuat satu akun dummy siswa Pandu dan satu akun dummy admin Agung pada databas
 
 ---
 
+## EXISEL-20260809-016 — Audit Log Lengkap, Verifikasi, GitHub Push, dan Handoff VPS
+
+### Identity
+
+- **Timestamp:** 2026-08-09 10:49:41 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Release Engineer & Technical Auditor
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “kalau sudah update ke log.md selengkap mungkin dari human prompt waktu dll dan push semua perubahan kegithub dan kasih saya command buat update ke vps”
+
+### TLDR AI agents done
+
+Melengkapi `log.md` dengan 16 execution entry untuk rangkaian permintaan tanggal 9 Agustus 2026, menjalankan QA penuh, merekonsiliasi drift migration lokal yang terdeteksi, membuat commit release, dan mendorongnya ke `origin/main`. Command deployment VPS juga disiapkan berdasarkan `scripts/deploy-production.sh` dan konfigurasi production repository.
+
+### Changes
+
+- **File changed:** `log.md`
+- Menambahkan detail Identity, Human Prompt, ringkasan pekerjaan, file/perilaku yang berubah, hasil verifikasi, dan catatan keamanan untuk setiap prompt sesi.
+- Password dummy pada Human Prompt disensor sebagai `[REDACTED]`; plaintext dan hash tidak ditulis ke repository.
+- Memperbaiki error ESLint React pada scrollspy baru dengan menurunkan active item langsung dari prop ketika mode follow-scroll tidak aktif.
+- Menghapus reset state sinkron yang tidak diperlukan dari effect Typewriter agar full lint tidak gagal.
+- Men-stage 21 file source/migration/dokumentasi yang relevan.
+- Tidak men-stage `.claude/`, workbook lokal `plans/kehadiran-paskibra-2026-08-09.xlsx`, maupun lock file Excel karena merupakan konfigurasi/artefak lokal, bukan source release.
+
+### Database migration audit
+
+- `prisma migrate deploy` awal menemukan tabel `community_messages` telah ada pada database lokal port `5432`, tetapi migration history belum menandainya selesai.
+- Struktur kolom, primary key, dan kedua foreign key diverifikasi cocok dengan migration sebelum rekonsiliasi.
+- Migration `202608090001_add_community_messages` kemudian ditandai applied pada riwayat lokal tanpa membuat ulang atau menghapus tabel.
+- Migration `202608090002_update_paskibra_sunday_schedule` berhasil diterapkan.
+- Hasil akhir Prisma: **11 migrations found; all migrations successfully applied**.
+
+### Verification
+
+- `git diff --check`: passed.
+- `pnpm typecheck`: passed, 0 error.
+- `pnpm lint`: passed, 0 error; terdapat 3 warning non-blocking lama pada export Excel dan Community DAL.
+- `pnpm build`: passed menggunakan Next.js `16.3.0` / Turbopack; seluruh 15 static page berhasil dihasilkan dan dynamic routes terdaftar.
+- Commit source release: `43112ee feat: improve navigation attendance and community`.
+- Sebelum push: branch `main` ahead 1 dan behind 0 terhadap `origin/main`.
+- `git push origin main`: passed; remote bergerak dari `6ceb5b4` ke `43112ee`.
+- Push dilakukan tanpa force.
+
+### VPS update handoff
+
+Perintah update yang disiapkan untuk VPS:
+
+```bash
+cd /opt/exisel
+git fetch origin
+git checkout main
+git pull --ff-only origin main
+sudo ENV_FILE=/opt/exisel/.env.production ./scripts/deploy-production.sh
+```
+
+Pemeriksaan sesudah deploy:
+
+```bash
+docker compose --env-file /opt/exisel/.env.production -f /opt/exisel/compose.production.yml ps
+docker compose --env-file /opt/exisel/.env.production -f /opt/exisel/compose.production.yml logs --tail=100 migrate app caddy
+```
+
+### Security note
+
+- Tidak ada `.env`, password, hash password, atau token yang dimasukkan ke commit.
+- Akun dummy Pandu dan Agung tetap hanya berada pada database lokal; deployment Git tidak otomatis membuat akun tersebut di production.
+- Deployment production akan menjalankan service migration yang tersedia dalam Compose; backup database tetap disarankan sebelum update VPS.
+
+---
+
 _End of log. Future changes must append a new execution entry with Identity,
 Human Prompt, TLDR AI agents done, Changes, Verification, and Security note._
