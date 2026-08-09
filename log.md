@@ -7012,5 +7012,440 @@ docker compose --env-file /opt/exisel/.env.production -f /opt/exisel/compose.pro
 
 ---
 
+## EXISEL-20260809-017 — Splash Intro Logo dan Identitas EXISEL
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu prompt presisi tidak tersedia; penyelesaian rangkaian diverifikasi 11:08:47 WIB)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Front-end Motion & Brand Experience Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “saya mau nambahin animasi saat orang pertama kali buka web nya nanti muncul logo namsel kedua animasi text nya muncul dari sebelah kanan dengan nama exisel dan dibawah nya text kecil exstrakulikuler smkn 69 jakarta seperti animasi youtube”
+
+### TLDR AI agents done
+
+Menambahkan splash intro global sekitar tiga detik pada pembukaan awal aplikasi dengan logo SMKN 69, identitas EXISEL, subjudul “Ekstrakurikuler SMKN 69 Jakarta”, aksen lingkaran, garis brand, dan progress bar bergaya intro aplikasi/video.
+
+### Changes
+
+- **Files added:**
+  - `src/components/app-intro.tsx`
+  - `src/components/app-intro.module.css`
+- **File changed:** `src/app/layout.tsx`
+- Intro ditempatkan di root layout agar tampil saat aplikasi pertama kali dimuat, tetapi tidak terulang pada perpindahan route client-side.
+- Menambahkan penguncian scroll selama intro, penghapusan komponen setelah animasi selesai, safe-area mobile, dan dukungan `prefers-reduced-motion`.
+
+### Verification
+
+- Intro tampil di atas Landing tanpa mengganggu navbar, chatbot, atau konten setelah animasi selesai.
+- TypeScript dan targeted ESLint: passed.
+
+### Security note
+
+- Komponen tidak membaca atau mengirim data akun, cookie, maupun kredensial.
+
+---
+
+## EXISEL-20260809-018 — Menghapus Hydration Mismatch Script Intro
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu prompt presisi tidak tersedia; penyelesaian rangkaian diverifikasi 11:08:47 WIB)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Next.js Runtime Debugger
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> Pengguna melaporkan console error hydration mismatch pada `<script id="exisel-intro-bootstrap">` karena sebuah ekstensi Chrome menyisipkan script ke `<head>` sebelum React hydration.
+
+### TLDR AI agents done
+
+Menghapus inline bootstrap script dari `<head>` dan menyederhanakan lifecycle intro menjadi Client Component yang markup server dan client-nya identik.
+
+### Changes
+
+- **Files changed:**
+  - `src/app/layout.tsx`
+  - `src/components/app-intro.tsx`
+  - `src/components/app-intro.module.css`
+- Menghapus manipulasi `sessionStorage`/dataset sebelum hydration.
+- Intro sekarang dirender konsisten pada hard load pertama aplikasi dan otomatis hilang setelah timeline selesai.
+- Route navigation setelah aplikasi terbuka tidak memicu intro ulang karena root layout tetap terpasang.
+
+### Verification
+
+- Browser console setelah reload desktop dan mobile: 0 error.
+- Hydration mismatch tidak muncul kembali.
+
+### Security note
+
+- Tidak ada inline script pra-hydration yang tersisa.
+
+---
+
+## EXISEL-20260809-019 — Logo Transparan, Animasi dari Kiri, dan Sinkronisasi Typewriter
+
+### Identity
+
+- **Timestamp:** 2026-08-09 11:08:47 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Motion UI Engineer & Visual Asset Editor
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “logo namsel nya background putih hapus kecuali text nyaa dan animasi muncul nya dari sebelah kiri logo baru text bawah nya dari sebelah kiri juga dan saat kehalaman landingpages nya juga animasi ketik baru muncul jika user bener bener udah masuk kepagesnyaa”
+
+### TLDR AI agents done
+
+Menghilangkan kotak putih luar logo tanpa menghilangkan tulisan putih di dalam lambang, mengubah urutan animasi agar logo/EXISEL/subjudul masuk dari kiri, dan menahan typewriter Landing sampai splash benar-benar selesai.
+
+### Changes
+
+- **File added:** `public/logo-smkn69-transparent.png`
+- **Files changed:**
+  - `src/components/app-intro.tsx`
+  - `src/components/app-intro.module.css`
+  - `src/components/typewriter-heading.tsx`
+- Menggunakan skill ImageGen dalam mode background extraction untuk membuat sumber chroma-key, kemudian mengonversinya menjadi PNG alpha terpisah tanpa menimpa asset logo asli.
+- Varian ekstraksi yang menghilangkan detail putih ditolak dan dihapus; hanya varian tervalidasi yang mempertahankan tulisan putih dipakai.
+- Animasi berurutan: logo masuk dari kiri, garis brand terbentuk, EXISEL masuk dari kiri, kemudian subjudul masuk dari kiri.
+- Menambahkan event `exisel:intro-complete`; TypewriterHeading menunggu event tersebut sekaligus status IntersectionObserver sebelum mulai mengetik.
+- Ukuran logo, judul, subjudul, gap, dan progress bar disesuaikan untuk viewport ponsel 390px tanpa horizontal overflow.
+
+### Verification
+
+- Browser desktop: logo transparan, EXISEL dan subjudul tampil penuh, serta progress animation berjalan.
+- Browser mobile 390×844: splash responsif dan tidak menghasilkan horizontal scroll.
+- Saat splash aktif, heading Landing menghasilkan teks kosong (`headingBeforeExit: ""`).
+- Setelah splash hilang, heading mulai mengetik dari awal (`headingAfterExit: "Temuk"`), bukan langsung menampilkan kalimat selesai.
+- Browser console desktop/mobile: 0 error.
+- `pnpm typecheck`: passed.
+- `pnpm lint`: passed dengan 0 error dan 3 warning non-blocking lama.
+- `pnpm build`: passed pada Next.js 16.3.0; seluruh static dan dynamic route berhasil diproses.
+- `git diff --check`: passed.
+
+### Security note
+
+- Asset logo baru tidak mengandung metadata pengguna atau informasi rahasia.
+- Tidak ada perubahan autentikasi, session, database, atau kredensial.
+
+---
+
+## EXISEL-20260809-020 — Intro Mobile Center dengan Ukuran Sedang
+
+### Identity
+
+- **Timestamp:** 2026-08-09 11:12:04 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Mobile Motion UI Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “di tampilan mobile buat animasi nya dicenter dan ukuran lebih besar atau sedang”
+
+### TLDR AI agents done
+
+Mengubah komposisi splash khusus mobile menjadi vertikal dan benar-benar terpusat agar logo serta tulisan dapat diperbesar tanpa terpotong pada ponsel sempit.
+
+### Changes
+
+- **File changed:** `src/components/app-intro.module.css`
+- Pada viewport maksimal 560px, susunan diubah menjadi logo di tengah, garis aksen horizontal, lalu EXISEL dan subjudul di bawahnya.
+- Logo menggunakan ukuran responsif `82–98px` dan EXISEL `38–48px`.
+- Seluruh elemen memakai `justify-items: center`, text alignment tengah, dan progress bar terpusat.
+- Arah animasi logo, EXISEL, dan subjudul tetap berasal dari kiri.
+- Desktop tetap memakai komposisi horizontal sebelumnya.
+
+### Verification
+
+- Diuji pada viewport `302×663`, sesuai lebar screenshot pengguna.
+- Pusat logo: selisih `0px` dari pusat viewport.
+- Pusat judul EXISEL: selisih `0px` dari pusat viewport.
+- Horizontal overflow: tidak ada.
+- Screenshot browser memperlihatkan seluruh logo, EXISEL, dan subjudul tanpa terpotong.
+- `pnpm build`: passed pada Next.js 16.3.0.
+
+### Security note
+
+- Perubahan hanya pada layout CSS responsive; tidak menyentuh data atau autentikasi.
+
+---
+
+## EXISEL-20260809-021 — Mobile Intro Kembali Berdampingan seperti Desktop
+
+### Identity
+
+- **Timestamp:** 2026-08-09 11:17:57 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Responsive Motion UI Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “dimobile logo muncul dan textnya disamping seperti didekstop jangan horizontal tapi tetap dicenter dan ukuran nya sesuai”
+
+### TLDR AI agents done
+
+Mengembalikan komposisi intro mobile menjadi berdampingan seperti desktop: logo di kiri, divider vertikal, serta EXISEL dan subjudul di kanan, dengan keseluruhan lockup tetap terpusat.
+
+### Changes
+
+- **Files changed:**
+  - `src/components/app-intro.module.css`
+  - `src/components/app-intro.tsx`
+- Mengganti grid mobile vertikal menjadi tiga kolom responsif: logo, divider vertikal, dan brand copy.
+- Logo menggunakan ukuran `66–80px`; EXISEL menggunakan ukuran `30–34px` agar sesuai pada layar sempit.
+- Menjaga `justify-content: center` untuk seluruh lockup.
+- Mengizinkan area copy menampilkan seluruh huruf tanpa clipping.
+- Subjudul dipisah dua baris khusus mobile: “Ekstrakurikuler” dan “SMKN 69 Jakarta”; desktop tetap satu baris.
+
+### Verification
+
+- Viewport `302×663`: center delta `0px`, tidak ada horizontal overflow, seluruh teks terlihat.
+- Viewport `390×844`: center delta `0px`, tidak ada horizontal overflow, seluruh teks terlihat.
+- Browser console: 0 error.
+- Targeted ESLint `app-intro.tsx`: passed.
+- `pnpm build`: passed pada Next.js 16.3.0.
+
+### Security note
+
+- Perubahan hanya pada markup presentasional dan CSS responsive.
+
+---
+
+## EXISEL-20260809-022 — Background Poster EXISEL 16:9
+
+### Identity
+
+- **Timestamp:** 2026-08-09 (waktu prompt presisi tidak tersedia; rangkaian poster direvisi dan diverifikasi 12:16:14 WIB)
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Campaign Visual Designer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “buatkan saya background untuk poster ukuran 16:9 dengan warna pallet web exisel dan saran text hook yang cocok”
+
+### TLDR AI agents done
+
+Membuat background poster digital 16:9 tanpa teks, dengan ruang putih-krem untuk copy di sisi kiri dan palet identitas EXISEL; juga menyiapkan rekomendasi hook poster.
+
+### Changes
+
+- **File added:** `public/poster-exisel-background-16x9.png`
+- Menggunakan imagegen untuk membuat komposisi 16:9 dengan krem `#FBFAF6`, biru `#1747C7`, oranye `#F47B28`, lavender, hijau muda, dan tinta gelap.
+- Menyisakan negative space di sisi kiri agar judul, CTA, dan logo dapat diedit di Canva/Figma tanpa kehilangan keterbacaan.
+- Rekomendasi hook utama: “Pilih ekskulmu. Tumbuh bersama EXISEL.”
+
+### Verification
+
+- Asset poster disimpan di workspace dengan ukuran 16:9.
+- Tidak ada teks atau logo yang tertanam sehingga copy poster dapat diedit terpisah.
+
+### Security note
+
+- Asset tidak memuat data siswa, kredensial, atau watermark.
+
+---
+
+## EXISEL-20260809-023 — Poster EXISEL Tanpa Elemen Kotak Sisi Kanan
+
+### Identity
+
+- **Timestamp:** 2026-08-09 12:16:14 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Campaign Visual Designer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “gausah pake elemen kotak kotak di bagian kanannya”
+
+### TLDR AI agents done
+
+Merevisi background poster dengan menghapus semua bentuk kotak, kartu, outline frame, dan panel UI di bagian kanan; menggantinya dengan pita diagonal serta kurva abstrak yang lebih bersih.
+
+### Changes
+
+- **File added:** `public/poster-exisel-background-16x9-organic.png`
+- Mempertahankan palet EXISEL, tekstur kertas krem, ruang teks kiri, aksen dot, dan garis lingkaran sudut.
+- Mengganti objek kotak kanan menjadi elemen organik non-kotak: pita biru-oranye, kurva lavender, dan aksen hijau muda.
+- File poster sebelumnya dipertahankan dan tidak ditimpa.
+
+### Verification
+
+- Hasil visual diperiksa: tidak ada kartu, outline kotak, panel UI, atau elemen rectangular di sisi kanan.
+- Area kiri tetap bersih untuk headline dan CTA.
+- Rasio komposisi tetap 16:9.
+
+### Security note
+
+- Asset tidak memuat teks, logo, kredensial, atau informasi pribadi.
+
+---
+
+## EXISEL-20260809-024 — Background Poster Neobrutalism Triptych Instagram
+
+### Identity
+
+- **Timestamp:** 2026-08-09 12:24:46 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Campaign Visual Designer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “background nya diubah semua, ganti dengan tema neobrutalims gitu yang cocok untuk dibuat poster dan bisa dibagi 3 dengan format potrait untuk postingan instagram”
+
+### TLDR AI agents done
+
+Membuat ulang background sebagai karya neobrutalism panorama yang menyambung, lalu mengekspornya menjadi tiga post Instagram portrait siap unggah berurutan.
+
+### Changes
+
+- **Files added:** `public/poster-exisel-neobrutalist-triptych-master.png`, `public/poster-exisel-neobrutalist-instagram-01.png`, `public/poster-exisel-neobrutalist-instagram-02.png`, dan `public/poster-exisel-neobrutalist-instagram-03.png`.
+- Membuat artwork baru dari nol dengan gaya neobrutalism: outline tinta gelap tebal, bayangan blok tegas, tekstur screen-print, bentuk kertas sobek, bintang, zigzag, panah, dan aksen checkerboard.
+- Menggunakan palet EXISEL: royal blue, biru terang, oranye, lavender, hijau muda, krem hangat, dan tinta gelap.
+- Menjaga ruang kosong untuk headline/CTA serta tanpa teks, logo, watermark, kartu UI, dan elemen kotak.
+- Master panorama dipotong dan diekspor dalam urutan unggah kiri → tengah → kanan menjadi tiga PNG portrait `1080 × 1350 px` (rasio Instagram 4:5).
+
+### Verification
+
+- Master disimpan pada ukuran `1942 × 809 px` dengan komposisi tiga panel yang menyambung.
+- Setiap file Instagram telah diverifikasi berukuran tepat `1080 × 1350 px`.
+- Hash ketiga hasil ekspor berbeda, sehingga setiap post memuat segmen visual yang berbeda dan bukan duplikasi panel tengah.
+- Hasil visual diperiksa: tiap panel memiliki area terang untuk penambahan copy dan tidak memiliki teks atau logo tertanam.
+
+### Security note
+
+- Asset tidak memuat data siswa, kredensial, watermark, maupun informasi pribadi.
+
+---
+
+## EXISEL-20260809-025 — Penyederhanaan Poster Neobrutalism Instagram
+
+### Identity
+
+- **Timestamp:** 2026-08-09 12:29:54 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Campaign Visual Designer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “elemennya jangan terlalu rame sedang aja”
+
+### TLDR AI agents done
+
+Membuat versi neobrutalism dengan kepadatan visual sedang: lebih lega, lebih fokus, dan tetap siap dibagi menjadi tiga post Instagram portrait yang menyambung.
+
+### Changes
+
+- **Files added:** `public/poster-exisel-neobrutalist-minimal-triptych-master.png`, `public/poster-exisel-neobrutalist-minimal-instagram-01.png`, `public/poster-exisel-neobrutalist-minimal-instagram-02.png`, dan `public/poster-exisel-neobrutalist-minimal-instagram-03.png`.
+- Mengurangi elemen dekoratif sekitar 60% dibanding versi triptych sebelumnya.
+- Menyisakan hanya tiga fokus bentuk utama: simbol gerak biru-oranye di kiri, blob biru dengan matahari oranye di tengah, serta panah oranye dengan aksen biru di kanan.
+- Menghapus checkerboard, titik/doodle yang tersebar, kilat, zigzag, bintang tambahan, dan elemen ramai lainnya.
+- Mempertahankan palet EXISEL, outline tinta gelap tebal, bayangan blok, dan tekstur cetak yang ringan.
+- Mengekspor tiga PNG `1080 × 1350 px` agar siap digunakan sebagai post Instagram portrait.
+
+### Verification
+
+- Master diverifikasi pada ukuran `1942 × 809 px` (format panorama triptych 12:5).
+- Ketiga panel telah diperiksa secara visual dan masing-masing berukuran tepat `1080 × 1350 px`.
+- Area atas dan tengah tiap panel dibiarkan lapang untuk headline, logo, dan CTA tanpa bersaing dengan elemen dekoratif.
+- Tidak ada teks, logo, watermark, data pribadi, atau elemen UI yang tertanam.
+
+### Security note
+
+- Asset poster tidak berisi kredensial, data siswa, atau informasi pribadi.
+
+---
+
+## EXISEL-20260809-026 — Dokumentasi, Commit, Push, dan Handoff Deploy VPS
+
+### Identity
+
+- **Timestamp:** 2026-08-09 12:38:31 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **AI agent:** Codex
+- **Role:** Release Engineer dan Technical Documentation Agent
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “update log.md perubahan sebelumnyaa dan push semua perubahan kegithub dan kasih saya coomand untuk deploy ke vps”
+
+### TLDR AI agents done
+
+Mengaudit perubahan yang belum ter-commit, melengkapi log perubahan intro dan aset kampanye sebelumnya, menjalankan pemeriksaan kualitas proyek, membuat satu commit release, mendorong perubahan aman ke `origin/main`, dan menyiapkan command update production VPS berbasis Docker Compose.
+
+### Changes
+
+- **Source/UI:** intro aplikasi global, layout dan animasi responsif, serta sinkronisasi typewriter setelah intro selesai.
+- **Brand asset:** logo SMKN 69 dengan background transparan.
+- **Campaign assets:** dua background poster 16:9 dan dua set triptych Instagram neobrutalism beserta master panorama.
+- **Documentation:** `log.md` diperbarui sampai execution entry ini dan `.gitignore` diperjelas untuk artefak lokal.
+- `.claude/settings.local.json` tidak dimasukkan karena merupakan konfigurasi izin khusus mesin lokal.
+- `plans/kehadiran-paskibra-2026-08-09.xlsx` tidak dimasukkan karena merupakan workbook operasional lokal yang berpotensi memuat data siswa.
+
+### Verification
+
+- `git diff --check`: passed.
+- `pnpm typecheck`: passed, 0 error.
+- `pnpm lint`: passed, 0 error; terdapat 3 warning lama yang tidak memblokir release.
+- Instalasi dependency lokal sempat tidak lengkap dan cache `.next` menyimpan hasil resolusi lama; `node_modules` dipulihkan dari lockfile dan hanya cache generated `.next` yang dibersihkan.
+- `pnpm build`: passed pada Next.js 16.3.0 setelah clean build; 15 static page berhasil dihasilkan dan seluruh dynamic route terdaftar.
+- Target push: remote `origin`, branch `main`, tanpa force push.
+- Deployment handoff menggunakan `scripts/deploy-production.sh` dan `.env.production` yang sudah tersedia di VPS.
+
+### VPS update handoff
+
+```bash
+cd /opt/exisel
+git fetch origin
+git checkout main
+git pull --ff-only origin main
+sudo ENV_FILE=/opt/exisel/.env.production ./scripts/deploy-production.sh
+```
+
+Pemeriksaan setelah deployment:
+
+```bash
+docker compose --env-file /opt/exisel/.env.production -f /opt/exisel/compose.production.yml ps
+docker compose --env-file /opt/exisel/.env.production -f /opt/exisel/compose.production.yml logs --tail=100 migrate app caddy
+```
+
+### Security note
+
+- File environment, credential, database privat, konfigurasi izin lokal, dan workbook yang berpotensi memuat data siswa tidak dikirim ke GitHub.
+- Deployment tidak mengubah `.env.production` di VPS dan menjalankan migration melalui service Compose yang telah disediakan proyek.
+
+---
+
 _End of log. Future changes must append a new execution entry with Identity,
 Human Prompt, TLDR AI agents done, Changes, Verification, and Security note._

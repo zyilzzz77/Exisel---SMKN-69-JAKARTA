@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
+import { AppIntro } from "@/components/app-intro";
 import { EskulChatbot } from "@/components/eskul-chatbot";
 import "./globals.css";
 
@@ -127,6 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <AppIntro />
         {children}
         <EskulChatbot />
       </body>

@@ -52,6 +52,12 @@ yarn-error.log*
 # codex logs
 .codex-logs/
 
+# local AI-agent permissions
+/.claude/
+
+# local student attendance workbook
+/plans/kehadiran-paskibra-2026-08-09.xlsx
+
 # pnpm store
 .pnpm-store/
 

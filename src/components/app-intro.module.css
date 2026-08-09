@@ -1,0 +1,294 @@
+.overlay {
+  position: fixed;
+  z-index: 10000;
+  display: grid;
+  min-height: 100dvh;
+  inset: 0;
+  place-items: center;
+  overflow: hidden;
+  padding: max(24px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  background:
+    radial-gradient(circle at 50% 46%, rgba(36, 87, 245, 0.12), transparent 35%),
+    #fbfaf6;
+  color: #111111;
+  isolation: isolate;
+  animation: overlayExit 3000ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+:global(html.exisel-intro-locked),
+:global(html.exisel-intro-locked body) {
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  width: min(68vw, 780px);
+  aspect-ratio: 1;
+  border: 2px solid rgba(23, 71, 199, 0.12);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.72);
+  animation: glowEnter 1300ms 160ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.glow::before,
+.glow::after {
+  position: absolute;
+  border-radius: inherit;
+  content: "";
+  inset: 12%;
+}
+
+.glow::before {
+  border: 2px solid rgba(244, 123, 40, 0.14);
+}
+
+.glow::after {
+  border: 2px solid rgba(23, 71, 199, 0.08);
+  inset: 24%;
+}
+
+.brandLockup {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto 4px minmax(0, auto);
+  align-items: center;
+  gap: clamp(18px, 3vw, 34px);
+  padding: clamp(24px, 5vw, 48px);
+}
+
+.logoFrame {
+  display: grid;
+  width: clamp(78px, 11vw, 112px);
+  aspect-ratio: 0.82;
+  place-items: center;
+  opacity: 0;
+  transform: translateX(-90px) scale(0.92);
+  transform-origin: left center;
+  animation: logoEnter 720ms 120ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 12px 16px rgba(17, 17, 17, 0.16));
+}
+
+.divider {
+  width: 4px;
+  height: clamp(72px, 11vw, 112px);
+  border-radius: 999px;
+  background: #f47b28;
+  box-shadow: 3px 0 0 #15182b;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: center;
+  animation: dividerEnter 460ms 590ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.copyClip {
+  overflow: hidden;
+  padding: 8px 10px 8px 0;
+}
+
+.copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.copy strong {
+  font-family: var(--font-display), "Arial Black", sans-serif;
+  font-size: clamp(42px, 8vw, 82px);
+  font-weight: 800;
+  letter-spacing: -0.065em;
+  line-height: 0.92;
+  opacity: 0;
+  transform: translateX(-80px);
+  animation: copyEnter 720ms 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.copy span {
+  margin-top: clamp(10px, 1.5vw, 16px);
+  color: #4c5264;
+  font-family: var(--font-body), Arial, sans-serif;
+  font-size: clamp(9px, 1.35vw, 15px);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-64px);
+  animation: copyEnter 680ms 1050ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.mobileSubtitleBreak {
+  display: none;
+}
+
+.progress {
+  position: absolute;
+  right: clamp(24px, 5vw, 48px);
+  bottom: clamp(12px, 3vw, 30px);
+  left: clamp(24px, 5vw, 48px);
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(21, 24, 43, 0.1);
+  opacity: 0;
+  animation: progressTrackEnter 320ms 1150ms ease both;
+}
+
+.progress::after {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #1747c7 0 72%, #f47b28 72% 100%);
+  content: "";
+  transform: translateX(-101%);
+  animation: progressFill 1250ms 1200ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes logoEnter {
+  0% {
+    opacity: 0;
+    transform: translateX(-90px) scale(0.92);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes dividerEnter {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes copyEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glowEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes progressTrackEnter {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes progressFill {
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes overlayExit {
+  0%,
+  82% {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 560px) {
+  .brandLockup {
+    grid-template-columns: auto 3px minmax(0, min(52vw, 185px));
+    justify-content: center;
+    gap: 8px;
+    width: min(100%, 390px);
+    padding: 0 0 18px;
+  }
+
+  .logoFrame {
+    width: clamp(66px, 20vw, 80px);
+  }
+
+  .divider {
+    width: 3px;
+    height: clamp(72px, 22vw, 88px);
+    box-shadow: 2px 0 0 #15182b;
+    animation-name: dividerEnter;
+  }
+
+  .copyClip {
+    width: 100%;
+    overflow: visible;
+    padding: 6px 2px 6px 0;
+    text-align: left;
+  }
+
+  .copy {
+    align-items: flex-start;
+  }
+
+  .copy strong {
+    font-size: clamp(30px, 8.8vw, 34px);
+  }
+
+  .copy span {
+    max-width: 185px;
+    font-size: clamp(6.5px, 1.8vw, 8px);
+    letter-spacing: 0.04em;
+    white-space: normal;
+  }
+
+  .mobileSubtitleBreak {
+    display: block;
+  }
+
+  .progress {
+    right: 8px;
+    bottom: -4px;
+    left: 8px;
+    height: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .glow,
+  .logoFrame,
+  .divider,
+  .copy,
+  .progress,
+  .progress::after {
+    animation: none;
+  }
+}

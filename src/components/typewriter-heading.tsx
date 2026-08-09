@@ -29,7 +29,24 @@ export function TypewriterHeading({
 
   const [displayedText, setDisplayedText] = useState("");
   const [isDone, setIsDone] = useState(false);
+  const [isIntroComplete, setIsIntroComplete] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    let animationFrame = 0;
+    const markIntroComplete = () => setIsIntroComplete(true);
+
+    window.addEventListener("exisel:intro-complete", markIntroComplete);
+
+    if (document.documentElement.dataset.exiselIntroComplete === "true") {
+      animationFrame = window.requestAnimationFrame(markIntroComplete);
+    }
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("exisel:intro-complete", markIntroComplete);
+    };
+  }, []);
 
   useEffect(() => {
     const node = containerRef.current;
@@ -53,7 +70,7 @@ export function TypewriterHeading({
   }, [repeatOnScroll]);
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || !isIntroComplete) return;
 
     let index = 0;
 
@@ -68,7 +85,7 @@ export function TypewriterHeading({
     }, 60);
 
     return () => clearInterval(timer);
-  }, [isVisible, fullText]);
+  }, [isIntroComplete, isVisible, fullText]);
 
   const line1Length = line1.length;
   const currentLine1 = displayedText.slice(
