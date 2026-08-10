@@ -1,7 +1,7 @@
-# EXISEL — AI Execution Log
+# EXISEL — Codex Execution Log
 
 Dokumen ini adalah catatan kronologis seluruh permintaan dan perubahan yang
-dikerjakan AI pada proyek EXISEL. Setiap entri mempunyai identitas eksekusi,
+dikerjakan melalui platform Codex pada proyek EXISEL. Setiap entri mempunyai identitas eksekusi,
 input prompt, pekerjaan yang dilakukan, artefak yang berubah, hasil verifikasi,
 dan catatan keamanan.
 
@@ -12,7 +12,7 @@ dan catatan keamanan.
 | Proyek | EXISEL — Sistem Informasi Ekstrakurikuler Siswa |
 | Workspace | `C:\Users\USER\Documents\EXISEL - EXTRAKULIKULER NAMSEL` |
 | Requester | USER / pemilik workspace |
-| AI agent | Codex — senior full-stack development agent |
+| Platform | Codex — platform pengembangan full-stack |
 | Model log | ChatGPT 5.6 Solana (`gpt-5.6-sol`) |
 | Zona waktu | Asia/Jakarta (WIB / UTC+07:00) |
 | Tanggal sesi | 4 Agustus 2026 |
@@ -45,7 +45,7 @@ dan catatan keamanan.
 
 - **Timestamp:** 2026-08-04 — waktu presisi tidak tercatat
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -55,7 +55,7 @@ dan catatan keamanan.
 > Lampiran `pasted-text.txt`: “Bertindaklah sebagai senior full-stack
 > developer. Buat aplikasi web profesional…”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membaca spesifikasi aplikasi EXISEL, mengidentifikasi kebutuhan Next.js,
 TypeScript, PostgreSQL, Prisma, autentikasi, role siswa/admin, dashboard,
@@ -84,7 +84,7 @@ Tidak ada credential atau data siswa yang dibaca pada tahap ini.
 
 - **Timestamp:** 2026-08-04 — waktu presisi tidak tercatat
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -93,7 +93,7 @@ Tidak ada credential atau data siswa yang dibaca pada tahap ini.
 
 > “saya naro design.md nya taro dimana”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menetapkan folder `plans/` sebagai lokasi dokumen desain agar rencana UI
 terpisah dari source code aplikasi.
@@ -115,7 +115,7 @@ terpisah dari source code aplikasi.
 
 - **Timestamp:** 2026-08-04 — waktu presisi tidak tercatat
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -124,7 +124,7 @@ terpisah dari source code aplikasi.
 
 > “buat folder plans berisi design.md”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat area dokumentasi desain di dalam workspace. Dokumen desain landing
 page yang tersedia kemudian dipertahankan dengan nama aslinya.
@@ -151,7 +151,7 @@ page yang tersedia kemudian dipertahankan dengan nama aslinya.
 
 - **Timestamp:** 2026-08-04 13:22:49 WIB *(berdasarkan file output)*
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer dan UI implementer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -160,7 +160,7 @@ page yang tersedia kemudian dipertahankan dengan nama aslinya.
 
 > “excuted plan deisgn landing pages nya”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menginisialisasi aplikasi Next.js dan menerjemahkan design system
 Neo-Brutalism menjadi landing page EXISEL yang responsif, mudah diakses, dan
@@ -216,7 +216,7 @@ repository. Peringatan tidak memengaruhi build atau runtime proyek.
 
 - **Timestamp:** 2026-08-04 — waktu presisi tidak tercatat
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Development runtime operator
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -227,7 +227,7 @@ repository. Peringatan tidak memengaruhi build atau runtime proyek.
 
 > “dan jalankan localhost”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memeriksa ulang hasil landing page, menjalankan development server, dan
 memastikan aplikasi dapat diakses dari `http://localhost:3000`.
@@ -252,8 +252,8 @@ memastikan aplikasi dapat diakses dari `http://localhost:3000`.
 
 - **Timestamp:** 2026-08-04 — waktu presisi tidak tercatat
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
-- **Role:** UI and brand implementation agent
+- **Platform:** Codex
+- **Role:** UI and brand implementation specialist
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -266,7 +266,7 @@ memastikan aplikasi dapat diakses dari `http://localhost:3000`.
 - Gambar logo SMK Negeri 69 Jakarta diberikan melalui clipboard attachment.
 - Sumber sementara tidak dimasukkan ke source control.
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti identitas logo sementara pada landing page dengan logo resmi SMKN 69
 Jakarta dan menyimpan aset yang digunakan aplikasi.
@@ -289,14 +289,14 @@ Attachment hanya digunakan sebagai aset visual dan tidak berisi data akun.
 
 ---
 
-## EXISEL-20260804-007 — Membuat log AI lengkap
+## EXISEL-20260804-007 — Membuat log Codex lengkap
 
 ### Identity
 
 - **Timestamp:** 2026-08-04 — waktu presisi tidak tercatat
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
-- **Role:** Technical documentation agent
+- **Platform:** Codex
+- **Role:** Technical documentation specialist
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -304,7 +304,7 @@ Attachment hanya digunakan sebagai aset visual dan tidak berisi data akun.
 
 > “kasih saya log.md yang berisikan log ai yang super lengkap”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat dokumentasi audit teknis untuk spesifikasi, setup proyek, implementasi
 landing page, aset, route, verifikasi, keamanan, dan pekerjaan lanjutan.
@@ -326,7 +326,7 @@ landing page, aset, route, verifikasi, keamanan, dan pekerjaan lanjutan.
 
 - **Timestamp:** 2026-08-04 13:49:38 WIB *(berdasarkan file output)*
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Full-stack authentication UI developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -335,7 +335,7 @@ landing page, aset, route, verifikasi, keamanan, dan pekerjaan lanjutan.
 
 > “oke sekarang escuted plans design-login-pages.md”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menerjemahkan design plan login menjadi route `/login` dengan tampilan
 Neo-Brutalism, validasi Server Action, state pending/error, tombol tampilkan
@@ -385,7 +385,7 @@ entri ini dan dikerjakan pada eksekusi berikutnya.
 
 - **Timestamp:** 2026-08-04 14:02:00 WIB *(rekonstruksi sesi)*
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack and database developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed with database activation pending
@@ -402,7 +402,7 @@ entri ini dan dikerjakan pada eksekusi berikutnya.
 - Used range: `A1:E36`.
 - Headers: `No`, `Nama Siswa`, `Kelas`, `Email`, `Password`.
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memvalidasi 35 akun, membuat skema PostgreSQL/Prisma, menghasilkan SQL impor
 privat, mengubah username login dari NIS menjadi email, menggunakan NIS pada
@@ -505,7 +505,7 @@ Tidak ada PII siswa atau password asli yang dicetak ke output akhir maupun log.
 
 - **Timestamp:** 2026-08-04 14:10:00 WIB *(rekonstruksi sesi)*
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Database and application runtime operator
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -515,7 +515,7 @@ Tidak ada PII siswa atau password asli yang dicetak ke output akhir maupun log.
 > “fixed **Layanan belum tersambung.** **Database akun belum dapat diakses.
 > Hubungi admin sekolah atau coba lagi nanti.**”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat PostgreSQL khusus proyek pada port 5433, menerapkan migration,
 mengimpor 35 akun, mengaktifkan environment aplikasi, me-restart Next.js, dan
@@ -584,7 +584,7 @@ menggunakan managed PostgreSQL, TLS, password kuat, dan secret berbeda.
 
 - **Timestamp:** 2026-08-04 14:18:00 WIB *(rekonstruksi sesi)*
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Full-stack dashboard developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -602,7 +602,7 @@ menggunakan managed PostgreSQL, TLS, password kuat, dan secret berbeda.
 - Typography: Space Grotesk and Manrope.
 - Structure: rigid grid, thick borders, hard shadows, responsive reflow.
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membangun dashboard siswa personal yang membaca PostgreSQL, menampilkan status
 pendaftaran, jadwal, rekomendasi ekskul, jumlah kursi, data akun aman, dan
@@ -670,8 +670,8 @@ navigasi responsif.
 
 - **Timestamp:** 2026-08-04 14:18:56 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
-- **Role:** Technical documentation agent
+- **Platform:** Codex
+- **Role:** Technical documentation specialist
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -679,7 +679,7 @@ navigasi responsif.
 
 > “update log.md nyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan status operasional terbaru untuk Next.js, PostgreSQL, akun siswa,
 ekstrakurikuler, jadwal, authenticated health check, dan keamanan data.
@@ -709,8 +709,8 @@ Health check tidak mencetak identitas, email, password, atau token siswa.
 
 - **Timestamp:** 2026-08-04 14:20:42 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
-- **Role:** Technical documentation agent
+- **Platform:** Codex
+- **Role:** Technical documentation specialist
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -721,9 +721,9 @@ Health check tidak mencetak identitas, email, password, atau token siswa.
 ### Input reference
 
 Gambar menunjukkan format log ringkas yang berisi timestamp, model used,
-human prompt, TLDR pekerjaan agent, dan files changed.
+human prompt, TLDR platform Codex, dan files changed.
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan execution summary berbasis timestamp di bagian atas log sambil
 mempertahankan riwayat teknis lama.
@@ -745,8 +745,8 @@ mempertahankan riwayat teknis lama.
 
 - **Timestamp:** 2026-08-04 14:23:33 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
-- **Role:** Technical documentation and audit agent
+- **Platform:** Codex
+- **Role:** Technical documentation and audit specialist
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -755,7 +755,7 @@ mempertahankan riwayat teknis lama.
 > “setiap perubahan ada identitas nya dan ada input promptnya untuk model
 > chatgpt 5.6 solana jadi tolong dirombak semua log.md nyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti seluruh struktur log lama menjadi execution ledger kronologis. Setiap
 prompt dan perubahan kini mempunyai identity, model, requester, input prompt,
@@ -792,7 +792,7 @@ security note bila relevan.
 
 - **Timestamp:** 2026-08-04 14:42:37 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Full-stack catalog page developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -810,7 +810,7 @@ security note bila relevan.
   `enrollments`.
 - Route: `/ekstrakurikuler`.
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membangun halaman katalog siswa yang menampilkan seluruh tujuh ekskul dari
 PostgreSQL, lengkap dengan pencarian, filter hari, deskripsi, jadwal, lokasi,
@@ -879,7 +879,7 @@ siswa. Navigasi dashboard diarahkan ke route baru tersebut.
 
 - **Timestamp:** 2026-08-04 14:44:05 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Project audit-log maintainer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -888,7 +888,7 @@ siswa. Navigasi dashboard diarahkan ke route baru tersebut.
 
 > “oke update log nya”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbarui `log.md` setelah penyelesaian halaman katalog ekstrakurikuler dan
 mencatat permintaan pengguna ini sebagai execution entry baru yang mempunyai
@@ -929,7 +929,7 @@ identitas, prompt asli, perubahan file, hasil verifikasi, dan catatan keamanan.
 
 - **Timestamp:** 2026-08-04 14:46:37 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Full-stack UI asset integrator
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -944,7 +944,7 @@ identitas, prompt asli, perubahan file, hasil verifikasi, dan catatan keamanan.
 - Destination asset: `public/logo-itc.png`.
 - Target UI: kartu ITC pada route `/ekstrakurikuler`.
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan gambar logo ITC milik pengguna sebagai aset lokal dan
 menampilkannya pada area identitas kartu ITC. Logo diberi bingkai tebal,
@@ -996,7 +996,7 @@ EXISEL serta tetap responsif pada layar kecil.
 
 - **Timestamp:** 2026-08-04 14:48:03 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Front-end visual refinement developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -1005,7 +1005,7 @@ EXISEL serta tetap responsif pada layar kecil.
 
 > “sama edit untuk kartu warna kuning text nya warna putih”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah warna teks pada seluruh kartu kuning/oranye menjadi putih, termasuk
 judul, nomor program, deskripsi, jadwal, kapasitas, dan footer. Badge kategori
@@ -1051,7 +1051,7 @@ menggunakan warna putih agar tetap terlihat pada latar oranye.
 
 - **Timestamp:** 2026-08-04 14:49:47 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Front-end visual refinement developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -1060,7 +1060,7 @@ menggunakan warna putih agar tetap terlihat pada latar oranye.
 
 > “yang itc kartu nya jangan kuning tapi navy biru muda”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memisahkan tone visual kartu ITC dari kartu oranye dan memberinya tema khusus
 navy–biru muda. Dasar kartu sekarang navy, teks utama putih, sedangkan
@@ -1109,7 +1109,7 @@ deskripsi, badge, progress kuota, dan garis status menggunakan aksen biru muda.
 
 - **Timestamp:** 2026-08-04 16:08:03 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack registration workflow developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -1119,7 +1119,7 @@ deskripsi, badge, progress kuota, dan garis status menggunakan aksen biru muda.
 > “setiap kartu eskul ada tombol daftar nya dan direct ke pages /daftar/eskul/
 > dan nanti langsung ke isi nama,nis,eskul yang dipilih secara otomatis”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membangun alur pendaftaran ekstrakurikuler siswa secara end-to-end. Setiap
 kartu ekskul sekarang mempunyai tombol daftar yang membawa ID program ke route
@@ -1247,7 +1247,7 @@ kapasitas, dan enrollment ganda sebelum menyimpan status `PENDING`.
 
 - **Timestamp:** 2026-08-04 16:08:04 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Runtime incident responder
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -1264,7 +1264,7 @@ kapasitas, dan enrollment ganda sebelum menyimpan status `PENDING`.
 Catatan: UUID akun yang ikut tercetak pada pesan error pengguna sengaja tidak
 disalin ke log untuk melindungi identifier internal siswa.
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mendiagnosis bahwa Next.js development server masih menyimpan Prisma Client
 lama di memory setelah schema `users.nis` ditambahkan. Migration dan generated
@@ -1308,7 +1308,7 @@ runtime memuat client terbaru.
 
 - **Timestamp:** 2026-08-04 16:18:46 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Full-stack enrollment workflow developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -1317,7 +1317,7 @@ runtime memuat client terbaru.
 
 > “pas mereka daftar itu otomatis diterima dan tinggal hadir”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah aturan bisnis pendaftaran dari menunggu persetujuan menjadi langsung
 diterima. Setiap pendaftaran yang lolos validasi session, duplikasi, program
@@ -1397,7 +1397,7 @@ halaman memberi instruksi bahwa siswa tinggal hadir sesuai jadwal ekskul.
 
 - **Timestamp:** 2026-08-04 16:37:02 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack attendance system developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -1410,7 +1410,7 @@ halaman memberi instruksi bahwa siswa tinggal hadir sesuai jadwal ekskul.
 > bisa dilihat admin guru jadi buat pages buat login ke pages admin/guru untuk
 > memantau kehadiran siswa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membangun alur kehadiran end-to-end. Siswa yang sudah diterima hanya dapat
 mengisi kehadiran pada hari sesuai jadwal ekskulnya. Nama, kelas, dan program
@@ -1554,7 +1554,7 @@ mengisi.
 
 - **Timestamp:** 2026-08-04 16:54:34 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack attendance rules developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -1567,7 +1567,7 @@ mengisi.
 > dimenu absen eskul nya ngga muncul jadi yang muncul yang diikuti oleh siswa
 > tsb dihari itu juga”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperketat absensi menjadi satu kali submit yang tidak dapat diubah, membatasi
 menu kehadiran hanya pada ekskul `APPROVED` yang terjadwal pada hari Jakarta
@@ -1712,8 +1712,8 @@ sedangkan admin/guru dapat memfilter dan melihat ketidakhadiran otomatis.
 
 - **Timestamp:** 2026-08-04 17:15:17 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
-- **Role:** AI execution log maintainer
+- **Platform:** Codex
+- **Role:** Codex execution log maintainer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -1721,7 +1721,7 @@ sedangkan admin/guru dapat memfilter dan melihat ketidakhadiran otomatis.
 
 > “update log.md”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memeriksa kembali bagian akhir execution log dan memastikan perubahan aturan
 absensi terbaru sudah tercatat lengkap pada `EXISEL-20260804-024`, termasuk
@@ -1753,7 +1753,7 @@ permintaan pembaruan log juga mempunyai jejak audit tersendiri.
 
 - Struktur wajib `Identity`: present.
 - Struktur wajib `Human Prompt`: present.
-- Struktur wajib `TLDR AI agents done`: present.
+- Struktur wajib `TLDR platform Codex`: present.
 - Struktur wajib `Files changed`: present.
 - Struktur wajib `Verification`: present.
 - Struktur wajib `Security note`: present.
@@ -1776,7 +1776,7 @@ permintaan pembaruan log juga mempunyai jejak audit tersendiri.
 
 - **Timestamp:** 2026-08-04 17:42:14 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack reporting and spreadsheet developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -1789,7 +1789,7 @@ permintaan pembaruan log juga mempunyai jejak audit tersendiri.
 > hari agenda nya apakah hadir atau tidak dan seterusnyaa dan dipages admin/guru
 > kelihaatan analisa data keaktifan murid dieskul dan jumlah kehadiran”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan mesin laporan historis kehadiran, analisis keaktifan per siswa dan
 per ekskul, serta unduhan workbook Excel profesional yang hanya dapat diakses
@@ -1875,7 +1875,7 @@ keaktifan, dan rincian alasan izin.
 
 - **Timestamp:** 2026-08-04 17:42:14 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Local runtime and database recovery operator
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -1887,7 +1887,7 @@ keaktifan, dan rincian alasan izin.
 > “Layanan belum tersambung. Database akun belum dapat diakses. Hubungi admin
 > sekolah atau coba lagi nanti.”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menyalakan kembali Next.js localhost, menemukan PostgreSQL lokal pada port 5433
 sedang berhenti, lalu mengaktifkan database menggunakan startup project. Login
@@ -1927,7 +1927,7 @@ admin kembali tersambung dan route dashboard dapat membaca data akun.
 
 - **Timestamp:** 2026-08-04 17:42:14 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack admin experience developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -1940,7 +1940,7 @@ admin kembali tersambung dan route dashboard dapat membaca data akun.
 
 > “dimenu dashboard ada tombol cek laporan excel”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memindahkan analitik historis dan seluruh tombol download Excel dari dashboard
 monitoring ke halaman khusus `/admin/laporan`. Menghapus lingkaran
@@ -2005,7 +2005,7 @@ laporan. Dashboard kini fokus pada filter dan tabel monitoring harian.
 
 - **Timestamp:** 2026-08-04 17:58:36 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack student dashboard developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -2019,7 +2019,7 @@ laporan. Dashboard kini fokus pada filter dan tabel monitoring harian.
 > berapa dan itu ditanggalan nya dibuletin dan dibawah ada keterangan nya dan
 > tombol isi kehadiran ada dikartu statusmu”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah kartu jadwal dashboard siswa menjadi kalender minggu aktif
 Senin–Jumat. Tanggal dihitung otomatis berdasarkan waktu sekolah Jakarta,
@@ -2099,7 +2099,7 @@ mempunyai ekskul yang berlangsung hari ini.
 
 - **Timestamp:** 2026-08-04 18:39:08 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior front-end catalog developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -2109,7 +2109,7 @@ mempunyai ekskul yang berlangsung hari ini.
 > “yang card basket dan futsal di pages /ekstrakulikuler tolong disamain ukuran
 > card nya”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan kelas layout khusus pada kartu Basket dan Futsal di katalog
 `/ekstrakurikuler` agar keduanya mempunyai lebar grid dan tinggi kartu yang
@@ -2148,7 +2148,7 @@ dan tinggi konten responsif agar isinya tidak terpotong.
 
 - **Timestamp:** 2026-08-04 18:43:19 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior responsive UI debugging developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -2157,7 +2157,7 @@ dan tinggi konten responsif agar isinya tidak terpotong.
 
 > “mana masih berbeda ukuran card nya”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memverifikasi langsung ukuran kartu pada viewport yang dilaporkan pengguna dan
 menemukan selector pola grid lama mempunyai prioritas lebih tinggi daripada
@@ -2195,7 +2195,7 @@ viewport tersebut.
 
 - **Timestamp:** 2026-08-04 18:50:28 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior front-end catalog developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -2204,7 +2204,7 @@ viewport tersebut.
 
 > “tambahkan logo nihon seperti logo itc”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan gambar logo Nihon yang diberikan pengguna sebagai aset lokal dan
 menghubungkannya ke presentasi kartu Nihon di `/ekstrakurikuler`. Logo memakai
@@ -2243,7 +2243,7 @@ ITC.
 
 - **Timestamp:** 2026-08-04 18:53:14 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior front-end catalog developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -2252,7 +2252,7 @@ ITC.
 
 > “tambahkan logo basket seperti logo nihon”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan gambar logo Basket yang diberikan pengguna sebagai aset lokal dan
 menghubungkannya ke kartu Basket di `/ekstrakurikuler`. Logo memakai komponen,
@@ -2291,7 +2291,7 @@ Nihon dan ITC.
 
 - **Timestamp:** 2026-08-04 18:54:16 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior front-end catalog developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -2300,7 +2300,7 @@ Nihon dan ITC.
 
 > “tambahka logo ec seperti logo basket”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan gambar logo English Club yang diberikan pengguna sebagai aset
 lokal dan menghubungkannya ke kartu English Club di `/ekstrakurikuler`. Logo
@@ -2339,7 +2339,7 @@ sama dengan logo Basket, Nihon, dan ITC.
 
 - **Timestamp:** 2026-08-04 18:56:40 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior front-end visual design developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -2348,7 +2348,7 @@ sama dengan logo Basket, Nihon, dan ITC.
 
 > “warna card ec jangan kuning tapi merah muda aja kayak logo nya”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti tema kartu English Club dari kuning/oranye menjadi merah muda yang
 selaras dengan warna logo. Menambahkan aksen merah pada progress kuota serta
@@ -2386,7 +2386,7 @@ teks tetap jelas.
 
 - **Timestamp:** 2026-08-04 19:09:23 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack extracurricular profile developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -2396,7 +2396,7 @@ teks tetap jelas.
 > “buat pages /eskul/nama_eskul
 > contoh eskul pmr dengan design.md ini”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat halaman detail dinamis `/eskul/[nama_eskul]` berdasarkan EXISEL Visual
 Language yang diberikan pengguna. Contoh lengkap tersedia di `/eskul/pmr`, dan
@@ -2480,7 +2480,7 @@ progress kuota, dan status pendaftaran siswa.
 
 - Timestamp: 2026-08-04 19:21:54 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior front-end navigation developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -2489,7 +2489,7 @@ progress kuota, dan status pendaftaran siswa.
 
 > “dipages /ekstrakurikuler nya itu kita klik card direct kepages /eskul/nama_eskul nya”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Seluruh kartu ekstrakurikuler pada katalog sekarang menjadi area klik menuju halaman detail ekskul berdasarkan slug namanya. Tombol daftar dan status pilihan tetap memiliki tujuan masing-masing.
 
@@ -2531,7 +2531,7 @@ Seluruh kartu ekstrakurikuler pada katalog sekarang menjadi area klik menuju hal
 
 - Timestamp: 2026-08-05 10:55:33 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior front-end accessibility developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -2540,7 +2540,7 @@ Seluruh kartu ekstrakurikuler pada katalog sekarang menjadi area klik menuju hal
 
 > “edit text ini Gunakan email yang tercatat di akun e-Learning. menjadi Gunakan Email Yang Tercatat Yang Didata Guru; ganti juga text gunakan NIS sebagai password awal. menjadi gunakan password yang diberikan; sama edit tombol sembunyikan password menjadi icon mata saja”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbarui seluruh instruksi login siswa agar memakai email yang didata guru dan password yang diberikan, lalu mengganti label tombol password dengan ikon mata yang tetap memiliki label aksesibel.
 
@@ -2583,7 +2583,7 @@ Memperbarui seluruh instruksi login siswa agar memakai email yang didata guru da
 
 - Timestamp: 2026-08-05 10:56:00 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior front-end UI developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -2592,7 +2592,7 @@ Memperbarui seluruh instruksi login siswa agar memakai email yang didata guru da
 
 > “matanya jangan miring4”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah geometri ikon mata menjadi bentuk oval horizontal tanpa rotasi sehingga tampil lurus pada tombol password.
 
@@ -2625,7 +2625,7 @@ Mengubah geometri ikon mata menjadi bentuk oval horizontal tanpa rotasi sehingga
 
 - Timestamp: 2026-08-05 11:00:00 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior front-end UI developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -2634,7 +2634,7 @@ Mengubah geometri ikon mata menjadi bentuk oval horizontal tanpa rotasi sehingga
 
 > “ubah icon matanya saat password terbuka matanya terbuka, lalu saat password tertutup icon mata juga tertutup”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Ikon visibilitas password sekarang berubah secara visual: oval dengan pupil saat password terbuka dan garis mata saat password tertutup.
 
@@ -2667,7 +2667,7 @@ Ikon visibilitas password sekarang berubah secara visual: oval dengan pupil saat
 
 - Timestamp: 2026-08-05 11:12:46 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior full-stack developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -2676,7 +2676,7 @@ Ikon visibilitas password sekarang berubah secara visual: oval dengan pupil saat
 
 > “tambahkan eskul pramuka setiap hari rabu pada jam 15:45 - 17:00. Ekstrakurikuler Pramuka (Praja Muda Karana) adalah kegiatan pendidikan nonformal di luar jam pelajaran sekolah yang bertujuan untuk membentuk karakter, kedisiplinan, kemandirian, kepemimpinan, dan rasa cinta tanah air pada siswa melalui metode kepanduan. Tujuan utama: pembentukan karakter, keterampilan & kemandirian, kepemimpinan & kerja sama. Pakai Logo yang saya berikan.”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan Pramuka sebagai ekskul aktif ke-8 dengan logo pengguna, data PostgreSQL, jadwal Rabu 15:45–17:00, kartu katalog, halaman detail, tujuan pembelajaran, pendaftaran, dan dukungan filter Rabu.
 
@@ -2726,7 +2726,7 @@ Menambahkan Pramuka sebagai ekskul aktif ke-8 dengan logo pengguna, data Postgre
 
 - Timestamp: 2026-08-05 11:27:56 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior full-stack attendance workflow developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -2735,7 +2735,7 @@ Menambahkan Pramuka sebagai ekskul aktif ke-8 dengan logo pengguna, data Postgre
 
 > “saya mau ubah flow kehadiran jadi jika mereka hadir mereka harus mengisi code kehadiran yang diberikan oleh admin/guru/pembina eskul nya jadii code nya digenerate oleh admin dalam satu sesi dan berlaku hingga 15 menit misal eskul nya berkahir 17:00 maka code nya berkahir 17:15 dan generate code nya itu dipages /admin/esktrakulikuler/nama_eskul”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah presensi hadir menjadi presensi berbasis kode sesi. Admin membuat satu kode per ekskul dan tanggal dari halaman detail admin; siswa wajib memasukkan kode yang valid untuk status Hadir, sedangkan Izin tetap memakai alasan tanpa kode.
 
@@ -2792,7 +2792,7 @@ Mengubah presensi hadir menjadi presensi berbasis kode sesi. Admin membuat satu 
 
 - Timestamp: 2026-08-05 11:41:00 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior full-stack time-handling developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -2801,7 +2801,7 @@ Mengubah presensi hadir menjadi presensi berbasis kode sesi. Admin membuat satu 
 
 > “Kode Pramuka masih aktif sampai 00:15. ko format waktunya ngaco”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbaiki offset timestamp `timestamptz` dari adapter Prisma agar waktu expiry kode tampil dan divalidasi sebagai waktu Jakarta yang benar. Jadwal selesai 17:00 sekarang menghasilkan expiry 17:15.
 
@@ -2843,7 +2843,7 @@ Memperbaiki offset timestamp `timestamptz` dari adapter Prisma agar waktu expiry
 
 - Timestamp: 2026-08-05 11:56:24 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior admin dashboard UX developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -2852,7 +2852,7 @@ Memperbaiki offset timestamp `timestamptz` dari adapter Prisma agar waktu expiry
 
 > “cara kepages admin/ekstrakulikuler/nama_eskul nya dipages admin/laporan ditambahin tombol nya per card eskul nya buat generate code nyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan tombol Generate kode pada setiap kartu ekskul di halaman `/admin/laporan`, dengan link otomatis ke halaman generator berdasarkan slug nama ekskul.
 
@@ -2892,7 +2892,7 @@ Menambahkan tombol Generate kode pada setiap kartu ekskul di halaman `/admin/lap
 
 - Timestamp: 2026-08-05 12:06:45 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior responsive UI developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -2901,7 +2901,7 @@ Menambahkan tombol Generate kode pada setiap kartu ekskul di halaman `/admin/lap
 
 > “tolong rapihkan card ditampilan desktop dan mobile agar ukuran nya sama untuk setiap card nya jadi tidak ada tumpah tiindih”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menyeragamkan layout kartu ekskul pada desktop dan mobile agar semua kartu memiliki grid, tinggi, footer, dan batas konten yang konsisten tanpa tumpang tindih.
 
@@ -2942,7 +2942,7 @@ Menyeragamkan layout kartu ekskul pada desktop dan mobile agar semua kartu memil
 
 - Timestamp: 2026-08-05 12:12:00 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior responsive UI developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -2951,7 +2951,7 @@ Menyeragamkan layout kartu ekskul pada desktop dan mobile agar semua kartu memil
 
 > “Hapus yang diphoto”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menghapus elemen lingkaran “Semua 8 Ekskul” yang terlihat pada foto dari hero halaman katalog ekstrakurikuler.
 
@@ -2984,7 +2984,7 @@ Menghapus elemen lingkaran “Semua 8 Ekskul” yang terlihat pada foto dari her
 
 - Timestamp: 2026-08-05 12:20:00 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior landing page UI developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -2993,7 +2993,7 @@ Menghapus elemen lingkaran “Semua 8 Ekskul” yang terlihat pada foto dari her
 
 > “sama buatin saya navbar dibagian atas seperti digambar yaitu: about, background, dan explore”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menyesuaikan navbar landing page dengan tiga menu yang diminta—About, Background, dan Explore—serta menghubungkannya ke section halaman yang sesuai.
 
@@ -3030,7 +3030,7 @@ Menyesuaikan navbar landing page dengan tiga menu yang diminta—About, Backgrou
 
 - Timestamp: 2026-08-05 12:35:00 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior landing page UI developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3039,7 +3039,7 @@ Menyesuaikan navbar landing page dengan tiga menu yang diminta—About, Backgrou
 
 > “navbar nya dibuat lebih interaktif seperti tombol masuk”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah menu About, Background, dan Explore menjadi tombol navigasi dengan tampilan, hover, fokus keyboard, dan efek tekan yang konsisten dengan tombol Masuk.
 
@@ -3070,7 +3070,7 @@ Mengubah menu About, Background, dan Explore menjadi tombol navigasi dengan tamp
 
 - Timestamp: 2026-08-05 12:40:00 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior landing page UI developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3079,7 +3079,7 @@ Mengubah menu About, Background, dan Explore menjadi tombol navigasi dengan tamp
 
 > “jangan warna orange navbar nya tapi warna navy”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti warna hover dan fokus tombol navbar dari oranye menjadi navy dengan teks putih.
 
@@ -3108,7 +3108,7 @@ Mengganti warna hover dan fokus tombol navbar dari oranye menjadi navy dengan te
 
 - Timestamp: 2026-08-05 12:45:00 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior UI/UX developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3117,7 +3117,7 @@ Mengganti warna hover dan fokus tombol navbar dari oranye menjadi navy dengan te
 
 > “tambahin animasi ui/ux nya saat web nya dibuka ada animasi muncul”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan animasi pembuka landing page dengan efek fade-in dan gerakan naik bertahap untuk announcement, header, konten utama, dan footer.
 
@@ -3149,7 +3149,7 @@ Menambahkan animasi pembuka landing page dengan efek fade-in dan gerakan naik be
 
 - Timestamp: 2026-08-05 13:10:00 Asia/Jakarta
 - Model used: GPT-5 Codex
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior Next.js UI/UX developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3160,7 +3160,7 @@ Menambahkan animasi pembuka landing page dengan efek fade-in dan gerakan naik be
 
 > “pakai talwind css aja”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti scroll animation berbasis CSS Scroll Timeline dengan Intersection Observer dan utility Tailwind CSS agar animasi muncul konsisten saat pengguna scroll turun maupun naik.
 
@@ -3197,7 +3197,7 @@ Mengganti scroll animation berbasis CSS Scroll Timeline dengan Intersection Obse
 
 - Timestamp: 2026-08-05 13:15:00 Asia/Jakarta
 - Model used: GPT-5 Codex
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior Next.js UI/UX developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3206,7 +3206,7 @@ Mengganti scroll animation berbasis CSS Scroll Timeline dengan Intersection Obse
 
 > “css nya pakai talwind css native dan pakai design yang sudah ada”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memastikan animasi scroll baru menggunakan utility Tailwind CSS v4 native sambil mempertahankan seluruh bahasa visual EXISEL yang sudah ada.
 
@@ -3240,7 +3240,7 @@ Memastikan animasi scroll baru menggunakan utility Tailwind CSS v4 native sambil
 
 - Timestamp: 2026-08-05 13:20:00 Asia/Jakarta
 - Model used: GPT-5 Codex
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior Next.js UI/UX developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3249,7 +3249,7 @@ Memastikan animasi scroll baru menggunakan utility Tailwind CSS v4 native sambil
 
 > “card nya juga ada animasi nyaaa biar lebih smooth”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan animasi hover dan focus yang lebih halus pada kartu landing page menggunakan utility Tailwind CSS native tanpa mengubah desain dasarnya.
 
@@ -3284,7 +3284,7 @@ Menambahkan animasi hover dan focus yang lebih halus pada kartu landing page men
 
 - Timestamp: 2026-08-05 13:25:00 Asia/Jakarta
 - Model used: GPT-5 Codex
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior Next.js UI/UX developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3293,7 +3293,7 @@ Menambahkan animasi hover dan focus yang lebih halus pada kartu landing page men
 
 > “tambahin dilanding pages agar card nya saat cursos klik ke card nya ad animasi muncul kayak tombol masuk”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan active press feedback pada kartu landing page agar terasa seperti tombol Masuk saat ditekan dengan mouse atau layar sentuh.
 
@@ -3326,7 +3326,7 @@ Menambahkan active press feedback pada kartu landing page agar terasa seperti to
 
 - Timestamp: 2026-08-05 13:35:00 Asia/Jakarta
 - Model used: GPT-5 Codex
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior Next.js UI/UX developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3335,7 +3335,7 @@ Menambahkan active press feedback pada kartu landing page agar terasa seperti to
 
 > “animasi card dipages landing pages halaman utama jangan dibuat kaku buat lebih interaktif jika cursor nya mengarah ke card nya ada animasi card nya kedepan seperti yang ada di pages dashboard”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Meningkatkan animasi seluruh kartu ekskul landing page agar terasa maju ke depan saat cursor diarahkan, mengikuti karakter interaksi kartu pada dashboard tetapi dengan gerakan yang lebih halus.
 
@@ -3371,7 +3371,7 @@ Meningkatkan animasi seluruh kartu ekskul landing page agar terasa maju ke depan
 
 - Timestamp: 2026-08-05 12:50:00 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior Next.js developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3380,7 +3380,7 @@ Meningkatkan animasi seluruh kartu ekskul landing page agar terasa maju ke depan
 
 > “fixed Error Type Console Error A tree hydrated but some attributes of the server rendered HTML didn't match the client properties”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menangani atribut tambahan yang disisipkan ekstensi browser pada `<body>` sebelum React hydration.
 
@@ -3409,7 +3409,7 @@ Menangani atribut tambahan yang disisipkan ekstensi browser pada `<body>` sebelu
 
 - Timestamp: 2026-08-05 12:55:00 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior full-stack developer dan maintainer dokumentasi teknis
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3418,7 +3418,7 @@ Menangani atribut tambahan yang disisipkan ekstensi browser pada `<body>` sebelu
 
 > “update log.md nyaa yang lengkap”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbarui log eksekusi secara lengkap untuk perubahan terakhir yang menangani hydration warning pada root layout.
 
@@ -3458,7 +3458,7 @@ Memperbarui log eksekusi secara lengkap untuk perubahan terakhir yang menangani 
 
 - Timestamp: 2026-08-05 13:00:00 Asia/Jakarta
 - Model used: ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior UI/UX developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3467,7 +3467,7 @@ Memperbarui log eksekusi secara lengkap untuk perubahan terakhir yang menangani 
 
 > “tambahin animasi saat discroll atas bawah ada animasi muncul nya diui/ux nyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan animasi scroll-reveal pada ticker dan section landing page agar konten muncul halus ketika masuk area tampilan saat pengguna menggulir.
 
@@ -3498,7 +3498,7 @@ Menambahkan animasi scroll-reveal pada ticker dan section landing page agar kont
 
 - Timestamp: 2026-08-05 14:25:00 Asia/Jakarta
 - Model used: GPT-5 Codex
-- AI agent: Codex
+- Platform: Codex
 - Role: Senior full-stack developer
 - Requester: USER / pemilik workspace
 - Execution status: Completed
@@ -3507,7 +3507,7 @@ Menambahkan animasi scroll-reveal pada ticker dan section landing page agar kont
 
 > “nyalain localhost nya saya mau preview ulang”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memulihkan dependensi native yang dibutuhkan, menyalakan PostgreSQL lokal, dan menjalankan kembali server Next.js untuk preview EXISEL di localhost.
 
@@ -3617,7 +3617,7 @@ Local URLs:
 
 - **Timestamp:** 2026-08-06 10:43:00 Asia/Jakarta
 - **Model used:** DeepSeek V4 Pro (`deepseek-v4-pro`) — 1M context window
-- **AI agent:** Claude Code (via `claude` CLI harness)
+- **platform Codex:** Claude Code (via `claude` CLI harness)
 - **Role:** Development runtime operator
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -3631,7 +3631,7 @@ Local URLs:
 > “Layanan belum tersambung. Database akun belum dapat diakses. Hubungi admin
 > sekolah atau coba lagi nanti. nyalain database nyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menyalakan ulang Next.js dev server (Turbopack) dan PostgreSQL lokal EXISEL.
 Memperbaiki `pnpm-workspace.yaml` yang hilang field `packages` sehingga `pnpm dev`
@@ -3675,9 +3675,9 @@ error. Memverifikasi aplikasi merespons HTTP 200 tanpa error database.
 
 - **Timestamp:** 2026-08-06 10:50:00 Asia/Jakarta
 - **Model used:** DeepSeek V4 Pro (`deepseek-v4-pro`) — 1M context window
-- **Subagent model used:** DeepSeek V4 Pro (`deepseek-v4-pro`) — agent "Explore"
+- **Supporting model used:** DeepSeek V4 Pro (`deepseek-v4-pro`) — mode "Explore"
   untuk eksplorasi codebase navbar dan layout
-- **AI agent:** Claude Code (via `claude` CLI harness)
+- **platform Codex:** Claude Code (via `claude` CLI harness)
 - **Role:** Senior front-end UI developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -3693,7 +3693,7 @@ error. Memverifikasi aplikasi merespons HTTP 200 tanpa error database.
 
 > “iyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menganalisis perbedaan visual antara navbar homepage (`/`) dan dashboard siswa
 (`/dashboard`), lalu menyamakan style navigation link dashboard agar menggunakan
@@ -3763,7 +3763,7 @@ mengubah struktur TSX, konten teks, avatar, maupun tombol logout.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior Next.js UI/UX developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -3778,7 +3778,7 @@ mengubah struktur TSX, konten teks, avatar, maupun tombol logout.
 - Screenshot tampilan awal section EXISEL.
 - Foto referensi siswa SIJA memegang piala dari clipboard attachment.
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menyempurnakan tampilan landing page agar hierarki visual, komposisi, warna,
 dan ruang kosong lebih nyaman dilihat. Placeholder piala diganti dengan visual
@@ -3819,7 +3819,7 @@ siswa SIJA yang memegang piala dan disatukan dengan gaya Neo-Brutalism EXISEL.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior front-end architecture and UI developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -3834,7 +3834,7 @@ siswa SIJA yang memegang piala dan disatukan dengan gaya Neo-Brutalism EXISEL.
 > “yang http://localhost:3000/ navbar atas nya itu About, backgroud, explore
 > situ khusus navbar landing pages”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat komponen navigasi siswa bersama agar style navbar konsisten di seluruh
 halaman, dengan dua varian isi: navigasi khusus landing page dan navigasi area
@@ -3882,7 +3882,7 @@ shadow, hover/focus, active state, dan reflow responsif.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack Next.js and PostgreSQL developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -3944,7 +3944,7 @@ langsung dianggap kedaluwarsa dan submit status Hadir ditolak.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Responsive UI and form interaction developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4002,7 +4002,7 @@ keyboard virtual Android/iOS muncul.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** React form reliability developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4054,7 +4054,7 @@ dapat ditekan walaupun status Hadir serta kode sudah tampak terisi.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Authentication UI and accessibility developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4113,7 +4113,7 @@ Kondisi tersebut membuat tap fisik tidak konsisten pada ponsel.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Technical documentation maintainer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4122,7 +4122,7 @@ Kondisi tersebut membuat tap fisik tidak konsisten pada ponsel.
 
 > “kalau sudah difixed update log.md semua perubahan yang tadi diprompt yak”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan catatan kronologis untuk redesign UI/UX, aset siswa SIJA, navbar
 Neo-Brutalism, perbaikan waktu sesi dan kode kehadiran, dukungan input mobile,
@@ -4157,7 +4157,7 @@ tombol konfirmasi mobile, serta tombol tampil/sembunyi password.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Next.js runtime and mobile interaction developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4218,7 +4218,7 @@ membutuhkan JavaScript tidak merespons tap pada HP.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Next.js admin UI and browser interaction developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4228,7 +4228,7 @@ membutuhkan JavaScript tidak merespons tap pada HP.
 > “disamping kode kehadiran tambahin icon salin code disamping untuk fitur
 > saling code”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan tombol ikon salin di samping kode kehadiran aktif pada halaman admin
 ekskul. Tombol mengikuti gaya Neo-Brutalism, memberikan feedback berhasil atau
@@ -4280,7 +4280,7 @@ pada HTTP alamat Wi-Fi melalui fallback clipboard.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Next.js responsive navigation developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4290,7 +4290,7 @@ pada HTTP alamat Wi-Fi melalui fallback clipboard.
 > “ditampilan mobile dipages utama dijadikan humberger / garis 3 saat dipencet
 > garis 3 nyaa memunculkan menu navbar nya seperti didekstop”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah navigasi About, Background, dan Explore pada landing page menjadi menu
 hamburger khusus layar mobile. Header mobile sekarang menampilkan identitas
@@ -4345,7 +4345,7 @@ ditekan, ketiga menu yang sama dengan desktop muncul pada baris di bawah header.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Next.js responsive navigation developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4355,7 +4355,7 @@ ditekan, ketiga menu yang sama dengan desktop muncul pada baris di bawah header.
 > “coba ubah navbar yang garis 3 nya jadi paling kanan dituker dengan buuton
 > masuk”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menukar posisi kontrol header landing page khusus mobile sehingga tombol Masuk
 berada di tengah dan tombol hamburger berada paling kanan, tanpa mengubah urutan
@@ -4390,7 +4390,7 @@ atau tampilan navigasi desktop.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Next.js student dashboard data developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4400,7 +4400,7 @@ atau tampilan navigasi desktop.
 > “tolong yang eskul pilihan terupdate setiap hari nyaa massa hari ini ec
 > diatas nya basket help in fixed no mistakes”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menyatukan sumber data judul kartu Ekskul Pilihan dan informasi Hari ini.
 Ekskul berstatus APPROVED yang memiliki jadwal pada hari berjalan kini menjadi
@@ -4437,7 +4437,7 @@ tidak ada jadwal hari itu.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Next.js interaction and accessibility developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4449,7 +4449,7 @@ tidak ada jadwal hari itu.
 
 > “popup nya ditengah”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti logout langsung dengan popup konfirmasi Neo-Brutalism yang terpusat
 di layar. Komponen yang sama digunakan pada dashboard, katalog, detail ekskul,
@@ -4505,7 +4505,7 @@ pendaftaran, dan kehadiran siswa.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Next.js responsive navigation and UI consistency developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4518,7 +4518,7 @@ pendaftaran, dan kehadiran siswa.
 > “masih ada bug nih, masih ada warna orange di navbarnya, dan juga ketika di
 > klik pada navbar kehadiran komposisi button mengecil, kamu hebat harus bisa ya”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menjadikan navigasi aktif pada seluruh halaman siswa berwarna biru secara
 konsisten, menghapus sisa indikator oranye, dan mencegah ukuran maupun posisi
@@ -4572,7 +4572,7 @@ masing-masing halaman dipusatkan pada komponen navigasi bersama.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Next.js landing-page motion and responsive UI developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -4583,7 +4583,7 @@ masing-masing halaman dipusatkan pada komponen navigasi bersama.
 > kamu harus buat satu lagi dengan bentuk menyilang lalu untuk warnanya orange
 > aja, lalu kata kata nya yaitu ‘Join Now!’”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah ticker pilihan ekstrakurikuler menjadi marquee biru yang bergerak
 lebih cepat dan terus-menerus dari kanan ke kiri, lalu menambahkan ticker kedua
@@ -4636,8 +4636,8 @@ berwarna oranye bertuliskan “Join Now!” yang melintang diagonal di atasnya.
 
 - **Timestamp:** 2026-08-06 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
-- **Role:** Technical documentation agent
+- **Platform:** Codex
+- **Role:** Technical documentation specialist
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -4645,7 +4645,7 @@ berwarna oranye bertuliskan “Join Now!” yang melintang diagonal di atasnya.
 
 > “sama update log.md dari semua perubahan”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan audit trail untuk perbaikan warna dan kestabilan navbar siswa serta
 ticker silang “Join Now!” pada landing page, termasuk file yang berubah, detail
@@ -4681,7 +4681,7 @@ implementasi, hasil pengujian, dan catatan keamanan.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -4693,7 +4693,7 @@ implementasi, hasil pengujian, dan catatan keamanan.
 
 > “lah kan sebelumnya udh ada 36 akun dipostgres sql”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan image produksi multi-stage, PostgreSQL 16, migrator Prisma, health
 check, volume persisten, dokumentasi environment, serta konfigurasi cookie
@@ -4729,7 +4729,7 @@ dicatat atau dimasukkan ke source control.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -4743,7 +4743,7 @@ dicatat atau dimasukkan ke source control.
 > “direct nya ke /eskul/nama_eskul ... benerin ui/ux ... diberbagai tampilan
 > devices serta animasi card saat diklik”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menyatukan warna dan logo card ekskul pada landing, dashboard, katalog, serta
 detail; memperbaiki tujuan link menjadi `/eskul/[nama_eskul]`; dan menata grid
@@ -4775,7 +4775,7 @@ Perubahan bersifat presentasional dan routing; tidak mengubah data akun.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -4784,7 +4784,7 @@ Perubahan bersifat presentasional dan routing; tidak mengubah data akun.
 > “dipages http://localhost:3000/eskul/pmr tambahin photo dokumentasi dan
 > tambahin logo eskul nyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan logo PMR pada hero detail dan galeri dokumentasi agenda PMR yang
 responsif, lengkap dengan teks alternatif, caption, serta frame yang mengikuti
@@ -4813,7 +4813,7 @@ Aset dokumentasi tidak digunakan sebagai credential atau input autentikasi.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -4825,7 +4825,7 @@ Aset dokumentasi tidak digunakan sebagai credential atau input autentikasi.
 
 > “navbar atas ui/ux nya berantakan dipages kehaidran tolong difixed”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbaiki CTA Jelajahi Ekskul agar mempertahankan session siswa dan menuju
 katalog yang benar, serta merapikan announcement, brand, navbar, avatar, dan
@@ -4857,7 +4857,7 @@ Lax. Override cookie non-secure hanya ditujukan untuk HTTP lokal.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -4870,7 +4870,7 @@ Lax. Override cookie non-secure hanya ditujukan untuk HTTP lokal.
 
 > “harus bisa jawab ... setiap eskul ... namsel apa? smkn 69 dimana”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat EksiBot lokal berbasis dataset keyword yang dapat menjawab salam,
 informasi EXISEL/NAMSEL/SMKN 69, daftar ekskul, jadwal, lokasi, kapasitas,
@@ -4903,7 +4903,7 @@ Pesan chatbot diproses di browser dan tidak disimpan ke database.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -4915,7 +4915,7 @@ Pesan chatbot diproses di browser dan tidak disimpan ke database.
 > “fitur kamera nya ... dibawah fitur opsi kehadiran ... pemidai otomatis ...
 > asal izin kamera diizinkan”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti kode hadir enam digit dengan QR dinamis bertanda tangan yang berganti
 setiap empat detik, serta menanamkan pemindai kamera otomatis langsung di bawah
@@ -4958,7 +4958,7 @@ context oleh browser modern.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -4966,7 +4966,7 @@ context oleh browser modern.
 
 > “tambahin logo futsal setiap card futsal”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan aset logo Futsal yang diberikan pengguna dan memetakannya pada
 landing page, katalog seluruh ekskul, dashboard siswa, halaman detail Futsal,
@@ -4999,7 +4999,7 @@ Logo merupakan aset visual dan tidak memuat credential aplikasi.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -5007,7 +5007,7 @@ Logo merupakan aset visual dan tidak memuat credential aplikasi.
 
 > “update log.md dan psuh commit perubahan yang baru”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbarui audit trail perubahan Docker, UI/routing, dokumentasi PMR,
 EksiBot, QR kehadiran, dan logo Futsal; menjalankan pemeriksaan release; lalu
@@ -5032,7 +5032,7 @@ nilai `.env`, database volume, serta kredensial tidak disertakan.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -5049,7 +5049,7 @@ nilai `.env`, database volume, serta kredensial tidak disertakan.
 > “didekstop saat user pertama kali buka pages eskul nama eskul dan logo nya
 > muncul tanpa terpotong karena navbar atas terlalu besar”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengarahkan seluruh kartu rekomendasi dashboard langsung ke halaman detail,
 menambahkan dokumentasi kegiatan English Club, Basket, dan Nihon, menyatukan
@@ -5108,7 +5108,7 @@ credential tidak disertakan dalam commit.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -5116,7 +5116,7 @@ credential tidak disertakan dalam commit.
 
 > “fav.icon pakai logo namsel dan background putih hilangin kecuali texnyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti favicon aplikasi dengan logo resmi SMKN 69 Jakarta dan menghapus
 latar putih di luar perisai menjadi transparan tanpa menghapus tulisan maupun
@@ -5152,7 +5152,7 @@ data siswa, atau konfigurasi rahasia yang ditambahkan.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -5160,7 +5160,7 @@ data siswa, atau konfigurasi rahasia yang ditambahkan.
 
 > “dilaptop sama dihp detik nya ngga muncul dihp tolong difixed no mistakes”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbaiki countdown QR dinamis yang dapat berhenti pada `0 detik` di HP
 dengan menyinkronkan timer browser terhadap waktu server dan latensi jaringan,
@@ -5203,7 +5203,7 @@ bucket empat detik yang sedang aktif.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -5212,7 +5212,7 @@ bucket empat detik yang sedang aktif.
 > “ubah avatar eksibot menjadi gambar yang aku kirimkan jangan lupa background
 > putihnya yang robot ya, dihapus”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti avatar huruf “E” pada header EksiBot dengan gambar robot kiriman
 pengguna, menghapus latar putih di luar lingkaran biru, dan mempertahankan
@@ -5250,7 +5250,7 @@ autentikasi, serta data pengguna tidak berubah.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -5259,7 +5259,7 @@ autentikasi, serta data pengguna tidak berubah.
 > “ubah kotak kuota terisi dan pilihanmu menjadi warna oren pada kolom itc.
 > hanya ubah itunya saja ya”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah hanya latar area “Kuota terisi” dan “Pilihanmu” pada kartu ITC menjadi
 oranye tanpa mengubah kartu, warna, tombol, atau layout ekskul lain.
@@ -5292,7 +5292,7 @@ pendaftaran, autentikasi, dan database tidak berubah.
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -5302,7 +5302,7 @@ pendaftaran, autentikasi, dan database tidak berubah.
 > Docker pada domain exisel.web.id di VPS 208.84.100.133, aktifkan SSL, dan
 > berikan langkah deployment dengan domain yang sudah di Cloudflare”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan stack Docker Compose production yang memisahkan PostgreSQL,
 migrasi, Next.js standalone, serta Caddy; menyiapkan HTTPS otomatis dan
@@ -5357,7 +5357,7 @@ serta private key dilarang masuk repository. Cloudflare harus memakai Full
 
 - **Timestamp:** 2026-08-07 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -5367,7 +5367,7 @@ serta private key dilarang masuk repository. Cloudflare harus memakai Full
 > ekskul berbeda karena untuk lomba dan testing; setelah absen ada tombol
 > selesai lalu bisa generate lagi”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah sesi QR dari batas otomatis berdasarkan jadwal menjadi sesi manual
 yang dapat dibuat pada hari apa pun, ditutup dengan tombol Selesai, dan dibuat
@@ -5408,7 +5408,7 @@ terlupa aktif tanpa batas.
 
 - **Timestamp:** 2026-08-08 — waktu presisi tidak tercatat
 - **Model used:** GPT-5 Codex
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -5418,7 +5418,7 @@ terlupa aktif tanpa batas.
 > pas klik eskul, navbar dan logonya mengecil; benerin UI yang teksnya masih
 > misah di kartu mobile”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengecilkan dan menggeser brand pada navbar Kehadiran, serta membuat keseluruhan
 navbar halaman detail ekskul lebih ringkas tanpa mengubah dashboard.
@@ -5460,7 +5460,7 @@ autentikasi, dan alur kehadiran tidak berubah.
 > “{"message":"Laporan Excel belum dapat dibuat. Coba kembali."}
 > fixed fitur download laporan excel dipages /admin/laporan yang belum berfungsi fixed no mistakes”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti mekanisme generator Excel dari proses subprocess eksternal yang rapuh menjadi modul JS/TS berbasis `exceljs` yang membuat buffer `.xlsx` secara langsung di memori Node.js tanpa ketergantungan pada runtime CLI pihak ketiga.
 
@@ -5489,7 +5489,7 @@ Meningkatkan keamanan dan stabilitas dengan menghapus eksekusi perintah shell/su
 
 - **Timestamp:** 2026-08-08 15:38 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer dan UI implementer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5498,7 +5498,7 @@ Meningkatkan keamanan dan stabilitas dengan menghapus eksekusi perintah shell/su
 
 > “format video potrait sama jangan terlalu besar dan vidoe nya ada idbawah card warna biru”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memindahkan posisi seksi video promosi tepat di bawah hero card warna biru pada halaman detail ekskul (`/eskul/[nama_eskul]`), merubah rasio video menjadi portrait (9:16), dan membatasi lebarnya hingga max 310px.
 
@@ -5525,7 +5525,7 @@ Memindahkan posisi seksi video promosi tepat di bawah hero card warna biru pada 
 
 - **Timestamp:** 2026-08-08 15:42 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer dan UI implementer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5534,7 +5534,7 @@ Memindahkan posisi seksi video promosi tepat di bawah hero card warna biru pada 
 
 > “dibuat card aja video promosi nya dan videonya ada disebelah kanan”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah seksi video promosi menjadi satu kartu utuh bergaya Neo-Brutalism dengan tata letak grid 2 kolom (*side-by-side*), di mana informasi ekskul berada di sisi kiri dan player video portrait diletakkan di sisi kanan.
 
@@ -5562,7 +5562,7 @@ Mengubah seksi video promosi menjadi satu kartu utuh bergaya Neo-Brutalism denga
 
 - **Timestamp:** 2026-08-08 15:46 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Content & UI developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5581,7 +5581,7 @@ Mengubah seksi video promosi menjadi satu kartu utuh bergaya Neo-Brutalism denga
 > 
 > tapi perkenalan pmr itu apa secara menarik”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menghapus teks robotik yang berulang dan menggantinya dengan deskripsi perkenalan ekskul yang inspiratif, lengkap dengan indikator fokus utama dan nilai karakter pada kartu video promosi.
 
@@ -5607,7 +5607,7 @@ Menghapus teks robotik yang berulang dan menggantinya dengan deskripsi perkenala
 
 - **Timestamp:** 2026-08-08 16:03 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5616,7 +5616,7 @@ Menghapus teks robotik yang berulang dan menggantinya dengan deskripsi perkenala
 
 > “eskul futsal,nihon,ec ngga ush pakai video promosi”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengondisikan render seksi video promosi (`video ? <PromoVideoPlayer /> : null`) dan menghapus data konfigurasinya khusus untuk ekskul Futsal, Nihon, dan English Club.
 
@@ -5641,7 +5641,7 @@ Mengondisikan render seksi video promosi (`video ? <PromoVideoPlayer /> : null`)
 
 - **Timestamp:** 2026-08-08 16:05 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer & date logic engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5650,7 +5650,7 @@ Mengondisikan render seksi video promosi (`video ? <PromoVideoPlayer /> : null`)
 
 > “dipages jadwal jika sudah lewat hari jumat maka masuk next week dan terupdate otomatis”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan helper `getSchoolWeekRange` untuk menggeser kalender latihan secara otomatis ke hari Senin di minggu depan apabila hari saat ini sudah melewati hari Jumat (Sabtu & Minggu), serta menyesuaikan judul dan label tombol secara dinamis.
 
@@ -5676,7 +5676,7 @@ Menambahkan helper `getSchoolWeekRange` untuk menggeser kalender latihan secara 
 
 - **Timestamp:** 2026-08-08 16:09 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer & auth engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5685,7 +5685,7 @@ Menambahkan helper `getSchoolWeekRange` untuk menggeser kalender latihan secara 
 
 > “dipages dashboard saat klik card eskul nya kan direct ke /eskul/nama_eskul itu ngga perlu login biar orang luar bisa lihat keunggulan nya apa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat Data Access Layer publik `getPublicExtracurricularData` dan mengizinkan pengunjung luar/unauthenticated mengakses langsung halaman detail ekskul (`/eskul/[nama_eskul]`) dan katalog (`/ekstrakurikuler`) tanpa dipaksa redirect ke halaman login.
 
@@ -5712,7 +5712,7 @@ Membuat Data Access Layer publik `getPublicExtracurricularData` dan mengizinkan 
 
 - **Timestamp:** 2026-08-08 16:23 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** UI & Content developer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5732,7 +5732,7 @@ Membuat Data Access Layer publik `getPublicExtracurricularData` dan mengizinkan 
 > 
 > masuk pakai akun yang sudah diberikan”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbarui judul langkah 01 pendaftaran pada landing page (`src/app/page.tsx`) dari *"Masuk pakai NIS"* menjadi *"Masuk pakai akun yang sudah diberikan"*.
 
@@ -5756,7 +5756,7 @@ Memperbarui judul langkah 01 pendaftaran pada landing page (`src/app/page.tsx`) 
 
 - **Timestamp:** 2026-08-08 16:26 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Chatbot & NLP engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5773,7 +5773,7 @@ Memperbarui judul langkah 01 pendaftaran pada landing page (`src/app/page.tsx`) 
 > 
 > dan tambahin animasi typing saat eksibot menjawab biar kelihatan natural”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbarui dataset EksiBot untuk memberikan rekomendasi cerdas secara otomatis saat siswa merasa bingung memilih ekskul, serta mengganti respon fallback kaku dengan kalimat yang ramah dan bersahabat.
 
@@ -5798,7 +5798,7 @@ Memperbarui dataset EksiBot untuk memberikan rekomendasi cerdas secara otomatis 
 
 - **Timestamp:** 2026-08-08 17:03 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Chatbot UI & Animation engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5807,7 +5807,7 @@ Memperbarui dataset EksiBot untuk memberikan rekomendasi cerdas secara otomatis 
 
 > “animasi typing nya masih aneh fixed no mistakes”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbaiki tata letak indikator 3 titik bouncing EksiBot agar berjajar secara horizontal (`display: flex !important; flex-direction: row !important;`) dan mengimplementasikan komponen `TypewriterBotMessage` untuk efek mengetik teks karakter per karakter yang alami.
 
@@ -5833,8 +5833,8 @@ Memperbaiki tata letak indikator 3 titik bouncing EksiBot agar berjajar secara h
 
 - **Timestamp:** 2026-08-08 17:08 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
-- **Role:** Technical documentation & reporting agent
+- **Platform:** Codex
+- **Role:** Technical documentation & reporting specialist
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -5842,9 +5842,9 @@ Memperbaiki tata letak indikator 3 titik bouncing EksiBot agar berjajar secara h
 
 > “dari project ini... ai/llm yang digunakan vibe code nya dari log.md”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
-Menyusun rincian teknologi AI/LLM yang digunakan dalam *vibe coding* proyek EXISEL berdasarkan referensi `log.md` (*ChatGPT 5.6 Solana / gpt-5.6-sol & Codex Agent*) ke dalam format tabel teknologi 3.6 yang siap disalin.
+Menyusun rincian teknologi AI/LLM yang digunakan dalam *vibe coding* proyek EXISEL berdasarkan referensi `log.md` (*ChatGPT 5.6 Solana / gpt-5.6-sol & platform Codex*) ke dalam format tabel teknologi 3.6 yang siap disalin.
 
 ### Verification
 
@@ -5858,8 +5858,8 @@ Menyusun rincian teknologi AI/LLM yang digunakan dalam *vibe coding* proyek EXIS
 
 - **Timestamp:** 2026-08-08 17:23 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
-- **Role:** Technical documentation agent
+- **Platform:** Codex
+- **Role:** Technical documentation specialist
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -5867,7 +5867,7 @@ Menyusun rincian teknologi AI/LLM yang digunakan dalam *vibe coding* proyek EXIS
 
 > “update log.md dari penambahan fitur sebelumnyaa harus ada human prompt model ai apa dan penyelesaain nyaa seperti log.md sebelumnyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbarui file `log.md` dengan mencatat seluruh entri eksekusi kronologis lengkap untuk setiap penambahan fitur, perbaikan UI, logika jadwal, autentikasi publik, dan pengembangan EksiBot.
 
@@ -5887,7 +5887,7 @@ Memperbarui file `log.md` dengan mencatat seluruh entri eksekusi kronologis leng
 
 - **Timestamp:** 2026-08-08 17:41 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer & UI implementer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5896,7 +5896,7 @@ Memperbarui file `log.md` dengan mencatat seluruh entri eksekusi kronologis leng
 
 > “dipages login tampilan mobile tambahin tombol untuk login kepages admin/ guru kayak pages login tampilan dekstop”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menampilkan tombol akses *"Portal admin/guru ↗"* pada header tampilan mobile serta menambahkan tombol pill badge *"Login Admin/Guru ↗"* di dalam header kartu login siswa agar admin dan guru dapat berpindah portal dengan mudah pada layar perangkat seluler.
 
@@ -5922,7 +5922,7 @@ Menampilkan tombol akses *"Portal admin/guru ↗"* pada header tampilan mobile s
 
 - **Timestamp:** 2026-08-08 18:11 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer & UI animator
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5931,7 +5931,7 @@ Menampilkan tombol akses *"Portal admin/guru ↗"* pada header tampilan mobile s
 
 > “text Tiga langkah. Nggak pakai drama. tambahin animasi ketik per kata”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti elemen `h2` statis pada seksi alur pendaftaran di landing page (`src/app/page.tsx`) dengan komponen `TypewriterHeading` agar judul *"Tiga langkah. Nggak pakai drama."* muncul dengan animasi ketik otomatis saat di-scroll.
 
@@ -5955,7 +5955,7 @@ Mengganti elemen `h2` statis pada seksi alur pendaftaran di landing page (`src/a
 
 - **Timestamp:** 2026-08-08 18:29 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer & UI architect
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -5964,7 +5964,7 @@ Mengganti elemen `h2` statis pada seksi alur pendaftaran di landing page (`src/a
 
 > “excuted file @[c:\Users\USER\Documents\EXISEL - EXTRAKULIKULER NAMSEL\plans\PLAN.md — Fitur Community Exisel.md]”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengisi dan mengeksekusi fitur **Exisel Community** lengkap dengan halaman publik `/community` (layout ala Discord Server untuk 8 channel ekskul) serta halaman pengelola `/admin/community` bagi Admin/Guru untuk mengirim pengumuman resmi.
 
@@ -6014,7 +6014,7 @@ Mengisi dan mengeksekusi fitur **Exisel Community** lengkap dengan halaman publi
 
 - **Timestamp:** 2026-08-08 18:39 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Senior full-stack developer & UI/UX architect
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6023,7 +6023,7 @@ Mengisi dan mengeksekusi fitur **Exisel Community** lengkap dengan halaman publi
 
 > “navbar atas harus kayak pages dashboard agar ui/ux nya enak”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan header navigasi utama di bagian paling atas halaman `/community` yang konsisten dengan halaman dashboard siswa (*Logo SMKN 69 Jakarta, Brand EXISEL, StudentNavigation links: Dashboard, Pilihan ekskul, Community, Kehadiran, Jadwal, Akun, serta kontrol profil/login*).
 
@@ -6051,7 +6051,7 @@ Menambahkan header navigasi utama di bagian paling atas halaman `/community` yan
 
 - **Timestamp:** 2026-08-08 18:43 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Mobile UI/UX engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6060,7 +6060,7 @@ Menambahkan header navigasi utama di bagian paling atas halaman `/community` yan
 
 > “excuted file @[c:\Users\USER\Documents\EXISEL - EXTRAKULIKULER NAMSEL\plans\PLAN.md — Mobile UI-UX Community Exisel.md]”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengoptimalkan antarmuka dan pengalaman pengguna halaman `/community` pada perangkat seluler/mobile ala **Discord Mobile** dengan *Mobile Channel Drawer*, *Message Grouping*, *Date Separators*, pembungkusan URL aman (*overflow-wrap*), serta *LocalStorage channel persistence*.
 
@@ -6091,7 +6091,7 @@ Mengoptimalkan antarmuka dan pengalaman pengguna halaman `/community` pada peran
 
 - **Timestamp:** 2026-08-08 18:51 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Mobile UI/UX engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6100,7 +6100,7 @@ Mengoptimalkan antarmuka dan pengalaman pengguna halaman `/community` pada peran
 
 > “navbar pages community ditampilan mobile tolong dibuat sama kayak pages dashboard dimobile uga”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Penyelarasan header navigasi atas halaman `/community` pada tampilan mobile (< 768px) menggunakan komponen `StudentHeaderNav` dengan tombol hamburger 3 garis `mobile-menu-toggle` yang bersih dan slide-down menu overlay yang persis seperti halaman beranda dan dashboard siswa.
 
@@ -6128,7 +6128,7 @@ Penyelarasan header navigasi atas halaman `/community` pada tampilan mobile (< 7
 
 - **Timestamp:** 2026-08-08 19:10 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Frontend Engineer & Interaction Designer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6137,7 +6137,7 @@ Penyelarasan header navigasi atas halaman `/community` pada tampilan mobile (< 7
 
 > “untuk video dipages /eskul/nama_eskul video nya auto play saat user scroll ke card video dan kalau card video nya dilewatin dipause jadi sistem nyaa auto play saat discroll dan smooth”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan fitur pemutaran video otomatis berbasis scroll (*Scroll Auto Play & Auto Pause*) menggunakan API `IntersectionObserver` pada komponen `PromoVideoPlayer` halaman `/eskul/[nama_eskul]`. Video akan otomatis memutar (*play*) dengan halus saat card masuk ke area tampilan (*viewport*) dan otomatis dijeda (*pause*) saat pengguna menggeser (*scroll*) melewati video.
 
@@ -6165,7 +6165,7 @@ Menambahkan fitur pemutaran video otomatis berbasis scroll (*Scroll Auto Play & 
 
 - **Timestamp:** 2026-08-08 19:12 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Audio/Video Media Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6174,7 +6174,7 @@ Menambahkan fitur pemutaran video otomatis berbasis scroll (*Scroll Auto Play & 
 
 > “suara nya harus ada jangan dimute”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengatur mode audio video promo pada halaman `/eskul/[nama_eskul]` agar secara default **bersuara (Unmuted / `isMuted = false`)** ketika diputar otomatis saat pengguna melakukan scroll ke card video.
 
@@ -6200,7 +6200,7 @@ Mengatur mode audio video promo pada halaman `/eskul/[nama_eskul]` agar secara d
 
 - **Timestamp:** 2026-08-08 19:45 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** DevOps & Release Manager
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6209,7 +6209,7 @@ Mengatur mode audio video promo pada halaman `/eskul/[nama_eskul]` agar secara d
 
 > “update log.md dan push semua perubahan ke github”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Meng-update seluruh catatan audit trail `log.md` serta melakukan komit git (`git commit`) dan mendorong (`git push`) seluruh pembaruan kode, fitur Exisel Community, optimasi Mobile UI/UX, interaksi video promo, dan aset ke repository GitHub (`main` branch).
 
@@ -6233,7 +6233,7 @@ Meng-update seluruh catatan audit trail `log.md` serta melakukan komit git (`git
 
 - **Timestamp:** 2026-08-08 22:09 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Full-stack Developer & Content Designer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6242,7 +6242,7 @@ Meng-update seluruh catatan audit trail `log.md` serta melakukan komit git (`git
 
 > “dipages eskul basket tambahin video promo basket seperti pages eskul pmr”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menghubungkan file video `/videos/basket-promo.mp4` dan poster `/logo-basket.webp` ke komponen `PromoVideoPlayer` pada halaman detail `/eskul/basket` lengkap dengan deskripsi materi keahlian (*skills*), lokasi latihan, dan fitur *Scroll Auto Play*.
 
@@ -6268,7 +6268,7 @@ Menghubungkan file video `/videos/basket-promo.mp4` dan poster `/logo-basket.web
 
 - **Timestamp:** 2026-08-08 22:14 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** UI Content Editor
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6277,7 +6277,7 @@ Menghubungkan file video `/videos/basket-promo.mp4` dan poster `/logo-basket.web
 
 > “Tujuh arena. Satu pilihanmu. ganti jadi delapan arena”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengganti judul animasi pengetikan `TypewriterHeading` pada halaman Katalog Ekstrakurikuler (`/ekstrakurikuler`) dari *"Tujuh arena."* menjadi *"Delapan arena."* agar sesuai dengan jumlah 8 ekstrakurikuler aktif di SMKN 69 Jakarta.
 
@@ -6301,7 +6301,7 @@ Mengganti judul animasi pengetikan `TypewriterHeading` pada halaman Katalog Ekst
 
 - **Timestamp:** 2026-08-08 22:37 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Lead UI/UX Architect
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6310,7 +6310,7 @@ Mengganti judul animasi pengetikan `TypewriterHeading` pada halaman Katalog Ekst
 
 > “benerin navbar pages community seperti navbar dashboard yang dijadikan humburger dan berlaku juga untuk pages yang lainnya seperti pages kehadiran eskul dll ditampilan mobile hp”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbaiki dan menyelaraskan header navigasi atas pada seluruh halaman siswa (`/dashboard`, `/community`, `/ekstrakurikuler`, `/eskul/[nama_eskul]`, `/kehadiran`, `/daftar/eskul`) dengan menyembunyikan pills navigasi horizontal yang tumpah melintang dan menggantinya secara universal dengan tombol hamburger 3-garis `StudentHeaderNav` yang bersih, konsisten, dan responsif di layar smartphone HP (< 768px).
 
@@ -6342,7 +6342,7 @@ Memperbaiki dan menyelaraskan header navigasi atas pada seluruh halaman siswa (`
 
 - **Timestamp:** 2026-08-08 22:40 WIB
 - **Model used:** ChatGPT 5.6 Solana (`gpt-5.6-sol`)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Mobile UI/UX Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6351,7 +6351,7 @@ Memperbaiki dan menyelaraskan header navigasi atas pada seluruh halaman siswa (`
 
 > “dipages community kenapa garis 3 nyaa ditengah sedangkan yang lain ada dipojok kanan atas fixed no mistakes”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbaiki posisi tombol hamburger 3-garis (`mobile-menu-toggle`) pada halaman `/community` (dan seluruh halaman mobile HP) agar **selalu berada tepat di pojok kanan atas (`order: 99 !important; margin-left: auto !important;`)**, sejajar dan konsisten dengan seluruh halaman aplikasi.
 
@@ -6377,7 +6377,7 @@ Memperbaiki posisi tombol hamburger 3-garis (`mobile-menu-toggle`) pada halaman 
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Project Documentation Assistant
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6386,7 +6386,7 @@ Memperbaiki posisi tombol hamburger 3-garis (`mobile-menu-toggle`) pada halaman 
 
 > “kasih saya jawaban yang simple untuk project web saya: Haqqi Annazili yang ngoding, Irvan Juliansyah UI/UX, Aldi prompt engineering”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menyusun pembagian tugas anggota secara singkat: Haqqi sebagai programmer, Irvan sebagai UI/UX designer, dan Aldi sebagai prompt engineer.
 
@@ -6411,7 +6411,7 @@ Menyusun pembagian tugas anggota secara singkat: Haqqi sebagai programmer, Irvan
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Local Development Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6420,7 +6420,7 @@ Menyusun pembagian tugas anggota secara singkat: Haqqi sebagai programmer, Irvan
 
 > “nyalain localhost nya dan databasenya tanpa docker”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menjalankan PostgreSQL lokal non-Docker di port `5433`, menyiapkan Prisma, menjalankan migration, lalu menyalakan Next.js development server pada `http://localhost:3000`.
 
@@ -6449,7 +6449,7 @@ Menjalankan PostgreSQL lokal non-Docker di port `5433`, menyiapkan Prisma, menja
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Full-stack & Database Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6458,7 +6458,7 @@ Menjalankan PostgreSQL lokal non-Docker di port `5433`, menyiapkan Prisma, menja
 
 > Pengguna melaporkan `PrismaClientKnownRequestError`: tabel `public.community_messages` tidak ada saat membuka halaman Community.
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan migration PostgreSQL untuk tabel `community_messages`, indeks, dan foreign key yang sesuai dengan Prisma schema, kemudian menerapkannya ke database lokal.
 
@@ -6488,7 +6488,7 @@ Menambahkan migration PostgreSQL untuk tabel `community_messages`, indeks, dan f
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Mobile UI/UX Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6497,7 +6497,7 @@ Menambahkan migration PostgreSQL untuk tabel `community_messages`, indeks, dan f
 
 > “dipages community ditampilan mobile tolong dibenerin ui/ux tombol masuk nya agar sesuai dengan pages dashboard ditampilan mobile hp”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menyelaraskan gaya dan posisi tombol Masuk pada header mobile Community dengan pola visual halaman Dashboard.
 
@@ -6522,7 +6522,7 @@ Menyelaraskan gaya dan posisi tombol Masuk pada header mobile Community dengan p
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Mobile UI/UX Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6531,7 +6531,7 @@ Menyelaraskan gaya dan posisi tombol Masuk pada header mobile Community dengan p
 
 > “maksud saya tampilan masuk dan garis 3 nya harus konsisten tiap pages seperti pages dashboard mobile yang gambar saya berikan”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperjelas implementasi sebelumnya dengan membuat tombol Masuk dan hamburger Community mengikuti dimensi, urutan, serta posisi header Dashboard.
 
@@ -6557,7 +6557,7 @@ Memperjelas implementasi sebelumnya dengan membuat tombol Masuk dan hamburger Co
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Responsive Front-end Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6566,7 +6566,7 @@ Memperjelas implementasi sebelumnya dengan membuat tombol Masuk dan hamburger Co
 
 > “dimobile navbar nya masih berantakan aku mau navbar nya setara dan konsisten di tengah atau center, dan pada saat aku pakai di iphone navbar tidak muncul tolong di fix ya tanpa ada kesalahan”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperkuat breakpoint mobile hingga `980px`, memastikan hamburger memiliki ukuran eksplisit, dan merapikan menu drawer agar navbar terlihat serta dapat dipakai pada layar iPhone.
 
@@ -6591,7 +6591,7 @@ Memperkuat breakpoint mobile hingga `980px`, memastikan hamburger memiliki ukura
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Mobile UI/UX Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6600,7 +6600,7 @@ Memperkuat breakpoint mobile hingga `980px`, memastikan hamburger memiliki ukura
 
 > “dipages dashboard tombol garis tiga nyaa dipojok kanan atas disamping tombol keluar bukan dibawah”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memindahkan hamburger Dashboard ke pojok kanan atas, tepat di samping tombol Keluar, tanpa jatuh ke baris kedua.
 
@@ -6626,7 +6626,7 @@ Memindahkan hamburger Dashboard ke pojok kanan atas, tepat di samping tombol Kel
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Responsive Front-end Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6635,7 +6635,7 @@ Memindahkan hamburger Dashboard ke pojok kanan atas, tepat di samping tombol Kel
 
 > “dipages kehadiran http://localhost:3000/kehadiran masih berantakan dibenerin yaa kayak pages dashboard karena pages dashboard sudah bener”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menyamakan struktur header mobile halaman Kehadiran dengan Dashboard.
 
@@ -6660,7 +6660,7 @@ Menyamakan struktur header mobile halaman Kehadiran dengan Dashboard.
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Responsive Front-end Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6669,7 +6669,7 @@ Menyamakan struktur header mobile halaman Kehadiran dengan Dashboard.
 
 > “http://localhost:3000/ekstrakurikuler dipages itu juga navbar nya masih berantakan tolong samain kayak pages dasboard”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menyamakan navbar mobile halaman Ekstrakurikuler dengan struktur header Dashboard.
 
@@ -6694,7 +6694,7 @@ Menyamakan navbar mobile halaman Ekstrakurikuler dengan struktur header Dashboar
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Front-end Interaction Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6703,7 +6703,7 @@ Menyamakan navbar mobile halaman Ekstrakurikuler dengan struktur header Dashboar
 
 > “navbar nyaa dideksop maupun mobile tetap stay saat discroll dan saat kita scroll ke pages about navbar nya ngikut gitu meskipun ngga diklik”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat navbar tetap melekat saat scroll dan menambahkan scrollspy sehingga status tombol navigasi mengikuti section yang sedang terlihat, termasuk About.
 
@@ -6740,7 +6740,7 @@ Membuat navbar tetap melekat saat scroll dan menambahkan scrollspy sehingga stat
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Front-end Interaction Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6749,7 +6749,7 @@ Membuat navbar tetap melekat saat scroll dan menambahkan scrollspy sehingga stat
 
 > “pindahin tombol jadwal disamping tombol dashboard dan saat discroling ada animasi juga perpindahan kayak pages sebelumnyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memindahkan tombol Jadwal tepat setelah Dashboard dan menambahkan perpindahan status aktif berdasarkan scroll dengan animasi yang tetap menghormati preferensi reduced motion.
 
@@ -6780,7 +6780,7 @@ Memindahkan tombol Jadwal tepat setelah Dashboard dan menambahkan perpindahan st
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Full-stack & Database Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6789,7 +6789,7 @@ Memindahkan tombol Jadwal tepat setelah Dashboard dan menambahkan perpindahan st
 
 > “eskul paskibra ada dihari minggu dilapangan sekolah juga dan fitur absensi berfungsi”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah jadwal Paskibra menjadi Minggu di Lapangan Sekolah dan memperluas rentang minggu sekolah hingga Minggu agar jadwal serta absensi akhir pekan tetap masuk perhitungan.
 
@@ -6824,7 +6824,7 @@ Mengubah jadwal Paskibra menjadi Minggu di Lapangan Sekolah dan memperluas renta
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Browser Media & Front-end Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6833,7 +6833,7 @@ Mengubah jadwal Paskibra menjadi Minggu di Lapangan Sekolah dan memperluas renta
 
 > “saya nyoba fitur camera dilocalhost udh diiizin tapi tetap black screen tolong difixed bugnyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Memperbaiki inisialisasi stream kamera QR, fallback constraint kamera, proses playback video, pembersihan track, dan pesan error agar kegagalan tidak lagi tampil sebagai layar hitam tanpa penjelasan.
 
@@ -6864,7 +6864,7 @@ Memperbaiki inisialisasi stream kamera QR, fallback constraint kamera, proses pl
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Admin UI/UX Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6873,7 +6873,7 @@ Memperbaiki inisialisasi stream kamera QR, fallback constraint kamera, proses pl
 
 > “fixed navbar dipages http://localhost:3000/admin/dashboard buat mirip navbar dashboard user yang tadi dijadiin garis tiga dan ada tombol keluar”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah navigasi admin menjadi komponen interaktif dengan hamburger mobile dan tombol Keluar yang sejajar, mengikuti pola Dashboard siswa.
 
@@ -6904,7 +6904,7 @@ Mengubah navigasi admin menjadi komponen interaktif dengan hamburger mobile dan 
 
 - **Timestamp:** 2026-08-09 (waktu presisi tidak tersedia pada transcript)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Local Database Administrator
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6913,7 +6913,7 @@ Mengubah navigasi admin menjadi komponen interaktif dengan hamburger mobile dan 
 
 > “buatkan saya akun siswa dan admin dummy dengan nama siswa: Pandu, Nama Admin: Agung, password kedua nya sama: [REDACTED]”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat satu akun dummy siswa Pandu dan satu akun dummy admin Agung pada database lokal dengan password sama yang diberikan pengguna dan disimpan sebagai hash Argon2id.
 
@@ -6943,7 +6943,7 @@ Membuat satu akun dummy siswa Pandu dan satu akun dummy admin Agung pada databas
 
 - **Timestamp:** 2026-08-09 10:49:41 WIB (`+07:00`), terverifikasi dari sistem
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Release Engineer & Technical Auditor
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -6952,7 +6952,7 @@ Membuat satu akun dummy siswa Pandu dan satu akun dummy admin Agung pada databas
 
 > “kalau sudah update ke log.md selengkap mungkin dari human prompt waktu dll dan push semua perubahan kegithub dan kasih saya command buat update ke vps”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Melengkapi `log.md` dengan 16 execution entry untuk rangkaian permintaan tanggal 9 Agustus 2026, menjalankan QA penuh, merekonsiliasi drift migration lokal yang terdeteksi, membuat commit release, dan mendorongnya ke `origin/main`. Command deployment VPS juga disiapkan berdasarkan `scripts/deploy-production.sh` dan konfigurasi production repository.
 
@@ -7018,7 +7018,7 @@ docker compose --env-file /opt/exisel/.env.production -f /opt/exisel/compose.pro
 
 - **Timestamp:** 2026-08-09 (waktu prompt presisi tidak tersedia; penyelesaian rangkaian diverifikasi 11:08:47 WIB)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Front-end Motion & Brand Experience Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -7027,7 +7027,7 @@ docker compose --env-file /opt/exisel/.env.production -f /opt/exisel/compose.pro
 
 > “saya mau nambahin animasi saat orang pertama kali buka web nya nanti muncul logo namsel kedua animasi text nya muncul dari sebelah kanan dengan nama exisel dan dibawah nya text kecil exstrakulikuler smkn 69 jakarta seperti animasi youtube”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menambahkan splash intro global sekitar tiga detik pada pembukaan awal aplikasi dengan logo SMKN 69, identitas EXISEL, subjudul “Ekstrakurikuler SMKN 69 Jakarta”, aksen lingkaran, garis brand, dan progress bar bergaya intro aplikasi/video.
 
@@ -7057,7 +7057,7 @@ Menambahkan splash intro global sekitar tiga detik pada pembukaan awal aplikasi 
 
 - **Timestamp:** 2026-08-09 (waktu prompt presisi tidak tersedia; penyelesaian rangkaian diverifikasi 11:08:47 WIB)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Next.js Runtime Debugger
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -7066,7 +7066,7 @@ Menambahkan splash intro global sekitar tiga detik pada pembukaan awal aplikasi 
 
 > Pengguna melaporkan console error hydration mismatch pada `<script id="exisel-intro-bootstrap">` karena sebuah ekstensi Chrome menyisipkan script ke `<head>` sebelum React hydration.
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menghapus inline bootstrap script dari `<head>` dan menyederhanakan lifecycle intro menjadi Client Component yang markup server dan client-nya identik.
 
@@ -7097,7 +7097,7 @@ Menghapus inline bootstrap script dari `<head>` dan menyederhanakan lifecycle in
 
 - **Timestamp:** 2026-08-09 11:08:47 WIB (`+07:00`), terverifikasi dari sistem
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Motion UI Engineer & Visual Asset Editor
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -7106,7 +7106,7 @@ Menghapus inline bootstrap script dari `<head>` dan menyederhanakan lifecycle in
 
 > “logo namsel nya background putih hapus kecuali text nyaa dan animasi muncul nya dari sebelah kiri logo baru text bawah nya dari sebelah kiri juga dan saat kehalaman landingpages nya juga animasi ketik baru muncul jika user bener bener udah masuk kepagesnyaa”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Menghilangkan kotak putih luar logo tanpa menghilangkan tulisan putih di dalam lambang, mengubah urutan animasi agar logo/EXISEL/subjudul masuk dari kiri, dan menahan typewriter Landing sampai splash benar-benar selesai.
 
@@ -7148,7 +7148,7 @@ Menghilangkan kotak putih luar logo tanpa menghilangkan tulisan putih di dalam l
 
 - **Timestamp:** 2026-08-09 11:12:04 WIB (`+07:00`), terverifikasi dari sistem
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Mobile Motion UI Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -7157,7 +7157,7 @@ Menghilangkan kotak putih luar logo tanpa menghilangkan tulisan putih di dalam l
 
 > “di tampilan mobile buat animasi nya dicenter dan ukuran lebih besar atau sedang”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengubah komposisi splash khusus mobile menjadi vertikal dan benar-benar terpusat agar logo serta tulisan dapat diperbesar tanpa terpotong pada ponsel sempit.
 
@@ -7191,7 +7191,7 @@ Mengubah komposisi splash khusus mobile menjadi vertikal dan benar-benar terpusa
 
 - **Timestamp:** 2026-08-09 11:17:57 WIB (`+07:00`), terverifikasi dari sistem
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Responsive Motion UI Engineer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -7200,7 +7200,7 @@ Mengubah komposisi splash khusus mobile menjadi vertikal dan benar-benar terpusa
 
 > “dimobile logo muncul dan textnya disamping seperti didekstop jangan horizontal tapi tetap dicenter dan ukuran nya sesuai”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengembalikan komposisi intro mobile menjadi berdampingan seperti desktop: logo di kiri, divider vertikal, serta EXISEL dan subjudul di kanan, dengan keseluruhan lockup tetap terpusat.
 
@@ -7235,7 +7235,7 @@ Mengembalikan komposisi intro mobile menjadi berdampingan seperti desktop: logo 
 
 - **Timestamp:** 2026-08-09 (waktu prompt presisi tidak tersedia; rangkaian poster direvisi dan diverifikasi 12:16:14 WIB)
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Campaign Visual Designer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -7244,7 +7244,7 @@ Mengembalikan komposisi intro mobile menjadi berdampingan seperti desktop: logo 
 
 > “buatkan saya background untuk poster ukuran 16:9 dengan warna pallet web exisel dan saran text hook yang cocok”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat background poster digital 16:9 tanpa teks, dengan ruang putih-krem untuk copy di sisi kiri dan palet identitas EXISEL; juga menyiapkan rekomendasi hook poster.
 
@@ -7272,7 +7272,7 @@ Membuat background poster digital 16:9 tanpa teks, dengan ruang putih-krem untuk
 
 - **Timestamp:** 2026-08-09 12:16:14 WIB (`+07:00`), terverifikasi dari sistem
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Campaign Visual Designer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -7281,7 +7281,7 @@ Membuat background poster digital 16:9 tanpa teks, dengan ruang putih-krem untuk
 
 > “gausah pake elemen kotak kotak di bagian kanannya”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Merevisi background poster dengan menghapus semua bentuk kotak, kartu, outline frame, dan panel UI di bagian kanan; menggantinya dengan pita diagonal serta kurva abstrak yang lebih bersih.
 
@@ -7310,7 +7310,7 @@ Merevisi background poster dengan menghapus semua bentuk kotak, kartu, outline f
 
 - **Timestamp:** 2026-08-09 12:24:46 WIB (`+07:00`), terverifikasi dari sistem
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Campaign Visual Designer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -7319,7 +7319,7 @@ Merevisi background poster dengan menghapus semua bentuk kotak, kartu, outline f
 
 > “background nya diubah semua, ganti dengan tema neobrutalims gitu yang cocok untuk dibuat poster dan bisa dibagi 3 dengan format potrait untuk postingan instagram”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat ulang background sebagai karya neobrutalism panorama yang menyambung, lalu mengekspornya menjadi tiga post Instagram portrait siap unggah berurutan.
 
@@ -7350,7 +7350,7 @@ Membuat ulang background sebagai karya neobrutalism panorama yang menyambung, la
 
 - **Timestamp:** 2026-08-09 12:29:54 WIB (`+07:00`), terverifikasi dari sistem
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
+- **Platform:** Codex
 - **Role:** Campaign Visual Designer
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
@@ -7359,7 +7359,7 @@ Membuat ulang background sebagai karya neobrutalism panorama yang menyambung, la
 
 > “elemennya jangan terlalu rame sedang aja”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Membuat versi neobrutalism dengan kepadatan visual sedang: lebih lega, lebih fokus, dan tetap siap dibagi menjadi tiga post Instagram portrait yang menyambung.
 
@@ -7391,8 +7391,8 @@ Membuat versi neobrutalism dengan kepadatan visual sedang: lebih lega, lebih fok
 
 - **Timestamp:** 2026-08-09 12:38:31 WIB (`+07:00`), terverifikasi dari sistem
 - **Model used:** Codex (runtime model identifier tidak diekspos)
-- **AI agent:** Codex
-- **Role:** Release Engineer dan Technical Documentation Agent
+- **Platform:** Codex
+- **Role:** Release Engineer dan Technical Documentation Specialist
 - **Requester:** USER / pemilik workspace
 - **Execution status:** Completed
 
@@ -7400,7 +7400,7 @@ Membuat versi neobrutalism dengan kepadatan visual sedang: lebih lega, lebih fok
 
 > “update log.md perubahan sebelumnyaa dan push semua perubahan kegithub dan kasih saya coomand untuk deploy ke vps”
 
-### TLDR AI agents done
+### TLDR platform Codex
 
 Mengaudit perubahan yang belum ter-commit, melengkapi log perubahan intro dan aset kampanye sebelumnya, menjalankan pemeriksaan kualitas proyek, membuat satu commit release, mendorong perubahan aman ke `origin/main`, dan menyiapkan command update production VPS berbasis Docker Compose.
 
@@ -7447,5 +7447,71 @@ docker compose --env-file /opt/exisel/.env.production -f /opt/exisel/compose.pro
 
 ---
 
+## EXISEL-20260810-027 — Navigasi Mobile Detail Ekstrakurikuler dan Konsolidasi Aset
+
+### Identity
+
+- **Timestamp:** 2026-08-10 13:47:12 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **Platform:** Codex
+- **Role:** Frontend Engineer, Visual Asset Curator, dan Release Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “okee push semua perubahan ke github dan kasih saya step by step untuk update dari ssh root smpe deploy ke production”
+
+### TLDR platform Codex
+
+Menyempurnakan navbar mobile pada seluruh halaman detail ekstrakurikuler, mengonsolidasikan poster dan diagram EXISEL yang dibuat pada rangkaian pekerjaan sebelumnya, menormalkan istilah dokumentasi menjadi platform Codex, serta menyiapkan release aman ke branch `main` dan deployment production berbasis Docker Compose.
+
+### Changes
+
+- **Responsive navigation:** memperbarui `src/app/(student)/eskul/[nama_eskul]/detail.module.css` agar header mobile menggunakan susunan tiga kolom yang konsisten, tombol hamburger berada di sisi kanan, serta menu terbuka tersusun rapi dalam dua kolom.
+- **Mobile branding:** menyesuaikan tinggi header, ukuran logo, dan ukuran nama aplikasi pada viewport kecil tanpa menimbulkan horizontal overflow.
+- **Documentation:** menormalkan penyebutan pelaksana otomatis di seluruh `log.md` menjadi istilah platform Codex dan peran spesialis yang relevan tanpa mengubah isi teknis riwayat pekerjaan.
+- **Architecture assets:** menambahkan diagram arsitektur sistem EXISEL dalam format PNG dan SVG.
+- **Campaign assets:** menambahkan rangkaian mockup dan poster EXISEL untuk fitur pilihan ekstrakurikuler, EksiBot, Community, QR kehadiran dinamis, dashboard guru/pembina, dan kredit Powered by AmbaCode.
+- Seluruh aset disimpan di direktori publik proyek dan diaudit ukurannya sebelum dimasukkan ke release.
+
+### Verification
+
+- Pengujian visual navbar dilakukan pada halaman `/eskul/basket` dengan viewport `320 × 700` dalam keadaan menu tertutup dan terbuka, serta pada `/eskul/itc` dengan viewport `768 × 800`.
+- Tidak ditemukan horizontal overflow atau error browser console pada pengujian tersebut.
+- `pnpm typecheck`: passed, 0 error.
+- `pnpm lint`: passed, 0 error; terdapat 3 warning lama yang tidak memblokir release.
+- `pnpm build`: passed pada Next.js 16.3.0.
+- Audit istilah `log.md`: seluruh istilah lama sudah dinormalkan; hanya nama file teknis `AGENTS.md` yang dipertahankan apa adanya.
+- `git diff --check`: passed.
+- Seluruh file gambar berada di bawah batas ukuran individual GitHub; aset terbesar sekitar 4,44 MB.
+- Target release: remote `origin`, branch `main`, tanpa force push.
+
+### VPS update handoff
+
+```bash
+cd /opt/exisel
+git fetch origin
+git checkout main
+git pull --ff-only origin main
+ENV_FILE=/opt/exisel/.env.production ./scripts/deploy-production.sh
+```
+
+Pemeriksaan setelah deployment:
+
+```bash
+docker compose --env-file /opt/exisel/.env.production -f /opt/exisel/compose.production.yml ps
+docker compose --env-file /opt/exisel/.env.production -f /opt/exisel/compose.production.yml logs --tail=100 migrate app caddy
+curl -fsS https://exisel.web.id/login >/dev/null && echo "HTTPS LOGIN OK"
+```
+
+### Security note
+
+- Tidak ada `.env`, password, private key, database dump, atau credential production yang dimasukkan ke release.
+- File database dan akun dummy tetap berada pada volume PostgreSQL production; proses update source tidak mengganti volume tersebut.
+- Deployment menjalankan validasi konfigurasi, build image baru, migration, health check aplikasi, dan pembaruan service melalui skrip resmi repository.
+
+---
+
 _End of log. Future changes must append a new execution entry with Identity,
-Human Prompt, TLDR AI agents done, Changes, Verification, and Security note._
+Human Prompt, TLDR platform Codex, Changes, Verification, and Security note._

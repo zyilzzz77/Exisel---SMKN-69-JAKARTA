@@ -1,0 +1,233 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2800" height="1600" viewBox="0 0 2800 1600" role="img" aria-labelledby="title description">
+  <title id="title">Diagram Arsitektur Sistem EXISEL</title>
+  <desc id="description">Alur pengguna menuju browser, Caddy, aplikasi Next.js, Prisma ORM, dan PostgreSQL, termasuk komponen QR dinamis, EksiBot, autentikasi, Community, dan laporan Excel.</desc>
+
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="8" dy="10" stdDeviation="0" flood-color="#111111" flood-opacity="1"/>
+    </filter>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#111111" flood-opacity="0.14"/>
+    </filter>
+    <marker id="arrowBlue" markerWidth="34" markerHeight="34" refX="30" refY="17" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L34,17 L0,34 Z" fill="#0B45D8"/>
+    </marker>
+    <marker id="arrowBlack" markerWidth="34" markerHeight="34" refX="30" refY="17" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L34,17 L0,34 Z" fill="#111111"/>
+    </marker>
+    <linearGradient id="blueBand" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0B45D8"/>
+      <stop offset="1" stop-color="#0637B7"/>
+    </linearGradient>
+    <style>
+      .font { font-family: Manrope, "Segoe UI", Arial, sans-serif; }
+      .title { font: 800 64px Manrope, "Segoe UI", Arial, sans-serif; fill: #111111; letter-spacing: -1px; }
+      .subtitle { font: 500 28px Manrope, "Segoe UI", Arial, sans-serif; fill: #4D4D55; }
+      .section { font: 800 28px Manrope, "Segoe UI", Arial, sans-serif; letter-spacing: 1.5px; }
+      .node-title { font: 800 31px Manrope, "Segoe UI", Arial, sans-serif; fill: #111111; }
+      .node-title-white { font: 800 31px Manrope, "Segoe UI", Arial, sans-serif; fill: #FFFFFF; }
+      .label { font: 700 25px Manrope, "Segoe UI", Arial, sans-serif; fill: #111111; }
+      .body { font: 500 22px Manrope, "Segoe UI", Arial, sans-serif; fill: #45454E; }
+      .body-white { font: 500 22px Manrope, "Segoe UI", Arial, sans-serif; fill: #FFFFFF; }
+      .tiny { font: 600 19px Manrope, "Segoe UI", Arial, sans-serif; fill: #5E5E68; }
+      .arrow-label { font: 800 20px Manrope, "Segoe UI", Arial, sans-serif; fill: #0B45D8; letter-spacing: .5px; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="2800" height="1600" fill="#F7F3EA"/>
+  <path d="M0 154 C640 114 1060 184 1500 132 C1950 78 2340 102 2800 56 L2800 0 L0 0 Z" fill="#0B45D8" opacity="0.08"/>
+  <circle cx="2680" cy="128" r="18" fill="#A8C92B"/>
+  <path d="M2580 130 C2616 92 2644 84 2670 104" fill="none" stroke="#111111" stroke-width="7" stroke-dasharray="16 16"/>
+
+  <!-- Heading -->
+  <text x="110" y="105" class="title">ARSITEKTUR SISTEM EXISEL</text>
+  <rect x="110" y="128" width="480" height="10" rx="5" fill="#FF5A00"/>
+  <text x="110" y="176" class="subtitle">Modular Monolith • Three-Tier Architecture • Production Deployment</text>
+
+  <!-- Column 1: Users -->
+  <g filter="url(#softShadow)">
+    <rect x="90" y="290" width="330" height="640" rx="28" fill="#FFFFFF" stroke="#111111" stroke-width="5"/>
+  </g>
+  <rect x="90" y="290" width="330" height="82" rx="24" fill="#111111"/>
+  <rect x="90" y="346" width="330" height="26" fill="#111111"/>
+  <text x="255" y="342" text-anchor="middle" class="section" fill="#FFFFFF">PENGGUNA</text>
+
+  <g filter="url(#shadow)">
+    <rect x="128" y="414" width="254" height="184" rx="24" fill="#E5ECFF" stroke="#111111" stroke-width="4"/>
+  </g>
+  <circle cx="255" cy="470" r="28" fill="#0B45D8"/>
+  <circle cx="255" cy="456" r="9" fill="#FFFFFF"/>
+  <path d="M235 486 Q255 466 275 486 L275 495 L235 495 Z" fill="#FFFFFF"/>
+  <text x="255" y="536" text-anchor="middle" class="node-title">Siswa</text>
+  <text x="255" y="570" text-anchor="middle" class="body">Akses layanan siswa</text>
+
+  <g filter="url(#shadow)">
+    <rect x="128" y="650" width="254" height="214" rx="24" fill="#FFF0E7" stroke="#111111" stroke-width="4"/>
+  </g>
+  <circle cx="255" cy="707" r="28" fill="#FF5A00"/>
+  <circle cx="255" cy="693" r="9" fill="#FFFFFF"/>
+  <path d="M235 723 Q255 703 275 723 L275 732 L235 732 Z" fill="#FFFFFF"/>
+  <text x="255" y="770" text-anchor="middle" class="node-title">Admin / Guru</text>
+  <text x="255" y="805" text-anchor="middle" class="body">Dashboard pembina</text>
+  <text x="255" y="835" text-anchor="middle" class="body">dan laporan</text>
+
+  <!-- Column 2: Browser -->
+  <g filter="url(#softShadow)">
+    <rect x="520" y="236" width="430" height="850" rx="30" fill="#FFFFFF" stroke="#111111" stroke-width="5"/>
+  </g>
+  <rect x="520" y="236" width="430" height="104" rx="26" fill="#0B45D8"/>
+  <rect x="520" y="314" width="430" height="26" fill="#0B45D8"/>
+  <text x="735" y="285" text-anchor="middle" class="node-title-white">BROWSER / CLIENT</text>
+  <text x="735" y="318" text-anchor="middle" class="body-white">Mobile dan desktop</text>
+
+  <rect x="560" y="385" width="350" height="150" rx="22" fill="#F7F3EA" stroke="#111111" stroke-width="3"/>
+  <text x="595" y="428" class="label">React 19 UI</text>
+  <text x="595" y="466" class="body">Client Components, form,</text>
+  <text x="595" y="496" class="body">navigasi, dan dashboard</text>
+
+  <rect x="560" y="565" width="350" height="150" rx="22" fill="#E5ECFF" stroke="#111111" stroke-width="3"/>
+  <text x="595" y="608" class="label">ZXing QR Scanner</text>
+  <text x="595" y="646" class="body">Kamera membaca token</text>
+  <text x="595" y="676" class="body">kehadiran dinamis</text>
+
+  <rect x="560" y="745" width="350" height="186" rx="22" fill="#FFF0E7" stroke="#111111" stroke-width="3"/>
+  <text x="595" y="788" class="label">EksiBot</text>
+  <text x="595" y="826" class="body">Dataset kata kunci lokal</text>
+  <text x="595" y="856" class="body">dan rekomendasi berbasis</text>
+  <text x="595" y="886" class="body">aturan — tanpa API AI eksternal</text>
+
+  <rect x="560" y="970" width="350" height="72" rx="18" fill="#111111"/>
+  <text x="735" y="1016" text-anchor="middle" class="body-white">Cookie sesi HttpOnly</text>
+
+  <!-- Column 3: Caddy -->
+  <g filter="url(#shadow)">
+    <rect x="1030" y="460" width="260" height="410" rx="28" fill="#FFFFFF" stroke="#111111" stroke-width="5"/>
+  </g>
+  <rect x="1030" y="460" width="260" height="86" rx="24" fill="#FF5A00"/>
+  <rect x="1030" y="520" width="260" height="26" fill="#FF5A00"/>
+  <text x="1160" y="515" text-anchor="middle" class="node-title-white">CADDY</text>
+  <text x="1160" y="604" text-anchor="middle" class="label">Reverse Proxy</text>
+  <text x="1160" y="653" text-anchor="middle" class="body">TLS / HTTPS</text>
+  <text x="1160" y="689" text-anchor="middle" class="body">Compression</text>
+  <text x="1160" y="725" text-anchor="middle" class="body">Security headers</text>
+  <text x="1160" y="761" text-anchor="middle" class="body">Request limit</text>
+  <rect x="1076" y="798" width="168" height="42" rx="21" fill="#FFF0E7" stroke="#FF5A00" stroke-width="2"/>
+  <text x="1160" y="827" text-anchor="middle" class="tiny">Port 80 / 443</text>
+
+  <!-- Column 4: Next.js server -->
+  <g filter="url(#softShadow)">
+    <rect x="1370" y="224" width="750" height="970" rx="34" fill="#FFFFFF" stroke="#111111" stroke-width="5"/>
+  </g>
+  <rect x="1370" y="224" width="750" height="112" rx="30" fill="url(#blueBand)"/>
+  <rect x="1370" y="306" width="750" height="30" fill="#0637B7"/>
+  <text x="1745" y="275" text-anchor="middle" class="node-title-white">NEXT.JS 16 APPLICATION SERVER</text>
+  <text x="1745" y="310" text-anchor="middle" class="body-white">Frontend rendering + backend logic dalam satu aplikasi</text>
+
+  <rect x="1415" y="382" width="315" height="150" rx="22" fill="#F7F3EA" stroke="#111111" stroke-width="3"/>
+  <text x="1450" y="425" class="label">Server Components</text>
+  <text x="1450" y="463" class="body">Render halaman dan</text>
+  <text x="1450" y="493" class="body">pengambilan data server</text>
+
+  <rect x="1760" y="382" width="315" height="150" rx="22" fill="#E5ECFF" stroke="#111111" stroke-width="3"/>
+  <text x="1795" y="425" class="label">Server Actions</text>
+  <text x="1795" y="463" class="body">Auth, pendaftaran,</text>
+  <text x="1795" y="493" class="body">Community, kehadiran</text>
+
+  <rect x="1415" y="562" width="315" height="150" rx="22" fill="#E5ECFF" stroke="#111111" stroke-width="3"/>
+  <text x="1450" y="605" class="label">Route Handlers</text>
+  <text x="1450" y="643" class="body">QR API dan ekspor</text>
+  <text x="1450" y="673" class="body">laporan Excel</text>
+
+  <rect x="1760" y="562" width="315" height="150" rx="22" fill="#FFF0E7" stroke="#111111" stroke-width="3"/>
+  <text x="1795" y="605" class="label">Auth &amp; Validation</text>
+  <text x="1795" y="643" class="body">Argon2, JWT, Zod,</text>
+  <text x="1795" y="673" class="body">role STUDENT / ADMIN</text>
+
+  <rect x="1415" y="742" width="315" height="174" rx="22" fill="#FFF0E7" stroke="#111111" stroke-width="3"/>
+  <text x="1450" y="785" class="label">QR Dinamis</text>
+  <text x="1450" y="823" class="body">HMAC-SHA256</text>
+  <text x="1450" y="853" class="body">Rotasi setiap 4 detik</text>
+  <text x="1450" y="883" class="body">Validasi di server</text>
+
+  <rect x="1760" y="742" width="315" height="174" rx="22" fill="#F7F3EA" stroke="#111111" stroke-width="3"/>
+  <text x="1795" y="785" class="label">Reporting Service</text>
+  <text x="1795" y="823" class="body">ExcelJS membentuk</text>
+  <text x="1795" y="853" class="body">rekap, ringkasan,</text>
+  <text x="1795" y="883" class="body">dan detail izin</text>
+
+  <rect x="1415" y="958" width="660" height="166" rx="24" fill="#111111"/>
+  <text x="1745" y="1009" text-anchor="middle" class="node-title-white">DATA ACCESS LAYER</text>
+  <text x="1745" y="1053" text-anchor="middle" class="body-white">Query terpusat untuk dashboard, kehadiran, laporan,</text>
+  <text x="1745" y="1085" text-anchor="middle" class="body-white">pendaftaran, jadwal, dan Community</text>
+
+  <!-- Column 5: Prisma -->
+  <g filter="url(#shadow)">
+    <rect x="2200" y="485" width="230" height="370" rx="28" fill="#E5ECFF" stroke="#111111" stroke-width="5"/>
+  </g>
+  <path d="M2250 566 L2315 524 L2380 566 L2362 725 L2315 772 L2268 725 Z" fill="#0B45D8" opacity="0.16" stroke="#0B45D8" stroke-width="5"/>
+  <text x="2315" y="636" text-anchor="middle" class="node-title">Prisma ORM</text>
+  <text x="2315" y="682" text-anchor="middle" class="body">Prisma 7</text>
+  <text x="2315" y="715" text-anchor="middle" class="body">adapter-pg</text>
+  <text x="2315" y="803" text-anchor="middle" class="tiny">Typed query layer</text>
+
+  <!-- Column 6: Database -->
+  <g filter="url(#softShadow)">
+    <ellipse cx="2610" cy="422" rx="150" ry="62" fill="#FF7A2D" stroke="#111111" stroke-width="5"/>
+    <rect x="2460" y="422" width="300" height="500" fill="#FFF0E7" stroke="#111111" stroke-width="5"/>
+    <ellipse cx="2610" cy="922" rx="150" ry="62" fill="#FFD8C2" stroke="#111111" stroke-width="5"/>
+    <ellipse cx="2610" cy="422" rx="150" ry="62" fill="#FF7A2D" stroke="#111111" stroke-width="5"/>
+  </g>
+  <text x="2610" y="432" text-anchor="middle" class="node-title-white">PostgreSQL 16</text>
+  <text x="2610" y="524" text-anchor="middle" class="label">Data utama</text>
+  <text x="2510" y="579" class="body">• User &amp; LoginThrottle</text>
+  <text x="2510" y="622" class="body">• Extracurricular</text>
+  <text x="2510" y="665" class="body">• Schedule</text>
+  <text x="2510" y="708" class="body">• Enrollment</text>
+  <text x="2510" y="751" class="body">• Attendance</text>
+  <text x="2510" y="794" class="body">• AttendanceSession</text>
+  <text x="2510" y="837" class="body">• CommunityMessage</text>
+  <text x="2610" y="929" text-anchor="middle" class="tiny">Persistent Docker volume</text>
+
+  <!-- Main arrows -->
+  <path d="M420 610 C456 610 478 610 514 610" fill="none" stroke="#0B45D8" stroke-width="8" marker-end="url(#arrowBlue)"/>
+  <text x="468" y="584" text-anchor="middle" class="arrow-label">INTERAKSI</text>
+
+  <path d="M950 665 C978 665 995 665 1024 665" fill="none" stroke="#0B45D8" stroke-width="8" marker-end="url(#arrowBlue)"/>
+  <text x="990" y="635" text-anchor="middle" class="arrow-label">HTTPS</text>
+
+  <path d="M1290 665 C1318 665 1337 665 1364 665" fill="none" stroke="#0B45D8" stroke-width="8" marker-end="url(#arrowBlue)"/>
+  <text x="1330" y="625" text-anchor="middle" class="arrow-label">PROXY</text>
+
+  <path d="M2120 665 C2148 665 2167 665 2194 665" fill="none" stroke="#0B45D8" stroke-width="8" marker-end="url(#arrowBlue)"/>
+  <text x="2158" y="625" text-anchor="middle" class="arrow-label">QUERY</text>
+
+  <path d="M2430 665 C2442 665 2446 665 2454 665" fill="none" stroke="#0B45D8" stroke-width="8" marker-end="url(#arrowBlue)"/>
+  <text x="2442" y="625" text-anchor="middle" class="arrow-label">SQL</text>
+
+  <!-- Bottom deployment band -->
+  <g filter="url(#softShadow)">
+    <rect x="90" y="1270" width="2670" height="230" rx="32" fill="#111111"/>
+  </g>
+  <text x="140" y="1332" class="section" fill="#FFFFFF">DEPLOYMENT PRODUCTION — DOCKER COMPOSE</text>
+
+  <rect x="140" y="1372" width="420" height="82" rx="18" fill="#0B45D8"/>
+  <text x="350" y="1424" text-anchor="middle" class="label" fill="#FFFFFF">Caddy • Port 80 / 443</text>
+
+  <rect x="590" y="1372" width="470" height="82" rx="18" fill="#F7F3EA"/>
+  <text x="825" y="1424" text-anchor="middle" class="label">Next.js • Internal 3000</text>
+
+  <rect x="1090" y="1372" width="470" height="82" rx="18" fill="#FFF0E7"/>
+  <text x="1325" y="1424" text-anchor="middle" class="label">PostgreSQL • Internal</text>
+
+  <rect x="1590" y="1372" width="430" height="82" rx="18" fill="#E5ECFF"/>
+  <text x="1805" y="1424" text-anchor="middle" class="label">Prisma Migrate</text>
+
+  <rect x="2050" y="1372" width="660" height="82" rx="18" fill="#FF5A00"/>
+  <text x="2380" y="1409" text-anchor="middle" class="label" fill="#FFFFFF">Jaringan backend internal</text>
+  <text x="2380" y="1439" text-anchor="middle" class="body-white">Database tidak diekspos ke internet</text>
+
+  <!-- Decorative closing mark -->
+  <path d="M2705 1122 q-52 60 -104 0 q52 -60 104 0 Z" fill="#A9A1E8" opacity="0.7"/>
+  <path d="M110 1184 h70 M145 1149 v70 M121 1160 l49 49 M170 1160 l-49 49" stroke="#FF5A00" stroke-width="10" stroke-linecap="round"/>
+</svg>
