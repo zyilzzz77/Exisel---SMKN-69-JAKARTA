@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     dateKey,
     sessionNonce: attendanceSession.code,
     now: serverNow,
-    baseUrl: new URL(request.url).origin,
+    host: request.headers.get("host"),
   });
 
   return NextResponse.json(

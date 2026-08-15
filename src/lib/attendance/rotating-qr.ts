@@ -5,13 +5,16 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 export const ATTENDANCE_QR_ROTATION_MS = 4_000;
 const QR_VERSION = "1";
 
-function qrBaseUrl() {
-  return process.env.NEXT_PUBLIC_APP_URL?.trim() ?? "http://localhost:3000";
+function qrBaseUrl(host?: string | null) {
+  const configured = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (configured) return configured;
+  if (host) return `http://${host}`;
+  return "http://localhost:3000";
 }
 
-function qrScanOrigin() {
+function qrScanOrigin(host?: string | null) {
   try {
-    return new URL(qrBaseUrl()).origin;
+    return new URL(qrBaseUrl(host)).origin;
   } catch {
     return "http://localhost:3000";
   }
@@ -54,10 +57,11 @@ export function createAttendanceQrPayload(input: {
   sessionNonce: string;
   now?: number;
   baseUrl?: string;
+  host?: string | null;
 }) {
   const now = input.now ?? Date.now();
   const bucket = Math.floor(now / ATTENDANCE_QR_ROTATION_MS);
-  const baseUrl = input.baseUrl?.trim() || qrBaseUrl();
+  const baseUrl = input.baseUrl?.trim() || qrBaseUrl(input.host);
   const url = new URL(qrScanPath(), baseUrl);
   url.searchParams.set("v", QR_VERSION);
   url.searchParams.set("e", input.extracurricularId);
@@ -79,12 +83,13 @@ export function validateAttendanceQrPayload(
     sessionNonce: string;
     now?: number;
     allowedOrigins?: string[];
+    host?: string | null;
   },
 ) {
   try {
     const url = new URL(payload);
     const allowedOrigins = new Set<string>([
-      qrScanOrigin(),
+      qrScanOrigin(input.host),
       ...(input.allowedOrigins ?? []),
     ]);
     if (!allowedOrigins.has(url.origin)) return false;
