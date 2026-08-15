@@ -59,7 +59,17 @@ export const getStudentAttendanceData = cache(
             status: "APPROVED",
             extracurricular: {
               isActive: true,
-              schedules: { some: { day } },
+              OR: [
+                { schedules: { some: { day } } },
+                {
+                  attendanceSessions: {
+                    some: {
+                      sessionDate: attendanceDate,
+                      expiresAt: { gt: new Date() },
+                    },
+                  },
+                },
+              ],
             },
           },
           orderBy: { registeredAt: "asc" },
