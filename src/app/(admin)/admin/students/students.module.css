@@ -1,0 +1,77 @@
+.page { min-height: 100vh; background: var(--paper); color: var(--ink); }
+.announcement { display: flex; min-height: 38px; align-items: center; justify-content: center; gap: 9px; border-bottom: 3px solid var(--ink); background: var(--orange); font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.announcement span { width: 10px; height: 10px; border: 2px solid var(--ink); border-radius: 50%; background: #42d66b; }
+.header { position: sticky; top: 0; z-index: 30; border-bottom: 3px solid var(--ink); background: rgba(255,255,255,.96); }
+.headerInner { display: flex; width: min(100% - 48px, 1540px); min-height: 92px; align-items: center; justify-content: space-between; gap: 24px; margin-inline: auto; }
+.brand { display: flex; align-items: center; gap: 11px; }
+.brand > img { width: 42px; height: 54px; object-fit: contain; }
+.brand > span { display: grid; line-height: 1; }
+.brand strong { font-family: var(--font-display), sans-serif; font-size: 19px; }
+.brand small { margin-top: 5px; color: var(--muted); font-size: 8px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.navigation { flex: 1; justify-content: center; }
+.accountActions { display: flex; align-items: center; gap: 10px; }
+.adminAvatar { display: grid; width: 42px; height: 42px; place-items: center; border: 3px solid var(--ink); border-radius: 50%; background: var(--orange); font-family: var(--font-display), sans-serif; font-size: 11px; font-weight: 900; }
+.accountActions > div { display: grid; max-width: 120px; }
+.accountActions > div strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.accountActions > div small { color: var(--muted); font-size: 8px; font-weight: 800; text-transform: uppercase; }
+.accountActions button { padding: 9px 12px; border: 3px solid var(--ink); border-radius: 5px; background: var(--white); box-shadow: 3px 3px 0 var(--ink); cursor: pointer; font: inherit; font-size: 10px; font-weight: 900; }
+.shell { width: min(100% - 48px, 1420px); margin-inline: auto; padding: 36px 0 80px; }
+.hero { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 42px; padding: clamp(28px, 3.2vw, 42px); border: var(--border); background: var(--blue); box-shadow: 9px 9px 0 var(--ink); color: var(--white); }
+.eyebrow { margin: 0 0 12px; color: var(--orange); font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.hero h1 { max-width: 850px; margin: 0; font-family: var(--font-display), sans-serif; font-size: clamp(39px,4.25vw,62px); letter-spacing: -.055em; line-height: .96; }
+.hero h1 span { color: var(--orange); }
+.hero > div > p:last-child { max-width: 750px; margin: 22px 0 0; color: var(--blue-light); }
+.heroStats { display: grid; grid-template-columns: repeat(2,142px); gap: 10px; }
+.heroStats article { display: grid; min-height: 132px; align-content: center; padding: 15px; border: 3px solid var(--ink); background: var(--white); box-shadow: 4px 4px 0 var(--ink); color: var(--ink); }
+.heroStats span, .heroStats small { font-size: 9px; font-weight: 900; text-transform: uppercase; }
+.heroStats strong { font-family: var(--font-display), sans-serif; font-size: 44px; line-height: 1; }
+.heroStats small { color: var(--muted); }
+.errorNotice { margin: 24px 0 0; padding: 13px 15px; border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); background: #ffdad6; color: #78000a; font-weight: 800; }
+.statusTabs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 9px; margin-top: 28px; padding: 4px 4px 8px; }
+.statusTabs a { display: inline-flex; min-width: 0; min-height: 48px; align-items: center; justify-content: space-between; gap: 7px; padding: 9px 11px; border: 3px solid var(--ink); border-radius: 5px; background: var(--white); box-shadow: 3px 3px 0 var(--ink); font-size: 10px; font-weight: 900; }
+.statusTabs a span { display: grid; min-width: 22px; height: 22px; place-items: center; border: 2px solid var(--ink); border-radius: 50%; background: var(--blue-light); font-size: 9px; }
+.statusTabs .activeTab { background: var(--orange); transform: translateY(-2px); }
+.manager { min-height: 570px; margin-top: 20px; padding: 28px; border: var(--border); background: var(--white); box-shadow: 8px 8px 0 var(--ink); }
+.managerHeading { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding-bottom: 22px; border-bottom: 3px solid var(--ink); }
+.managerHeading h2 { margin: 0; font-family: var(--font-display), sans-serif; font-size: 32px; }
+.managerHeading > span { padding: 7px 10px; border: 2px solid var(--ink); background: var(--blue-light); font-size: 10px; font-weight: 900; text-transform: uppercase; }
+.filters { display: grid; grid-template-columns: minmax(220px,1fr) minmax(180px,.42fr) auto; align-items: end; gap: 12px; margin-top: 20px; padding: 16px; border: 2px solid var(--ink); background: var(--paper); }
+.filters label { display: grid; gap: 6px; }
+.filters label span { font-size: 9px; font-weight: 900; text-transform: uppercase; }
+.filters input, .filters select { min-height: 46px; padding: 9px 11px; border: 3px solid var(--ink); background: var(--white); color: var(--ink); font: inherit; font-size: 12px; font-weight: 750; }
+.filters button { min-height: 46px; padding: 9px 14px; border: 3px solid var(--ink); background: var(--blue); box-shadow: 3px 3px 0 var(--ink); color: var(--white); cursor: pointer; font: inherit; font-size: 11px; font-weight: 900; }
+.studentList { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: stretch; gap: 16px; margin-top: 24px; }
+.studentCard { display: flex; min-width: 0; min-height: 285px; flex-direction: column; padding: 19px; border: 3px solid var(--ink); background: var(--paper); box-shadow: 4px 4px 0 var(--ink); }
+.identityRow { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: start; gap: 13px; }
+.studentAvatar { display: grid; width: 48px; height: 48px; place-items: center; border: 3px solid var(--ink); border-radius: 50%; background: var(--blue-light); font-family: var(--font-display),sans-serif; font-size: 12px; font-weight: 900; }
+.studentIdentity { min-width: 0; }
+.studentIdentity > div { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.studentIdentity h3 { min-width: 0; margin: 0; font-family: var(--font-display),sans-serif; font-size: 17px; overflow-wrap: anywhere; }
+.studentIdentity p { margin: 4px 0 0; color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+.studentIdentity small { color: var(--blue); font-size: 9px; font-weight: 900; text-transform: uppercase; }
+.statusPill { flex: 0 0 auto; padding: 4px 7px; border: 2px solid var(--ink); font-size: 8px; font-weight: 900; text-transform: uppercase; }
+.statusINCOMPLETE { background: var(--paper); }
+.statusPENDING { background: var(--orange-light); }
+.statusAPPROVED { background: #c8f6d2; }
+.statusREJECTED { background: #ffdad6; }
+.statusSUSPENDED { background: #ddd; }
+.studentData { display: grid; grid-template-columns: .7fr .8fr 1.5fr; gap: 8px; margin: 18px 0 0; }
+.studentData div { min-width: 0; padding: 9px; border: 2px solid var(--ink); background: var(--white); }
+.studentData dt { color: var(--muted); font-size: 8px; font-weight: 900; text-transform: uppercase; }
+.studentData dd { margin: 3px 0 0; font-size: 10px; font-weight: 850; overflow-wrap: anywhere; }
+.rejectionReason { margin: 14px 0 0; padding: 10px; border-left: 4px solid #d73333; background: #ffdad6; font-size: 10px; }
+.auditNote { margin: 12px 0 0; color: var(--muted); font-size: 9px; font-weight: 750; }
+.actions, .singleAction { margin-top: auto; padding-top: 16px; }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.approveButton, .rejectButton, .suspendButton { width: 100%; min-height: 43px; padding: 9px 11px; border: 3px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); cursor: pointer; font: inherit; font-size: 10px; font-weight: 900; }
+.approveButton { background: var(--blue); color: var(--white); }
+.rejectButton { background: #d73333; color: var(--white); }
+.suspendButton { background: var(--orange); color: var(--ink); }
+.approveButton:hover, .rejectButton:hover, .suspendButton:hover,
+.approveButton:focus-visible, .rejectButton:focus-visible, .suspendButton:focus-visible { box-shadow: 5px 5px 0 var(--ink); transform: translate(-1px, -1px); }
+.emptyState { margin-top: 28px; padding: 48px 24px; border: 3px dashed var(--ink); background: var(--paper); text-align: center; }
+.emptyState strong { font-family: var(--font-display),sans-serif; font-size: 22px; }
+.emptyState p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+@media (max-width: 1180px) { .headerInner { width: calc(100% - 32px); } .accountActions > div { display: none; } .statusTabs { grid-template-columns: repeat(3, minmax(0, 1fr)); } .studentList { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .heroStats { grid-template-columns: repeat(2,minmax(0,1fr)); } .filters { grid-template-columns: 1fr 1fr; } .filters button { grid-column: 1 / -1; } }
+@media (max-width: 680px) { .announcement { padding: 8px 16px; text-align: center; } .shell { width: calc(100% - 28px); padding-top: 26px; } .hero { padding: 25px 20px; box-shadow: 7px 7px 0 var(--ink); } .hero h1 { font-size: 42px; } .statusTabs { display: flex; overflow-x: auto; padding-inline: 3px; scrollbar-width: thin; } .statusTabs a { flex: 0 0 auto; } .manager { min-height: 520px; padding: 20px 15px; box-shadow: 6px 6px 0 var(--ink); } .filters { grid-template-columns: 1fr; padding: 13px; } .filters button { grid-column: auto; } .managerHeading { align-items: flex-start; flex-direction: column; gap: 8px; } .studentData { grid-template-columns: 1fr 1fr; } .studentData div:last-child { grid-column: 1 / -1; } .actions { grid-template-columns: 1fr; } .accountActions form { display: none; } }

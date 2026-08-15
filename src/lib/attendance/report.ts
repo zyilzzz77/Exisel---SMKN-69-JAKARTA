@@ -73,6 +73,51 @@ function getActivityLevel(rate: number, totalAgenda: number) {
   return "Perlu perhatian";
 }
 
+const gradeOrder: Record<string, number> = {
+  X: 10,
+  XI: 11,
+  XII: 12,
+  XIII: 13,
+};
+
+const majorOrder: Record<string, number> = {
+  SIJA: 1,
+  MEKA: 2,
+  OTO: 3,
+};
+
+function getClassSortKey(className: string | null) {
+  const normalized = className?.trim().toUpperCase() ?? "";
+  const match = normalized.match(/^(XIII|XII|XI|X)\s+(SIJA|MEKA|OTO)\s+(\d+)$/);
+
+  if (!match) return [99, 99, 99, normalized] as const;
+
+  const [, grade, major, group] = match;
+  return [
+    gradeOrder[grade] ?? 99,
+    majorOrder[major] ?? 99,
+    Number(group),
+    normalized,
+  ] as const;
+}
+
+function compareMembersByClassThenName(
+  left: AttendanceReportMember,
+  right: AttendanceReportMember,
+) {
+  const leftKey = getClassSortKey(left.className);
+  const rightKey = getClassSortKey(right.className);
+
+  for (let index = 0; index < 3; index++) {
+    const difference = (leftKey[index] as number) - (rightKey[index] as number);
+    if (difference !== 0) return difference;
+  }
+
+  const classDifference = String(leftKey[3]).localeCompare(String(rightKey[3]), "id");
+  if (classDifference !== 0) return classDifference;
+  return left.name.localeCompare(right.name, "id");
+}
+
 function buildAgendaDates(
   startDateKey: string,
   throughDateKey: string,
@@ -231,7 +276,7 @@ export async function getAttendanceProgramReports(programId?: string) {
         attendanceRate,
         activityLevel: getActivityLevel(attendanceRate, totalAgenda),
       };
-    });
+    }).sort(compareMembersByClassThenName);
     const totalExpected = members.reduce(
       (total, member) => total + member.totalAgenda,
       0,

@@ -15,7 +15,9 @@
 		X-Content-Type-Options "nosniff"
 		X-Frame-Options "DENY"
 		Referrer-Policy "strict-origin-when-cross-origin"
-		Permissions-Policy "camera=(self), microphone=(), geolocation=()"
+		# Keep this policy limited to stable, broadly supported directives.
+		# EXISEL does not need camera, microphone, or location permissions.
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
 		-Server
 		-X-Powered-By
 	}

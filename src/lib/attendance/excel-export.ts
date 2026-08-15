@@ -102,6 +102,87 @@ function styleTitle(
   sheet.getRow(row).height = 36;
 }
 
+function addSignatureBlock(
+  sheet: ExcelJS.Worksheet,
+  startRow: number,
+  startCol: number,
+  endCol: number,
+  extracurricularName: string,
+) {
+  const signatureRows = {
+    cityAndDate: startRow,
+    role: startRow + 1,
+    spaceStart: startRow + 2,
+    spaceEnd: startRow + 4,
+    name: startRow + 5,
+    identity: startRow + 6,
+  };
+
+  for (let row = signatureRows.cityAndDate; row <= signatureRows.identity; row++) {
+    sheet.getRow(row).height = row >= signatureRows.spaceStart && row <= signatureRows.spaceEnd
+      ? 20
+      : 18;
+  }
+
+  for (const row of [
+    signatureRows.cityAndDate,
+    signatureRows.role,
+    signatureRows.name,
+    signatureRows.identity,
+  ]) {
+    sheet.mergeCells(row, startCol, row, endCol);
+  }
+
+  const cityAndDateCell = sheet.getCell(signatureRows.cityAndDate, startCol);
+  cityAndDateCell.value = "____________________, ____ ____________________ 20____";
+  cityAndDateCell.font = { name: "Arial", color: { argb: colors.ink }, size: 10 };
+  cityAndDateCell.alignment = { horizontal: "center", vertical: "middle" };
+
+  const roleCell = sheet.getCell(signatureRows.role, startCol);
+  roleCell.value = `Penanggung Jawab Ekstrakurikuler ${extracurricularName}`;
+  roleCell.font = { name: "Arial", bold: true, color: { argb: colors.ink }, size: 10 };
+  roleCell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+
+  const nameCell = sheet.getCell(signatureRows.name, startCol);
+  nameCell.value = "(________________________________________)";
+  nameCell.font = { name: "Arial", color: { argb: colors.ink }, size: 10 };
+  nameCell.alignment = { horizontal: "center", vertical: "middle" };
+
+  const identityCell = sheet.getCell(signatureRows.identity, startCol);
+  identityCell.value = "NIP/NIK: ________________________________";
+  identityCell.font = { name: "Arial", color: { argb: colors.ink }, size: 10 };
+  identityCell.alignment = { horizontal: "center", vertical: "middle" };
+
+  return signatureRows.identity;
+}
+
+function configureA4Print(
+  sheet: ExcelJS.Worksheet,
+  printArea: string,
+  printTitlesRow: string,
+) {
+  sheet.pageSetup.paperSize = 9;
+  sheet.pageSetup.orientation = "landscape";
+  sheet.pageSetup.fitToPage = true;
+  sheet.pageSetup.fitToWidth = 1;
+  sheet.pageSetup.fitToHeight = 0;
+  sheet.pageSetup.pageOrder = "downThenOver";
+  sheet.pageSetup.horizontalCentered = true;
+  sheet.pageSetup.showGridLines = false;
+  sheet.pageSetup.margins = {
+    left: 0.35,
+    right: 0.35,
+    top: 0.45,
+    bottom: 0.45,
+    header: 0.2,
+    footer: 0.25,
+  };
+  sheet.pageSetup.printArea = printArea;
+  sheet.pageSetup.printTitlesRow = printTitlesRow;
+  sheet.headerFooter.oddFooter =
+    "&LEXISEL — SMKN 69 Jakarta&RHalaman &P dari &N";
+}
+
 export async function buildAttendanceExcelBuffer(
   report: AttendanceExportReport,
 ): Promise<Buffer> {
@@ -320,6 +401,21 @@ export async function buildAttendanceExcelBuffer(
   recapSheet.getColumn(totalStartIndex + 3).width = 16; // Total agenda
   recapSheet.getColumn(totalStartIndex + 4).width = 20; // Tingkat kehadiran
   recapSheet.getColumn(totalStartIndex + 5).width = 22; // Keaktifan
+
+  const recapDataEndRow = report.members.length > 0 ? memberEndRow : 6;
+  const recapSignatureStartCol = Math.max(6, Math.ceil(lastColumnIndex * 0.58));
+  const recapPrintEndRow = addSignatureBlock(
+    recapSheet,
+    recapDataEndRow + 3,
+    recapSignatureStartCol,
+    lastColumnIndex,
+    report.name,
+  );
+  configureA4Print(
+    recapSheet,
+    `A1:${lastColumn}${recapPrintEndRow}`,
+    "1:4",
+  );
 
   recapSheet.views = [
     { state: "frozen", xSplit: 5, ySplit: 4, showGridLines: true },
@@ -549,6 +645,16 @@ export async function buildAttendanceExcelBuffer(
     emptyCell.alignment = { vertical: "middle", horizontal: "center", wrapText: true };
   }
 
+  const summaryDataEndRow = report.members.length > 0 ? summaryEndRow : 10;
+  const summaryPrintEndRow = addSignatureBlock(
+    summarySheet,
+    summaryDataEndRow + 3,
+    6,
+    10,
+    report.name,
+  );
+  configureA4Print(summarySheet, `A1:J${summaryPrintEndRow}`, "1:8");
+
   summarySheet.views = [{ state: "frozen", xSplit: 0, ySplit: 8, showGridLines: true }];
 
   // ----------------------------------------------------
@@ -636,6 +742,16 @@ export async function buildAttendanceExcelBuffer(
   excuseSheet.getColumn(4).width = 32;
   excuseSheet.getColumn(5).width = 14;
   excuseSheet.getColumn(6).width = 52;
+
+  const excuseDataEndRow = excuseRows.length > 0 ? 4 + excuseRows.length : 6;
+  const excusePrintEndRow = addSignatureBlock(
+    excuseSheet,
+    excuseDataEndRow + 3,
+    4,
+    6,
+    report.name,
+  );
+  configureA4Print(excuseSheet, `A1:F${excusePrintEndRow}`, "1:4");
 
   excuseSheet.views = [{ state: "frozen", xSplit: 0, ySplit: 4, showGridLines: true }];
 

@@ -3,10 +3,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { type FormEvent, useEffect, useId, useRef, useState } from "react";
 import {
+  type FormEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
+import {
+  createChatbotContext,
+  getChatbotTechnicalErrorReply,
   getEskulChatbotReply,
   type ChatbotReply,
+  type ChatbotTelemetry,
 } from "@/lib/chatbot/eskul-keyword-dataset";
 import styles from "./eskul-chatbot.module.css";
 
@@ -26,8 +36,43 @@ const initialMessage: ChatMessage = {
 const quickQuestions = [
   "Ekskul apa saja?",
   "Saya suka coding",
-  "Jadwal PMR kapan?",
+  "Jadwal dan lokasi PMR?",
 ];
+
+function persistTelemetry(telemetry?: ChatbotTelemetry) {
+  if (!telemetry) return;
+
+  try {
+    if (telemetry.unanswered) {
+      const key = "eksibot:unanswered-queries";
+      const current = JSON.parse(localStorage.getItem(key) ?? "[]") as unknown[];
+      localStorage.setItem(
+        key,
+        JSON.stringify([...current, telemetry.unanswered].slice(-50)),
+      );
+    }
+
+    if (telemetry.slangCandidate) {
+      const key = "eksibot:slang-candidates";
+      const current = JSON.parse(localStorage.getItem(key) ?? "[]") as Array<
+        ChatbotTelemetry["slangCandidate"] & { count: number }
+      >;
+      const existing = current.find(
+        (candidate) => candidate?.phrase === telemetry.slangCandidate?.phrase,
+      );
+      const updated = existing
+        ? current.map((candidate) =>
+            candidate?.phrase === telemetry.slangCandidate?.phrase
+              ? { ...candidate, count: candidate.count + 1 }
+              : candidate,
+          )
+        : [...current, { ...telemetry.slangCandidate, count: 1 }];
+      localStorage.setItem(key, JSON.stringify(updated.slice(-50)));
+    }
+  } catch {
+    // Telemetry lokal bersifat opsional; bot tetap berfungsi jika storage diblokir.
+  }
+}
 
 function TypewriterBotMessage({
   message,
@@ -85,7 +130,8 @@ export function EskulChatbot() {
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
   const [isThinking, setIsThinking] = useState(false);
   const nextId = useRef(2);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const conversationContext = useRef(createChatbotContext());
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const messageEndRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
 
@@ -99,7 +145,7 @@ export function EskulChatbot() {
   useEffect(() => {
     if (!isOpen) return;
     inputRef.current?.focus();
-    const handleEscape = (event: KeyboardEvent) => {
+    const handleEscape = (event: globalThis.KeyboardEvent) => {
       if (event.key === "Escape") setIsOpen(false);
     };
     window.addEventListener("keydown", handleEscape);
@@ -125,11 +171,22 @@ export function EskulChatbot() {
     setIsThinking(true);
 
     setTimeout(() => {
-      const reply = getEskulChatbotReply(question);
+      let result;
+      try {
+        result = getEskulChatbotReply(
+          question,
+          conversationContext.current,
+        );
+      } catch {
+        result = getChatbotTechnicalErrorReply(conversationContext.current);
+      }
+      conversationContext.current = result.context;
+      persistTelemetry(result.telemetry);
       const botMessage: ChatMessage = {
         id: nextId.current++,
         sender: "bot",
-        ...reply,
+        text: result.text,
+        action: result.action,
         animate: true,
       };
       setMessages((current) => [...current, botMessage]);
@@ -140,6 +197,15 @@ export function EskulChatbot() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     sendMessage(input);
+  }
+
+  function handleInputKeyDown(
+    event: ReactKeyboardEvent<HTMLTextAreaElement>,
+  ) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage(input);
+    }
   }
 
   if (pathname.startsWith("/admin")) return null;
@@ -166,7 +232,7 @@ export function EskulChatbot() {
             <div>
               <strong>EksiBot</strong>
               <small>
-                <span aria-hidden="true" /> Dataset keyword aktif
+                <span aria-hidden="true" /> Multi-intent aktif
               </small>
             </div>
             <button
@@ -233,13 +299,15 @@ export function EskulChatbot() {
             <label className="sr-only" htmlFor={`${panelId}-input`}>
               Tulis pertanyaan tentang ekstrakurikuler
             </label>
-            <input
+            <textarea
               autoComplete="off"
               id={`${panelId}-input`}
-              maxLength={180}
+              maxLength={2000}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Contoh: jadwal ITC kapan?"
+              onKeyDown={handleInputKeyDown}
+              placeholder="Tanya beberapa hal sekaligus…"
               ref={inputRef}
+              rows={2}
               value={input}
             />
             <button

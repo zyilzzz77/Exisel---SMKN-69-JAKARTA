@@ -34,6 +34,7 @@ export function TypewriterHeading({
 
   useEffect(() => {
     let animationFrame = 0;
+    let fallbackTimer = 0;
     const markIntroComplete = () => setIsIntroComplete(true);
 
     window.addEventListener("exisel:intro-complete", markIntroComplete);
@@ -42,8 +43,11 @@ export function TypewriterHeading({
       animationFrame = window.requestAnimationFrame(markIntroComplete);
     }
 
+    fallbackTimer = window.setTimeout(markIntroComplete, 3200);
+
     return () => {
       window.cancelAnimationFrame(animationFrame);
+      window.clearTimeout(fallbackTimer);
       window.removeEventListener("exisel:intro-complete", markIntroComplete);
     };
   }, []);

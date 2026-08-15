@@ -47,6 +47,11 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel
+/**
  * Model Extracurricular
  * 
  */
@@ -72,6 +77,11 @@ export type Attendance = Prisma.AttendanceModel
  */
 export type AttendanceSession = Prisma.AttendanceSessionModel
 /**
+ * Model AttendanceIntent
+ * 
+ */
+export type AttendanceIntent = Prisma.AttendanceIntentModel
+/**
  * Model LoginThrottle
  * 
  */
@@ -81,3 +91,23 @@ export type LoginThrottle = Prisma.LoginThrottleModel
  * 
  */
 export type CommunityMessage = Prisma.CommunityMessageModel
+/**
+ * Model Competition
+ * 
+ */
+export type Competition = Prisma.CompetitionModel
+/**
+ * Model Achievement
+ * 
+ */
+export type Achievement = Prisma.AchievementModel
+/**
+ * Model GalleryItem
+ * 
+ */
+export type GalleryItem = Prisma.GalleryItemModel
+/**
+ * Model Session
+ * 
+ */
+export type Session = Prisma.SessionModel

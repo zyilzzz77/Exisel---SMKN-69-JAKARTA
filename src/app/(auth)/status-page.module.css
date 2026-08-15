@@ -1,0 +1,57 @@
+.content { display: grid; gap: 22px; padding: 30px; }
+.statusHeader { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-bottom: 22px; border-bottom: 3px solid var(--ink); }
+.statusNumber { font-family: var(--font-display), sans-serif; font-size: 58px; font-weight: 900; letter-spacing: -.06em; line-height: 1; }
+.statusBadge { padding: 7px 10px; border: 2px solid var(--ink); background: var(--blue-light); box-shadow: 3px 3px 0 var(--ink); font-size: 10px; font-weight: 900; text-transform: uppercase; }
+.content h2 { margin: 0; font-family: var(--font-display), sans-serif; font-size: 31px; letter-spacing: -.04em; }
+.content > p { margin: -12px 0 0; color: var(--muted); font-size: 13px; }
+.steps { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.steps li { display: grid; grid-template-columns: 32px 1fr; align-items: center; gap: 10px; padding: 10px 12px; border: 2px solid var(--ink); background: var(--paper); font-size: 12px; font-weight: 800; }
+.steps span { display: grid; width: 24px; height: 24px; place-items: center; border: 2px solid var(--ink); border-radius: 50%; background: var(--white); font-size: 10px; }
+.reason { display: grid; gap: 5px; padding: 14px; border: 3px solid var(--ink); background: #ffdad6; }
+.reason span { color: #78000a; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+.reason strong { font-size: 13px; white-space: pre-wrap; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.actions form { margin: 0; }
+.primaryButton, .secondaryButton {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  border: 3px solid var(--ink);
+  border-radius: 5px;
+  box-shadow: 4px 4px 0 var(--ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+}
+.primaryButton { background: var(--blue); color: var(--white); }
+.secondaryButton { background: var(--white); color: var(--ink); }
+.primaryButton:hover, .secondaryButton:hover { transform: translate(-1px, -1px); }
+.notice { margin: 0; padding: 12px 14px; border-left: 4px solid var(--orange); background: var(--orange-light); color: var(--muted); font-size: 11px; }
+.liveStatus {
+  display: grid;
+  grid-template-columns: 12px 1fr;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 13px;
+  border: 2px solid var(--ink);
+  background: var(--blue-light);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 800;
+}
+.liveDot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: #35d07f;
+  box-shadow: 0 0 0 3px rgb(53 208 127 / 20%);
+  animation: statusPulse 1.8s ease-in-out infinite;
+}
+.liveDotOffline { background: var(--orange); box-shadow: none; animation: none; }
+@keyframes statusPulse { 50% { box-shadow: 0 0 0 7px rgb(53 208 127 / 0%); } }
+@media (prefers-reduced-motion: reduce) { .liveDot { animation: none; } }
+@media (max-width: 560px) { .content { padding: 22px 18px; } .statusNumber { font-size: 48px; } .actions { display: grid; } .actions > *, .actions form button { width: 100%; } }

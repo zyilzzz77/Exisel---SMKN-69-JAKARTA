@@ -21,14 +21,26 @@ const adminNavigationItems = [
     label: "Laporan",
   },
   {
-    id: "catalog",
-    href: "/ekstrakurikuler",
-    label: "Katalog ekskul",
+    id: "students",
+    href: "/admin/students",
+    label: "Verifikasi siswa",
+  },
+  {
+    id: "content",
+    href: "/admin/lomba",
+    label: "Lomba & profil",
   },
 ] as const;
 
+export type AdminNavigationItem =
+  | "attendance"
+  | "community"
+  | "reports"
+  | "students"
+  | "content";
+
 type AdminNavigationProps = {
-  activeItem?: "attendance" | "community" | "reports" | "catalog";
+  activeItem?: AdminNavigationItem;
   className?: string;
 };
 

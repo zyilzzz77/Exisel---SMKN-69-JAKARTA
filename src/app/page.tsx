@@ -3,6 +3,8 @@ import Link from "next/link";
 import { LandingNavigation } from "@/components/landing-navigation";
 import { ScrollRevealController } from "@/components/scroll-reveal-controller";
 import { TypewriterHeading } from "@/components/typewriter-heading";
+import { getAuthenticatedSessionUser } from "@/lib/auth/authorization";
+import { getStudentStatusDestination } from "@/lib/auth/student-status";
 
 const extracurriculars = [
   {
@@ -95,7 +97,21 @@ const steps = [
 const softCardMotion =
   "will-change-transform transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 focus-within:-translate-y-1 hover:shadow-[8px_8px_0_var(--ink)] focus-within:shadow-[8px_8px_0_var(--ink)] active:translate-x-1 active:translate-y-1 active:shadow-none active:duration-100";
 
-export default function Home() {
+export default async function Home() {
+  const user = await getAuthenticatedSessionUser();
+  const dashboardHref = user
+    ? user.role === "ADMIN"
+      ? "/admin/dashboard"
+      : user.isActive
+        ? getStudentStatusDestination(user.status)
+        : "/suspended"
+    : "/login";
+  const userLabel = user
+    ? user.role === "ADMIN"
+      ? "Dashboard Admin"
+      : "Dashboard Siswa"
+    : null;
+
   return (
     <main className="landing-page">
       <ScrollRevealController />
@@ -132,9 +148,15 @@ export default function Home() {
 
           <LandingNavigation />
 
-          <Link className="button button-small button-light" href="/login">
-            Masuk <span aria-hidden="true">↗</span>
-          </Link>
+          {user ? (
+            <Link className="button button-small button-primary" href={dashboardHref}>
+              {userLabel} <span aria-hidden="true">↗</span>
+            </Link>
+          ) : (
+            <Link className="button button-small button-light" href="/login">
+              Masuk <span aria-hidden="true">↗</span>
+            </Link>
+          )}
         </div>
       </header>
 
@@ -159,9 +181,15 @@ export default function Home() {
               <a className="button button-primary" href="#pilihan">
                 Jelajahi 8 ekskul <span aria-hidden="true">↓</span>
               </a>
-              <Link className="text-link" href="/login">
-                Sudah punya akun? Masuk <span aria-hidden="true">→</span>
-              </Link>
+              {user ? (
+                <Link className="text-link" href={dashboardHref}>
+                  Buka {userLabel} <span aria-hidden="true">→</span>
+                </Link>
+              ) : (
+                <Link className="text-link" href="/login">
+                  Sudah punya akun? Masuk <span aria-hidden="true">→</span>
+                </Link>
+              )}
             </div>
 
             <dl className="hero-facts" aria-label="Ringkasan EXISEL">
@@ -433,8 +461,8 @@ export default function Home() {
                 </div>
 
                 <div className="feature-actions">
-                  <Link className="button button-orange" href="/login">
-                    Mulai pilih ekskul <span aria-hidden="true">→</span>
+                  <Link className="button button-orange" href={user ? dashboardHref : "/login"}>
+                    {user ? "Buka Dashboard" : "Mulai pilih ekskul"} <span aria-hidden="true">→</span>
                   </Link>
                   <span>8 pilihan kegiatan untuk berkembang bareng.</span>
                 </div>
@@ -455,8 +483,8 @@ export default function Home() {
               baru di luar kelas.
             </p>
           </div>
-          <Link className="button button-primary button-large" href="/login">
-            Daftar sekarang <span aria-hidden="true">→</span>
+          <Link className="button button-primary button-large" href={user ? dashboardHref : "/login"}>
+            {user ? "Buka Dashboard" : "Daftar sekarang"} <span aria-hidden="true">→</span>
           </Link>
         </section>
       </div>
@@ -480,7 +508,11 @@ export default function Home() {
           <div className="footer-links">
             <a href="#pilihan">Pilihan ekskul</a>
             <a href="#background">Cara daftar</a>
-            <Link href="/login">Masuk siswa</Link>
+            {user ? (
+              <Link href={dashboardHref}>{userLabel}</Link>
+            ) : (
+              <Link href="/login">Masuk siswa</Link>
+            )}
           </div>
           <p className="footer-note">
             Sistem Informasi Ekstrakurikuler Siswa

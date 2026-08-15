@@ -1,10 +1,16 @@
+.adminPage {
+  min-height: 100vh;
+  overflow-x: clip;
+  background: var(--paper);
+}
+
 .page {
   display: flex;
   flex-direction: column;
   gap: 28px;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 24px 32px 48px;
+  width: min(100% - 80px, 1320px);
+  margin-inline: auto;
+  padding-block: 52px 80px;
   font-family: var(--font-body), sans-serif;
   color: var(--ink);
 }
@@ -21,15 +27,27 @@
 .headerTitle {
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: 28px;
+  font-size: clamp(38px, 4vw, 58px);
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.055em;
+  line-height: 0.95;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--blue);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
 .headerSub {
-  margin: 4px 0 0;
+  max-width: 650px;
+  margin: 12px 0 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 11px;
+  line-height: 1.55;
 }
 
 .publicLink {
@@ -344,7 +362,45 @@
 }
 
 @media (max-width: 900px) {
+  .page {
+    width: min(100% - 40px, 760px);
+    padding-block: 40px 64px;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .page {
+    width: min(100% - 28px, 520px);
+    gap: 22px;
+    padding-block: 32px 52px;
+  }
+
+  .headerTitle {
+    font-size: clamp(34px, 11vw, 48px);
+  }
+
+  .publicLink {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .card {
+    padding: 18px;
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .msgItemMeta,
+  .modalActions {
+    align-items: flex-start;
+    flex-wrap: wrap;
   }
 }

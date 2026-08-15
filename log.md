@@ -7513,5 +7513,257 @@ curl -fsS https://exisel.web.id/login >/dev/null && echo "HTTPS LOGIN OK"
 
 ---
 
+## EXISEL-20260812-028 — Penguatan Otorisasi QR dan Patch Dependency
+
+### Identity
+
+- **Timestamp:** 2026-08-12 13:24:18 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **Platform:** Codex
+- **Role:** Application Security Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “fixed bug keamana yang kamu temuin”
+
+### TLDR platform Codex
+
+Menutup celah otorisasi sesi admin lama pada fitur QR kehadiran dan memperbarui dependency transitif yang memiliki advisory keamanan tingkat moderat.
+
+### Changes
+
+- Menambahkan primitive otorisasi server `getActiveSessionUser` yang memverifikasi signature sesi, role yang dibutuhkan, keberadaan akun, dan status aktif langsung ke PostgreSQL.
+- Mewajibkan verifikasi database tersebut saat admin membuat sesi QR, menyelesaikan sesi QR, dan mengambil payload QR dinamis.
+- Sesi JWT lama milik akun admin yang sudah dinonaktifkan atau berubah role kini langsung ditolak pada ketiga operasi sensitif tersebut, tanpa menunggu cookie delapan jam kedaluwarsa.
+- Mengunci dependency transitif `uuid` dari `8.3.2` ke versi patched `11.1.1` melalui `pnpm.overrides` dan memperbarui lockfile.
+
+### Verification
+
+- `pnpm audit --prod`: passed, tidak ada known vulnerability.
+- `pnpm typecheck`: passed, 0 error.
+- `pnpm lint`: passed, 0 error; terdapat 3 warning lama yang tidak terkait patch.
+- `pnpm build`: passed pada Next.js 16.3.0; 15 halaman statis berhasil dibuat dan seluruh dynamic route terdaftar.
+- `git diff --check`: passed.
+
+### Security note
+
+- Patch tidak mengubah schema, migration, isi database, akun, maupun credential production.
+- Tidak ada secret, token QR, cookie sesi, atau data siswa yang ditambahkan ke repository.
+- Pemeriksaan role dari JWT tetap digunakan sebagai penolakan awal, tetapi izin sensitif sekarang selalu dikonfirmasi ulang terhadap status akun terkini di database.
+
+---
+
+## EXISEL-20260813-029 — Eksekusi Rencana EksiBot Multi-Intent
+
+### Identity
+
+- **Timestamp:** 2026-08-13 08:51:37 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **Platform:** Codex
+- **Role:** Conversational Systems Engineer dan QA Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “excuted plans plans-exibot.md”
+>
+> “edit lagii misal ada yang bilang halo,hola, atau ada yang nanya nama_eskul dimana / kapan / cara daftar itu dikasih tau jawaban nyaa”
+
+### TLDR platform Codex
+
+Mengganti pencarian keyword satu-intent EksiBot dengan pipeline percakapan deterministik yang memahami pesan panjang, banyak pertanyaan, slang, typo, jawaban parsial, perbandingan, serta follow-up; sekaligus memastikan sapaan `halo`/`hola` dan pertanyaan lokasi, jadwal, atau cara daftar untuk seluruh ekskul memperoleh jawaban dari dataset.
+
+### Changes
+
+- Menambahkan normalisasi typo, singkatan, bahasa gaul, karakter berulang, serta bentuk `dimana` menjadi `di mana` melalui kamus terkurasi.
+- Menambahkan alias resmi untuk delapan ekskul: PMR, English Club, Nihon, Basket, ITC, Paskibra, Pramuka, dan Futsal.
+- Menambahkan deteksi multi-intent untuk daftar ekskul, detail, jadwal, lokasi, pendaftaran, kontak/pembina, biaya, syarat, kapasitas, rekomendasi, dan perbandingan.
+- Menambahkan dekomposisi serta deduplikasi kebutuhan agar satu field yang tidak tersedia tidak menggagalkan seluruh jawaban.
+- Menambahkan jawaban parsial yang secara spesifik menyebut field yang belum ada tanpa mengarang fakta.
+- Menambahkan perbandingan bentrok jadwal berdasarkan hari dan waktu yang terverifikasi di dataset.
+- Menambahkan memori sesi untuk follow-up seperti `tempatnya?`, serta klarifikasi singkat saat dua entitas terakhir sama-sama mungkin.
+- Menambahkan respons small-talk untuk sapaan termasuk `halo` dan `hola`, ucapan terima kasih, reaksi positif, acknowledgment, tawa, serta campuran small-talk dan pertanyaan.
+- Mengubah input EksiBot menjadi textarea maksimal 2.000 karakter; Enter mengirim dan Shift+Enter membuat baris baru.
+- Menambahkan queue telemetry anonim berbasis local storage untuk query tidak terjawab dan kandidat slang; isi pesan mentah tidak disimpan.
+- Menambahkan fallback khusus error teknis yang berbeda dari missing knowledge dan pemeriksa kontradiksi jadwal pada sumber ganda.
+- Menambahkan command `pnpm test:chatbot` beserta 20 regression test otomatis.
+
+### Verification
+
+- `pnpm test:chatbot`: passed, 20/20 test.
+- Test mencakup pesan sederhana, typo, lima kebutuhan sekaligus, pesan lebih dari 300 karakter dan lima kalimat, slang, `halo`, `hola`, mixed social + pertanyaan, follow-up, jawaban parsial, unknown entity, rekomendasi, deduplikasi, perbandingan, kontradiksi sumber, error teknis, serta out-of-scope.
+- Test tabel memastikan kedelapan nama ekskul menjawab pola `di mana`, `kapan`, dan `cara daftar`.
+- `pnpm typecheck`: passed, 0 error.
+- `pnpm exec eslint src`: passed, 0 error; terdapat 3 warning lama di luar perubahan EksiBot.
+- `pnpm build`: passed pada Next.js 16.3.0; 15 halaman statis berhasil dibuat dan seluruh dynamic route terdaftar.
+- `pnpm audit --prod`: passed, tidak ada known vulnerability.
+- QA browser pada `/login`: pertanyaan multi-paragraf, respons multi-intent, follow-up, `hola`, dan `PMR dimana?` berhasil.
+- QA viewport `320 × 700`: panel berada di dalam viewport tanpa horizontal overflow.
+- Browser console: tidak ada error atau warning.
+- `git diff --check`: passed.
+- `pnpm lint` tingkat root terhalang oleh sintaks Photoshop ExtendScript pada file untracked `tools/build_cover.jsx`; file tersebut dan seluruh `output/`/`tools/` yang tidak terkait tidak diubah.
+
+### Security note
+
+- EksiBot tetap deterministik dan tidak mengirim pesan pengguna ke API AI eksternal.
+- Fakta sekolah hanya berasal dari dataset terkurasi; field kontak, pembina, biaya, atau syarat yang kosong tidak diisi dengan tebakan.
+- Telemetry lokal dibatasi maksimal 50 item per queue dan tidak menyimpan teks pertanyaan mentah, credential, atau data siswa.
+- Implementasi tidak mengubah schema, migration, isi database, akun, maupun konfigurasi production.
+
+---
+
+## EXISEL-20260813-030 — Lomba, Prestasi, dan Galeri Ekskul
+
+### Identity
+
+- **Timestamp:** 2026-08-13 09:33:20 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **Platform:** Codex
+- **Role:** Full-Stack Product Engineer dan UI/UX Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed
+
+### Human Prompt
+
+> “dipages dashboard navbar yang pilihan eskul ganti jadii lomba jadi nanti direct kepages /lomba nanti user bisa lihat info lomba apa aja tiap eskul dan nanti yang update admin/pembina eskul nyaa dipages admin sama mau nambahin di pages /eskul/nama_eskul yang udh ada tambahin prestasi ama galery”
+>
+> “dropdownnyaa jangan gede gede bangett dimbile gw test malah gitu dan didekstop juga blm rapih tolong difixed no mistakes”
+
+### TLDR platform Codex
+
+Menambahkan pusat informasi lomba yang dapat difilter per ekskul, panel admin/pembina untuk mengelola lomba, prestasi, dan galeri, serta menyempurnakan filter menjadi dropdown custom yang ringkas dan responsif.
+
+### Changes
+
+- Mengganti menu navbar siswa `Pilihan ekskul` menjadi `Lomba` yang menuju `/lomba`.
+- Menambahkan halaman `/lomba` untuk melihat lomba mendatang dan arsip lomba selesai, lengkap dengan filter per ekskul, tanggal, lokasi, tingkat, batas daftar, penyelenggara, dan tautan pendaftaran.
+- Mengganti filter tombol berjajar dan native select menjadi dropdown custom: font pilihan 13–14 px, tinggi item 36–38 px, lebar maksimum 300–340 px, panel dapat di-scroll, dan tidak keluar dari viewport mobile.
+- Menambahkan halaman terproteksi `/admin/lomba` bagi role `ADMIN` yang mewakili admin/guru pembina untuk membuat, mengubah, menerbitkan sebagai draf, dan menghapus lomba, prestasi, serta galeri.
+- Menambahkan bagian Prestasi dan Galeri dinamis pada `/eskul/[nama_eskul]`, termasuk empty state saat pembina belum menerbitkan konten.
+- Menambahkan validasi server menggunakan Zod, verifikasi akun admin aktif terhadap database, pembatasan mutasi berdasarkan ID ekskul, validasi URL HTTPS/path publik, dan revalidasi halaman terkait.
+- Menambahkan model Prisma `Competition`, `Achievement`, dan `GalleryItem`, migration SQL production, serta Prisma Client terbaru.
+
+### Verification
+
+- Migration lokal `202608130001_add_competitions_achievements_gallery`: berhasil diterapkan.
+- `prisma validate`: passed.
+- `tsc --noEmit`: passed, 0 error.
+- `eslint src`: passed, 0 error; hanya 3 warning lama yang tidak terkait perubahan ini.
+- `next build`: passed pada Next.js 16.3.0; route `/lomba` dan `/admin/lomba` terdaftar.
+- `pnpm audit --prod`: tidak ditemukan known vulnerability.
+- Browser QA desktop `/lomba`: navbar berisi menu Lomba, dropdown ringkas, tidak ada horizontal overflow, dan tidak ada error console.
+- Browser QA mobile `390 × 844`: dropdown selebar 300 px, tinggi maksimal 280 px, teks item 13 px, tinggi item 36 px, dan tidak ada horizontal overflow.
+- Browser QA `/eskul/basket`: bagian Prestasi dan Galeri tampil dengan empty state yang benar serta tanpa error console.
+- Akses anonim ke `/admin/lomba` dialihkan ke `/admin/login`.
+
+### Security note
+
+- Semua aksi tulis selalu memverifikasi signature sesi, role `ADMIN`, keberadaan akun, dan status aktif langsung terhadap PostgreSQL.
+- ID, tanggal, panjang teks, URL, dan kepemilikan konten terhadap ekskul divalidasi di sisi server; field tersembunyi dari browser tidak dipercaya sebagai otorisasi.
+- Migration hanya menambah tabel baru dan tidak menghapus atau mengubah data siswa, akun dummy, kehadiran, maupun volume database yang sudah ada.
+
+---
+
+## EXISEL-20260813-031 — Google Login dan Verifikasi Akses Siswa
+
+### Identity
+
+- **Timestamp:** 2026-08-13 12:28:49 WIB (`+07:00`), terverifikasi dari sistem
+- **Model used:** Codex (runtime model identifier tidak diekspos)
+- **Platform:** Codex
+- **Role:** Full-Stack Authentication Engineer, Application Security Engineer, dan QA Engineer
+- **Requester:** USER / pemilik workspace
+- **Execution status:** Completed; aktivasi OAuth production memerlukan credential Google milik pemilik project
+
+### Human Prompt
+
+> “excuted file plans-google-login-exisel.md”
+
+### TLDR platform Codex
+
+Mengimplementasikan Google Login siswa dengan Authorization Code Flow, PKCE,
+nonce, dan verifikasi ID token; menambahkan alur pengisian Nama/NIS/Kelas,
+persetujuan admin, penolakan beserta alasan, pengiriman ulang, penangguhan,
+server-side authorization, serta audit log tanpa memutus login akun lama.
+
+### Changes
+
+- Menambahkan identitas Google (`googleId`, avatar), status akun siswa
+  `INCOMPLETE`, `PENDING`, `APPROVED`, `REJECTED`, dan `SUSPENDED`, relasi admin
+  approver/rejecter, serta model `AuditLog` melalui migration additive.
+- Memberi default `APPROVED` pada kolom status baru agar seluruh akun lama tetap
+  dapat login setelah migration diterapkan.
+- Menambahkan route `/api/auth/google/start` dan `/api/auth/google/callback`
+  dengan state, nonce, PKCE S256, pertukaran authorization code di sisi server,
+  verifikasi signature/issuer/audience/expiry ID token Google, pemeriksaan
+  `email_verified`, serta deteksi konflik account linking.
+- Menambahkan tombol Google pada `/login` tanpa menghapus login email/password
+  yang sudah digunakan siswa dan admin.
+- Menambahkan `/register/student`, `/pending`, `/rejected`, dan `/suspended`
+  lengkap dengan validasi nama, NIS tepat tujuh angka, pilihan kelas resmi,
+  alasan penolakan, refresh status, dan pengiriman ulang.
+- Menambahkan authorization helper terpusat yang selalu mencocokkan session
+  dengan role, status, dan `isActive` terkini di PostgreSQL sebelum membuka
+  dashboard, pendaftaran ekskul, kehadiran, community, atau mutasi sensitif.
+- Menambahkan `/api/me` dan `/api/student/register` dengan response private
+  no-store, same-origin check, state validation, dan payload allowlist yang tidak
+  menerima role/status dari browser.
+- Menambahkan `/admin/students` dengan pencarian, filter kelas/status, statistik,
+  approve, reject dengan alasan wajib, suspend, unsuspend, konfirmasi tindakan,
+  dan riwayat audit terbaru.
+- Mencatat transisi admin secara transaksional serta memakai conditional update
+  agar double approve/reject atau status race tidak dapat menimpa state terbaru.
+- Memperbaiki navigasi admin mobile yang ditemukan saat QA agar menu hamburger
+  menyembunyikan navigasi desktop dan membuka grid dua kolom yang tidak terpotong.
+- Menambahkan environment Google untuk local Docker dan production Compose,
+  contoh konfigurasi, `GOOGLE_LOGIN.md`, panduan deployment, serta enam regression
+  test untuk state machine dan validasi registrasi.
+
+### Verification
+
+- Migration `202608130002_add_google_student_verification`: berhasil diterapkan
+  pada PostgreSQL lokal; `prisma migrate status` menyatakan 13 migration dan
+  database schema up to date.
+- `prisma validate`: passed.
+- `test:auth`: passed, 6/6 test; mencakup redirect seluruh status, allowed/denied
+  transitions, normalisasi nama, validasi NIS, validasi kelas, dan pembuangan
+  field role/status yang disisipkan client.
+- Uji constraint PostgreSQL: NIS duplikat ditolak dengan kode `23505`; transaksi
+  di-rollback dan tidak meninggalkan data QA.
+- `tsc --noEmit`: passed, 0 error.
+- `eslint src`: passed, 0 error; tersisa dua warning lama pada generator laporan
+  Excel yang tidak berkaitan dengan autentikasi.
+- `next build`: passed pada Next.js 16.3.0; 22 halaman statis dihasilkan dan route
+  Google callback/start, registrasi, status siswa, API, serta admin students
+  terdaftar sebagai dynamic routes.
+- `pnpm audit --prod`: passed, tidak ada known vulnerability.
+- Browser QA: akun incomplete diarahkan ke registrasi; submit menjadi pending;
+  pending tidak dapat memaksa dashboard/kehadiran; approve membuka dashboard;
+  suspend menutup akses; reject menampilkan alasan; siswa rejected dapat
+  mengirim ulang; anonymous private routes dialihkan ke login.
+- Browser QA mobile `390 × 844`: login tidak overflow dan navigasi admin hasil
+  perbaikan tampil melalui hamburger dalam grid dua kolom.
+- Route Google tanpa credential diuji menghasilkan pesan konfigurasi yang aman,
+  bukan crash. End-to-end terhadap Google asli menunggu Client ID/Secret project.
+- Tiga akun dan tiga audit log QA sementara telah dihapus; jumlah akun QA yang
+  tersisa setelah cleanup adalah nol.
+- `git diff --check`: passed setelah normalisasi whitespace generated client.
+
+### Security note
+
+- Client secret Google hanya dibaca dari environment server dan tidak pernah
+  dikirim ke browser, ditulis ke log, atau dimasukkan ke repository.
+- Cookie OAuth bersifat `HttpOnly`, `SameSite=Lax`, berumur 10 menit, dan
+  `Secure` di production; cookie sesi aplikasi tetap `HttpOnly` dan `Secure`.
+- Google Login hanya membuktikan identitas. Akses siswa selalu membutuhkan status
+  `APPROVED` yang hanya dapat diberikan admin aktif melalui aksi server.
+- Migration bersifat additive dan tidak menghapus akun, password hash, kehadiran,
+  enrollment, maupun data production yang sudah ada.
+
+---
+
 _End of log. Future changes must append a new execution entry with Identity,
 Human Prompt, TLDR platform Codex, Changes, Verification, and Security note._

@@ -12,6 +12,21 @@ enum Role {
   ADMIN
 }
 
+enum UserStatus {
+  INCOMPLETE
+  PENDING
+  APPROVED
+  REJECTED
+  SUSPENDED
+}
+
+enum AuditAction {
+  STUDENT_APPROVED
+  STUDENT_REJECTED
+  STUDENT_SUSPENDED
+  STUDENT_UNSUSPENDED
+}
+
 enum DayOfWeek {
   MONDAY
   TUESDAY
@@ -35,40 +50,77 @@ enum AttendanceStatus {
 }
 
 model User {
-  id                 String       @id @default(uuid()) @db.Uuid
-  email              String       @unique @db.VarChar(254)
-  nis                String?      @unique @db.VarChar(20)
-  name               String       @db.VarChar(150)
-  passwordHash       String       @map("password_hash") @db.Text
-  role               Role         @default(STUDENT)
-  className          String?      @map("class_name") @db.VarChar(50)
-  isActive           Boolean      @default(true) @map("is_active")
-  mustChangePassword Boolean      @default(true) @map("must_change_password")
-  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt          DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
-  enrollments        Enrollment[]
-  attendances        Attendance[]
+  id                  String              @id @default(uuid()) @db.Uuid
+  email               String              @unique @db.VarChar(254)
+  googleId            String?             @unique @map("google_id") @db.VarChar(255)
+  avatarUrl           String?             @map("avatar_url") @db.VarChar(2048)
+  nis                 String?             @unique @db.VarChar(20)
+  name                String              @db.VarChar(150)
+  passwordHash        String              @map("password_hash") @db.Text
+  role                Role                @default(STUDENT)
+  status              UserStatus          @default(APPROVED)
+  className           String?             @map("class_name") @db.VarChar(50)
+  isActive            Boolean             @default(true) @map("is_active")
+  mustChangePassword  Boolean             @default(true) @map("must_change_password")
+  rejectionReason     String?             @map("rejection_reason") @db.VarChar(1000)
+  approvedAt          DateTime?           @map("approved_at") @db.Timestamptz(3)
+  approvedById        String?             @map("approved_by_id") @db.Uuid
+  rejectedAt          DateTime?           @map("rejected_at") @db.Timestamptz(3)
+  rejectedById        String?             @map("rejected_by_id") @db.Uuid
+  createdAt           DateTime            @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt           DateTime            @updatedAt @map("updated_at") @db.Timestamptz(3)
+  approvedBy          User?               @relation("ApprovedStudents", fields: [approvedById], references: [id], onDelete: SetNull)
+  approvedStudents    User[]              @relation("ApprovedStudents")
+  rejectedBy          User?               @relation("RejectedStudents", fields: [rejectedById], references: [id], onDelete: SetNull)
+  rejectedStudents    User[]              @relation("RejectedStudents")
+  adminAuditLogs      AuditLog[]          @relation("AdminAuditLogs")
+  targetAuditLogs     AuditLog[]          @relation("TargetAuditLogs")
+  enrollments         Enrollment[]
+  attendances         Attendance[]
   createdSessions     AttendanceSession[] @relation("CreatedAttendanceSessions")
   communityMessages   CommunityMessage[]
+  createdCompetitions Competition[]       @relation("CreatedCompetitions")
+  createdAchievements Achievement[]       @relation("CreatedAchievements")
+  createdGalleryItems GalleryItem[]       @relation("CreatedGalleryItems")
+  sessions            Session[]
 
   @@index([name])
   @@index([className])
+  @@index([role, status])
   @@map("users")
 }
 
+model AuditLog {
+  id           String      @id @default(uuid()) @db.Uuid
+  adminId      String      @map("admin_id") @db.Uuid
+  targetUserId String      @map("target_user_id") @db.Uuid
+  action       AuditAction
+  metadata     Json?
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+  admin        User        @relation("AdminAuditLogs", fields: [adminId], references: [id], onDelete: Restrict)
+  targetUser   User        @relation("TargetAuditLogs", fields: [targetUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminId, createdAt])
+  @@index([targetUserId, createdAt])
+  @@map("audit_logs")
+}
+
 model Extracurricular {
-  id          String       @id @default(uuid()) @db.Uuid
-  name        String       @unique @db.VarChar(120)
-  description String?      @db.Text
-  capacity    Int
-  isActive    Boolean      @default(true) @map("is_active")
-  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
-  schedules   Schedule[]
-  enrollments Enrollment[]
-  attendances Attendance[]
+  id                 String              @id @default(uuid()) @db.Uuid
+  name               String              @unique @db.VarChar(120)
+  description        String?             @db.Text
+  capacity           Int
+  isActive           Boolean             @default(true) @map("is_active")
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt          DateTime            @updatedAt @map("updated_at") @db.Timestamptz(3)
+  schedules          Schedule[]
+  enrollments        Enrollment[]
+  attendances        Attendance[]
   attendanceSessions AttendanceSession[]
-  communityMessages CommunityMessage[]
+  communityMessages  CommunityMessage[]
+  competitions       Competition[]
+  achievements       Achievement[]
+  galleryItems       GalleryItem[]
 
   @@map("extracurriculars")
 }
@@ -102,37 +154,60 @@ model Enrollment {
 }
 
 model Attendance {
-  id                String           @id @default(uuid()) @db.Uuid
-  userId            String           @map("user_id") @db.Uuid
-  extracurricularId String           @map("extracurricular_id") @db.Uuid
-  attendanceDate    DateTime         @map("attendance_date") @db.Date
-  status            AttendanceStatus
-  reason            String?          @db.VarChar(500)
-  submittedAt       DateTime         @default(now()) @map("submitted_at") @db.Timestamptz(3)
-  updatedAt         DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
-  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  extracurricular   Extracurricular  @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
+  id                  String              @id @default(uuid()) @db.Uuid
+  userId              String              @map("user_id") @db.Uuid
+  extracurricularId   String              @map("extracurricular_id") @db.Uuid
+  attendanceDate      DateTime            @map("attendance_date") @db.Date
+  status              AttendanceStatus
+  reason              String?             @db.VarChar(500)
+  attendanceMethod    String              @default("MANUAL") @map("attendance_method") @db.VarChar(30)
+  attendanceSessionId String?             @map("attendance_session_id") @db.Uuid
+  checkedInAt         DateTime?           @map("checked_in_at") @db.Timestamptz(3)
+  ipAddress           String?             @map("ip_address") @db.VarChar(45)
+  userAgent           String?             @map("user_agent") @db.Text
+  submittedAt         DateTime            @default(now()) @map("submitted_at") @db.Timestamptz(3)
+  updatedAt           DateTime            @updatedAt @map("updated_at") @db.Timestamptz(3)
+  user                User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  extracurricular     Extracurricular     @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
+  attendanceSession   AttendanceSession?  @relation(fields: [attendanceSessionId], references: [id], onDelete: SetNull)
 
   @@unique([userId, extracurricularId, attendanceDate])
   @@index([attendanceDate, status])
   @@index([extracurricularId, attendanceDate])
+  @@index([attendanceSessionId])
   @@map("attendances")
 }
 
 model AttendanceSession {
-  id                String          @id @default(uuid()) @db.Uuid
-  extracurricularId String          @map("extracurricular_id") @db.Uuid
-  createdById       String          @map("created_by_id") @db.Uuid
-  sessionDate       DateTime        @map("session_date") @db.Date
-  code              String          @db.VarChar(12)
-  expiresAt         DateTime        @map("expires_at") @db.Timestamptz(3)
-  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
-  extracurricular   Extracurricular @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
-  createdBy         User            @relation("CreatedAttendanceSessions", fields: [createdById], references: [id], onDelete: Restrict)
+  id                String               @id @default(uuid()) @db.Uuid
+  extracurricularId String               @map("extracurricular_id") @db.Uuid
+  createdById       String               @map("created_by_id") @db.Uuid
+  sessionDate       DateTime             @map("session_date") @db.Date
+  code              String               @db.VarChar(12)
+  expiresAt         DateTime             @map("expires_at") @db.Timestamptz(3)
+  createdAt         DateTime             @default(now()) @map("created_at") @db.Timestamptz(3)
+  extracurricular   Extracurricular      @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
+  createdBy         User                 @relation("CreatedAttendanceSessions", fields: [createdById], references: [id], onDelete: Restrict)
+  attendances       Attendance[]
 
   @@unique([extracurricularId, sessionDate])
   @@index([code, expiresAt])
   @@map("attendance_sessions")
+}
+
+model AttendanceIntent {
+  id                  String    @id @default(uuid()) @db.Uuid
+  intentTokenHash     String    @unique @map("intent_token_hash") @db.VarChar(255)
+  attendanceSessionId String    @map("attendance_session_id") @db.Uuid
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  expiresAt           DateTime  @map("expires_at") @db.Timestamptz(3)
+  consumedAt          DateTime? @map("consumed_at") @db.Timestamptz(3)
+  ipAddress           String?   @map("ip_address") @db.VarChar(45)
+  userAgent           String?   @map("user_agent") @db.Text
+
+  @@index([attendanceSessionId])
+  @@index([expiresAt])
+  @@map("attendance_intents")
 }
 
 model LoginThrottle {
@@ -159,5 +234,90 @@ model CommunityMessage {
 
   @@index([extracurricularId, createdAt])
   @@map("community_messages")
+}
+
+model Competition {
+  id                   String          @id @default(uuid()) @db.Uuid
+  extracurricularId    String          @map("extracurricular_id") @db.Uuid
+  createdById          String          @map("created_by_id") @db.Uuid
+  title                String          @db.VarChar(180)
+  organizer            String?         @db.VarChar(180)
+  description          String          @db.Text
+  eventDate            DateTime        @map("event_date") @db.Date
+  registrationDeadline DateTime?       @map("registration_deadline") @db.Date
+  location             String?         @db.VarChar(180)
+  level                String?         @db.VarChar(80)
+  registrationUrl      String?         @map("registration_url") @db.VarChar(2048)
+  isPublished          Boolean         @default(true) @map("is_published")
+  createdAt            DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+  extracurricular      Extracurricular @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
+  createdBy            User            @relation("CreatedCompetitions", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([extracurricularId, eventDate])
+  @@index([isPublished, eventDate])
+  @@map("competitions")
+}
+
+model Achievement {
+  id                String          @id @default(uuid()) @db.Uuid
+  extracurricularId String          @map("extracurricular_id") @db.Uuid
+  createdById       String          @map("created_by_id") @db.Uuid
+  title             String          @db.VarChar(180)
+  competitionName   String?         @map("competition_name") @db.VarChar(180)
+  rank              String          @db.VarChar(100)
+  level             String?         @db.VarChar(80)
+  achievedAt        DateTime        @map("achieved_at") @db.Date
+  description       String?         @db.Text
+  isPublished       Boolean         @default(true) @map("is_published")
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+  extracurricular   Extracurricular @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
+  createdBy         User            @relation("CreatedAchievements", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([extracurricularId, achievedAt])
+  @@index([isPublished, achievedAt])
+  @@map("achievements")
+}
+
+model GalleryItem {
+  id                String          @id @default(uuid()) @db.Uuid
+  extracurricularId String          @map("extracurricular_id") @db.Uuid
+  createdById       String          @map("created_by_id") @db.Uuid
+  imageUrl          String          @map("image_url") @db.VarChar(2048)
+  altText           String          @map("alt_text") @db.VarChar(240)
+  caption           String?         @db.VarChar(500)
+  takenAt           DateTime?       @map("taken_at") @db.Date
+  position          Int             @default(0)
+  isPublished       Boolean         @default(true) @map("is_published")
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+  extracurricular   Extracurricular @relation(fields: [extracurricularId], references: [id], onDelete: Cascade)
+  createdBy         User            @relation("CreatedGalleryItems", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([extracurricularId, position])
+  @@index([isPublished, createdAt])
+  @@map("gallery_items")
+}
+
+model Session {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  tokenHash  String    @unique @map("token_hash") @db.VarChar(255)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  expiresAt  DateTime  @map("expires_at") @db.Timestamptz(3)
+  lastSeenAt DateTime? @map("last_seen_at") @db.Timestamptz(3)
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz(3)
+  ipAddress  String?   @map("ip_address") @db.VarChar(45)
+  userAgent  String?   @map("user_agent") @db.Text
+  deviceName String?   @map("device_name") @db.VarChar(255)
+  createdBy  String?   @default("login") @map("created_by") @db.VarChar(50)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@index([expiresAt])
+  @@index([userId, revokedAt, expiresAt])
+  @@map("sessions")
 }
 

@@ -6,8 +6,7 @@
   inset: 0;
   place-items: center;
   overflow: hidden;
-  padding: max(24px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
-    max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  padding: max(24px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
   background:
     radial-gradient(circle at 50% 46%, rgba(36, 87, 245, 0.12), transparent 35%),
     #fbfaf6;
@@ -19,6 +18,13 @@
 :global(html.exisel-intro-locked),
 :global(html.exisel-intro-locked body) {
   overflow: hidden;
+  animation: introUnlock 1ms 3400ms forwards;
+}
+
+@keyframes introUnlock {
+  to {
+    overflow: visible;
+  }
 }
 
 .glow {
@@ -215,6 +221,7 @@
 }
 
 @keyframes overlayExit {
+
   0%,
   82% {
     opacity: 1;
@@ -282,7 +289,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .overlay,
+
   .glow,
   .logoFrame,
   .divider,
@@ -290,5 +297,9 @@
   .progress,
   .progress::after {
     animation: none;
+  }
+
+  .overlay {
+    animation: overlayExit 1ms 500ms both;
   }
 }

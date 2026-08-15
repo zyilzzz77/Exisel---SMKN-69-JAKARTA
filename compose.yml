@@ -40,6 +40,11 @@ services:
       SESSION_SECRET: ${SESSION_SECRET:?Isi SESSION_SECRET di file .env}
       # Localhost/LAN Docker runs over HTTP. Set true only behind HTTPS.
       SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:-http://localhost:3000/api/auth/google/callback}
+      GOOGLE_ALLOWED_EMAIL_DOMAIN: ${GOOGLE_ALLOWED_EMAIL_DOMAIN:-}
     ports:
       - "${APP_PORT:-3000}:3000"
     depends_on:

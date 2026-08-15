@@ -27,13 +27,21 @@ export type AggregateUser = {
 export type UserMinAggregateOutputType = {
   id: string | null
   email: string | null
+  googleId: string | null
+  avatarUrl: string | null
   nis: string | null
   name: string | null
   passwordHash: string | null
   role: $Enums.Role | null
+  status: $Enums.UserStatus | null
   className: string | null
   isActive: boolean | null
   mustChangePassword: boolean | null
+  rejectionReason: string | null
+  approvedAt: Date | null
+  approvedById: string | null
+  rejectedAt: Date | null
+  rejectedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -41,13 +49,21 @@ export type UserMinAggregateOutputType = {
 export type UserMaxAggregateOutputType = {
   id: string | null
   email: string | null
+  googleId: string | null
+  avatarUrl: string | null
   nis: string | null
   name: string | null
   passwordHash: string | null
   role: $Enums.Role | null
+  status: $Enums.UserStatus | null
   className: string | null
   isActive: boolean | null
   mustChangePassword: boolean | null
+  rejectionReason: string | null
+  approvedAt: Date | null
+  approvedById: string | null
+  rejectedAt: Date | null
+  rejectedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -55,13 +71,21 @@ export type UserMaxAggregateOutputType = {
 export type UserCountAggregateOutputType = {
   id: number
   email: number
+  googleId: number
+  avatarUrl: number
   nis: number
   name: number
   passwordHash: number
   role: number
+  status: number
   className: number
   isActive: number
   mustChangePassword: number
+  rejectionReason: number
+  approvedAt: number
+  approvedById: number
+  rejectedAt: number
+  rejectedById: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -71,13 +95,21 @@ export type UserCountAggregateOutputType = {
 export type UserMinAggregateInputType = {
   id?: true
   email?: true
+  googleId?: true
+  avatarUrl?: true
   nis?: true
   name?: true
   passwordHash?: true
   role?: true
+  status?: true
   className?: true
   isActive?: true
   mustChangePassword?: true
+  rejectionReason?: true
+  approvedAt?: true
+  approvedById?: true
+  rejectedAt?: true
+  rejectedById?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -85,13 +117,21 @@ export type UserMinAggregateInputType = {
 export type UserMaxAggregateInputType = {
   id?: true
   email?: true
+  googleId?: true
+  avatarUrl?: true
   nis?: true
   name?: true
   passwordHash?: true
   role?: true
+  status?: true
   className?: true
   isActive?: true
   mustChangePassword?: true
+  rejectionReason?: true
+  approvedAt?: true
+  approvedById?: true
+  rejectedAt?: true
+  rejectedById?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -99,13 +139,21 @@ export type UserMaxAggregateInputType = {
 export type UserCountAggregateInputType = {
   id?: true
   email?: true
+  googleId?: true
+  avatarUrl?: true
   nis?: true
   name?: true
   passwordHash?: true
   role?: true
+  status?: true
   className?: true
   isActive?: true
   mustChangePassword?: true
+  rejectionReason?: true
+  approvedAt?: true
+  approvedById?: true
+  rejectedAt?: true
+  rejectedById?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -186,13 +234,21 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type UserGroupByOutputType = {
   id: string
   email: string
+  googleId: string | null
+  avatarUrl: string | null
   nis: string | null
   name: string
   passwordHash: string
   role: $Enums.Role
+  status: $Enums.UserStatus
   className: string | null
   isActive: boolean
   mustChangePassword: boolean
+  rejectionReason: string | null
+  approvedAt: Date | null
+  approvedById: string | null
+  rejectedAt: Date | null
+  rejectedById: string | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -221,70 +277,132 @@ export type UserWhereInput = {
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.UuidFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
+  googleId?: Prisma.StringNullableFilter<"User"> | string | null
+  avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   nis?: Prisma.StringNullableFilter<"User"> | string | null
   name?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
+  status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   className?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
   mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  rejectionReason?: Prisma.StringNullableFilter<"User"> | string | null
+  approvedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  approvedById?: Prisma.UuidNullableFilter<"User"> | string | null
+  rejectedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  rejectedById?: Prisma.UuidNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  approvedStudents?: Prisma.UserListRelationFilter
+  rejectedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  rejectedStudents?: Prisma.UserListRelationFilter
+  adminAuditLogs?: Prisma.AuditLogListRelationFilter
+  targetAuditLogs?: Prisma.AuditLogListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   attendances?: Prisma.AttendanceListRelationFilter
   createdSessions?: Prisma.AttendanceSessionListRelationFilter
   communityMessages?: Prisma.CommunityMessageListRelationFilter
+  createdCompetitions?: Prisma.CompetitionListRelationFilter
+  createdAchievements?: Prisma.AchievementListRelationFilter
+  createdGalleryItems?: Prisma.GalleryItemListRelationFilter
+  sessions?: Prisma.SessionListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  googleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   nis?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   className?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   mustChangePassword?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  rejectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  rejectedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  approvedBy?: Prisma.UserOrderByWithRelationInput
+  approvedStudents?: Prisma.UserOrderByRelationAggregateInput
+  rejectedBy?: Prisma.UserOrderByWithRelationInput
+  rejectedStudents?: Prisma.UserOrderByRelationAggregateInput
+  adminAuditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
+  targetAuditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   attendances?: Prisma.AttendanceOrderByRelationAggregateInput
   createdSessions?: Prisma.AttendanceSessionOrderByRelationAggregateInput
   communityMessages?: Prisma.CommunityMessageOrderByRelationAggregateInput
+  createdCompetitions?: Prisma.CompetitionOrderByRelationAggregateInput
+  createdAchievements?: Prisma.AchievementOrderByRelationAggregateInput
+  createdGalleryItems?: Prisma.GalleryItemOrderByRelationAggregateInput
+  sessions?: Prisma.SessionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
+  googleId?: string
   nis?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
+  avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   name?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
+  status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
   className?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
   mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  rejectionReason?: Prisma.StringNullableFilter<"User"> | string | null
+  approvedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  approvedById?: Prisma.UuidNullableFilter<"User"> | string | null
+  rejectedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  rejectedById?: Prisma.UuidNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  approvedStudents?: Prisma.UserListRelationFilter
+  rejectedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  rejectedStudents?: Prisma.UserListRelationFilter
+  adminAuditLogs?: Prisma.AuditLogListRelationFilter
+  targetAuditLogs?: Prisma.AuditLogListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   attendances?: Prisma.AttendanceListRelationFilter
   createdSessions?: Prisma.AttendanceSessionListRelationFilter
   communityMessages?: Prisma.CommunityMessageListRelationFilter
-}, "id" | "email" | "nis">
+  createdCompetitions?: Prisma.CompetitionListRelationFilter
+  createdAchievements?: Prisma.AchievementListRelationFilter
+  createdGalleryItems?: Prisma.GalleryItemListRelationFilter
+  sessions?: Prisma.SessionListRelationFilter
+}, "id" | "email" | "googleId" | "nis">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  googleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   nis?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   className?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   mustChangePassword?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  rejectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  rejectedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -298,13 +416,21 @@ export type UserScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
+  googleId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   nis?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+  status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
   className?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   mustChangePassword?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  rejectionReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  approvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  approvedById?: Prisma.UuidNullableWithAggregatesFilter<"User"> | string | null
+  rejectedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  rejectedById?: Prisma.UuidNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -312,85 +438,157 @@ export type UserScalarWhereWithAggregatesInput = {
 export type UserCreateInput = {
   id?: string
   email: string
+  googleId?: string | null
+  avatarUrl?: string | null
   nis?: string | null
   name: string
   passwordHash: string
   role?: $Enums.Role
+  status?: $Enums.UserStatus
   className?: string | null
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
   communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
   id?: string
   email: string
+  googleId?: string | null
+  avatarUrl?: string | null
   nis?: string | null
   name: string
   passwordHash: string
   role?: $Enums.Role
+  status?: $Enums.UserStatus
   className?: string | null
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
   communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
   communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
   communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
   id?: string
   email: string
+  googleId?: string | null
+  avatarUrl?: string | null
   nis?: string | null
   name: string
   passwordHash: string
   role?: $Enums.Role
+  status?: $Enums.UserStatus
   className?: string | null
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -398,13 +596,19 @@ export type UserCreateManyInput = {
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -412,27 +616,58 @@ export type UserUpdateManyMutationInput = {
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
+export type UserListRelationFilter = {
+  every?: Prisma.UserWhereInput
+  some?: Prisma.UserWhereInput
+  none?: Prisma.UserWhereInput
+}
+
+export type UserOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrder
   nis?: Prisma.SortOrder
   name?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   className?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   mustChangePassword?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
+  approvedAt?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
+  rejectedAt?: Prisma.SortOrder
+  rejectedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -440,13 +675,21 @@ export type UserCountOrderByAggregateInput = {
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrder
   nis?: Prisma.SortOrder
   name?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   className?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   mustChangePassword?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
+  approvedAt?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
+  rejectedAt?: Prisma.SortOrder
+  rejectedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -454,13 +697,21 @@ export type UserMaxOrderByAggregateInput = {
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrder
   nis?: Prisma.SortOrder
   name?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   className?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   mustChangePassword?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
+  approvedAt?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
+  rejectedAt?: Prisma.SortOrder
+  rejectedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -468,6 +719,46 @@ export type UserMinOrderByAggregateInput = {
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
+}
+
+export type UserCreateNestedOneWithoutApprovedStudentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedStudentsInput, Prisma.UserUncheckedCreateWithoutApprovedStudentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedStudentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedManyWithoutApprovedByInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedByInput, Prisma.UserUncheckedCreateWithoutApprovedByInput> | Prisma.UserCreateWithoutApprovedByInput[] | Prisma.UserUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedByInput | Prisma.UserCreateOrConnectWithoutApprovedByInput[]
+  createMany?: Prisma.UserCreateManyApprovedByInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserCreateNestedOneWithoutRejectedStudentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRejectedStudentsInput, Prisma.UserUncheckedCreateWithoutRejectedStudentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRejectedStudentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedManyWithoutRejectedByInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRejectedByInput, Prisma.UserUncheckedCreateWithoutRejectedByInput> | Prisma.UserCreateWithoutRejectedByInput[] | Prisma.UserUncheckedCreateWithoutRejectedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRejectedByInput | Prisma.UserCreateOrConnectWithoutRejectedByInput[]
+  createMany?: Prisma.UserCreateManyRejectedByInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutApprovedByInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedByInput, Prisma.UserUncheckedCreateWithoutApprovedByInput> | Prisma.UserCreateWithoutApprovedByInput[] | Prisma.UserUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedByInput | Prisma.UserCreateOrConnectWithoutApprovedByInput[]
+  createMany?: Prisma.UserCreateManyApprovedByInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutRejectedByInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRejectedByInput, Prisma.UserUncheckedCreateWithoutRejectedByInput> | Prisma.UserCreateWithoutRejectedByInput[] | Prisma.UserUncheckedCreateWithoutRejectedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRejectedByInput | Prisma.UserCreateOrConnectWithoutRejectedByInput[]
+  createMany?: Prisma.UserCreateManyRejectedByInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -482,12 +773,124 @@ export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
 }
 
+export type EnumUserStatusFieldUpdateOperationsInput = {
+  set?: $Enums.UserStatus
+}
+
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type UserUpdateOneWithoutApprovedStudentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedStudentsInput, Prisma.UserUncheckedCreateWithoutApprovedStudentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedStudentsInput
+  upsert?: Prisma.UserUpsertWithoutApprovedStudentsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovedStudentsInput, Prisma.UserUpdateWithoutApprovedStudentsInput>, Prisma.UserUncheckedUpdateWithoutApprovedStudentsInput>
+}
+
+export type UserUpdateManyWithoutApprovedByNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedByInput, Prisma.UserUncheckedCreateWithoutApprovedByInput> | Prisma.UserCreateWithoutApprovedByInput[] | Prisma.UserUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedByInput | Prisma.UserCreateOrConnectWithoutApprovedByInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutApprovedByInput | Prisma.UserUpsertWithWhereUniqueWithoutApprovedByInput[]
+  createMany?: Prisma.UserCreateManyApprovedByInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutApprovedByInput | Prisma.UserUpdateWithWhereUniqueWithoutApprovedByInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutApprovedByInput | Prisma.UserUpdateManyWithWhereWithoutApprovedByInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUpdateOneWithoutRejectedStudentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRejectedStudentsInput, Prisma.UserUncheckedCreateWithoutRejectedStudentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRejectedStudentsInput
+  upsert?: Prisma.UserUpsertWithoutRejectedStudentsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRejectedStudentsInput, Prisma.UserUpdateWithoutRejectedStudentsInput>, Prisma.UserUncheckedUpdateWithoutRejectedStudentsInput>
+}
+
+export type UserUpdateManyWithoutRejectedByNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRejectedByInput, Prisma.UserUncheckedCreateWithoutRejectedByInput> | Prisma.UserCreateWithoutRejectedByInput[] | Prisma.UserUncheckedCreateWithoutRejectedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRejectedByInput | Prisma.UserCreateOrConnectWithoutRejectedByInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutRejectedByInput | Prisma.UserUpsertWithWhereUniqueWithoutRejectedByInput[]
+  createMany?: Prisma.UserCreateManyRejectedByInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutRejectedByInput | Prisma.UserUpdateWithWhereUniqueWithoutRejectedByInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutRejectedByInput | Prisma.UserUpdateManyWithWhereWithoutRejectedByInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutApprovedByNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedByInput, Prisma.UserUncheckedCreateWithoutApprovedByInput> | Prisma.UserCreateWithoutApprovedByInput[] | Prisma.UserUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedByInput | Prisma.UserCreateOrConnectWithoutApprovedByInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutApprovedByInput | Prisma.UserUpsertWithWhereUniqueWithoutApprovedByInput[]
+  createMany?: Prisma.UserCreateManyApprovedByInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutApprovedByInput | Prisma.UserUpdateWithWhereUniqueWithoutApprovedByInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutApprovedByInput | Prisma.UserUpdateManyWithWhereWithoutApprovedByInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutRejectedByNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRejectedByInput, Prisma.UserUncheckedCreateWithoutRejectedByInput> | Prisma.UserCreateWithoutRejectedByInput[] | Prisma.UserUncheckedCreateWithoutRejectedByInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRejectedByInput | Prisma.UserCreateOrConnectWithoutRejectedByInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutRejectedByInput | Prisma.UserUpsertWithWhereUniqueWithoutRejectedByInput[]
+  createMany?: Prisma.UserCreateManyRejectedByInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutRejectedByInput | Prisma.UserUpdateWithWhereUniqueWithoutRejectedByInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutRejectedByInput | Prisma.UserUpdateManyWithWhereWithoutRejectedByInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserCreateNestedOneWithoutAdminAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdminAuditLogsInput, Prisma.UserUncheckedCreateWithoutAdminAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdminAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutTargetAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTargetAuditLogsInput, Prisma.UserUncheckedCreateWithoutTargetAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTargetAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAdminAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdminAuditLogsInput, Prisma.UserUncheckedCreateWithoutAdminAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdminAuditLogsInput
+  upsert?: Prisma.UserUpsertWithoutAdminAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAdminAuditLogsInput, Prisma.UserUpdateWithoutAdminAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAdminAuditLogsInput>
+}
+
+export type UserUpdateOneRequiredWithoutTargetAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTargetAuditLogsInput, Prisma.UserUncheckedCreateWithoutTargetAuditLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTargetAuditLogsInput
+  upsert?: Prisma.UserUpsertWithoutTargetAuditLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTargetAuditLogsInput, Prisma.UserUpdateWithoutTargetAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutTargetAuditLogsInput>
 }
 
 export type UserCreateNestedOneWithoutEnrollmentsInput = {
@@ -546,38 +949,927 @@ export type UserUpdateOneRequiredWithoutCommunityMessagesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommunityMessagesInput, Prisma.UserUpdateWithoutCommunityMessagesInput>, Prisma.UserUncheckedUpdateWithoutCommunityMessagesInput>
 }
 
-export type UserCreateWithoutEnrollmentsInput = {
+export type UserCreateNestedOneWithoutCreatedCompetitionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedCompetitionsInput, Prisma.UserUncheckedCreateWithoutCreatedCompetitionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedCompetitionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCreatedCompetitionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedCompetitionsInput, Prisma.UserUncheckedCreateWithoutCreatedCompetitionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedCompetitionsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedCompetitionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedCompetitionsInput, Prisma.UserUpdateWithoutCreatedCompetitionsInput>, Prisma.UserUncheckedUpdateWithoutCreatedCompetitionsInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedAchievementsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAchievementsInput, Prisma.UserUncheckedCreateWithoutCreatedAchievementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAchievementsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCreatedAchievementsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAchievementsInput, Prisma.UserUncheckedCreateWithoutCreatedAchievementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAchievementsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedAchievementsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedAchievementsInput, Prisma.UserUpdateWithoutCreatedAchievementsInput>, Prisma.UserUncheckedUpdateWithoutCreatedAchievementsInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedGalleryItemsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedGalleryItemsInput, Prisma.UserUncheckedCreateWithoutCreatedGalleryItemsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedGalleryItemsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCreatedGalleryItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedGalleryItemsInput, Prisma.UserUncheckedCreateWithoutCreatedGalleryItemsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedGalleryItemsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedGalleryItemsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedGalleryItemsInput, Prisma.UserUpdateWithoutCreatedGalleryItemsInput>, Prisma.UserUncheckedUpdateWithoutCreatedGalleryItemsInput>
+}
+
+export type UserCreateNestedOneWithoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsInput
+  upsert?: Prisma.UserUpsertWithoutSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
+}
+
+export type UserCreateWithoutApprovedStudentsInput = {
   id?: string
   email: string
+  googleId?: string | null
+  avatarUrl?: string | null
   nis?: string | null
   name: string
   passwordHash: string
   role?: $Enums.Role
+  status?: $Enums.UserStatus
   className?: string | null
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
   communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutApprovedStudentsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutApprovedStudentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedStudentsInput, Prisma.UserUncheckedCreateWithoutApprovedStudentsInput>
+}
+
+export type UserCreateWithoutApprovedByInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutApprovedByInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutApprovedByInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedByInput, Prisma.UserUncheckedCreateWithoutApprovedByInput>
+}
+
+export type UserCreateManyApprovedByInputEnvelope = {
+  data: Prisma.UserCreateManyApprovedByInput | Prisma.UserCreateManyApprovedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserCreateWithoutRejectedStudentsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRejectedStudentsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutRejectedStudentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRejectedStudentsInput, Prisma.UserUncheckedCreateWithoutRejectedStudentsInput>
+}
+
+export type UserCreateWithoutRejectedByInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRejectedByInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutRejectedByInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRejectedByInput, Prisma.UserUncheckedCreateWithoutRejectedByInput>
+}
+
+export type UserCreateManyRejectedByInputEnvelope = {
+  data: Prisma.UserCreateManyRejectedByInput | Prisma.UserCreateManyRejectedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserUpsertWithoutApprovedStudentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovedStudentsInput, Prisma.UserUncheckedUpdateWithoutApprovedStudentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedStudentsInput, Prisma.UserUncheckedCreateWithoutApprovedStudentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovedStudentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovedStudentsInput, Prisma.UserUncheckedUpdateWithoutApprovedStudentsInput>
+}
+
+export type UserUpdateWithoutApprovedStudentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovedStudentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithWhereUniqueWithoutApprovedByInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovedByInput, Prisma.UserUncheckedUpdateWithoutApprovedByInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedByInput, Prisma.UserUncheckedCreateWithoutApprovedByInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutApprovedByInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovedByInput, Prisma.UserUncheckedUpdateWithoutApprovedByInput>
+}
+
+export type UserUpdateManyWithWhereWithoutApprovedByInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutApprovedByInput>
+}
+
+export type UserScalarWhereInput = {
+  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  OR?: Prisma.UserScalarWhereInput[]
+  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  id?: Prisma.UuidFilter<"User"> | string
+  email?: Prisma.StringFilter<"User"> | string
+  googleId?: Prisma.StringNullableFilter<"User"> | string | null
+  avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  nis?: Prisma.StringNullableFilter<"User"> | string | null
+  name?: Prisma.StringFilter<"User"> | string
+  passwordHash?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
+  status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  className?: Prisma.StringNullableFilter<"User"> | string | null
+  isActive?: Prisma.BoolFilter<"User"> | boolean
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  rejectionReason?: Prisma.StringNullableFilter<"User"> | string | null
+  approvedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  approvedById?: Prisma.UuidNullableFilter<"User"> | string | null
+  rejectedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  rejectedById?: Prisma.UuidNullableFilter<"User"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+}
+
+export type UserUpsertWithoutRejectedStudentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRejectedStudentsInput, Prisma.UserUncheckedUpdateWithoutRejectedStudentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRejectedStudentsInput, Prisma.UserUncheckedCreateWithoutRejectedStudentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRejectedStudentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRejectedStudentsInput, Prisma.UserUncheckedUpdateWithoutRejectedStudentsInput>
+}
+
+export type UserUpdateWithoutRejectedStudentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRejectedStudentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithWhereUniqueWithoutRejectedByInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRejectedByInput, Prisma.UserUncheckedUpdateWithoutRejectedByInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRejectedByInput, Prisma.UserUncheckedCreateWithoutRejectedByInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutRejectedByInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRejectedByInput, Prisma.UserUncheckedUpdateWithoutRejectedByInput>
+}
+
+export type UserUpdateManyWithWhereWithoutRejectedByInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutRejectedByInput>
+}
+
+export type UserCreateWithoutAdminAuditLogsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAdminAuditLogsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAdminAuditLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdminAuditLogsInput, Prisma.UserUncheckedCreateWithoutAdminAuditLogsInput>
+}
+
+export type UserCreateWithoutTargetAuditLogsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutTargetAuditLogsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutTargetAuditLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTargetAuditLogsInput, Prisma.UserUncheckedCreateWithoutTargetAuditLogsInput>
+}
+
+export type UserUpsertWithoutAdminAuditLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAdminAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAdminAuditLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdminAuditLogsInput, Prisma.UserUncheckedCreateWithoutAdminAuditLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAdminAuditLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAdminAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAdminAuditLogsInput>
+}
+
+export type UserUpdateWithoutAdminAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAdminAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutTargetAuditLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTargetAuditLogsInput, Prisma.UserUncheckedUpdateWithoutTargetAuditLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTargetAuditLogsInput, Prisma.UserUncheckedCreateWithoutTargetAuditLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTargetAuditLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTargetAuditLogsInput, Prisma.UserUncheckedUpdateWithoutTargetAuditLogsInput>
+}
+
+export type UserUpdateWithoutTargetAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTargetAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutEnrollmentsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEnrollmentsInput = {
   id?: string
   email: string
+  googleId?: string | null
+  avatarUrl?: string | null
   nis?: string | null
   name: string
   passwordHash: string
   role?: $Enums.Role
+  status?: $Enums.UserStatus
   className?: string | null
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
   communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -599,69 +1891,133 @@ export type UserUpdateToOneWithWhereWithoutEnrollmentsInput = {
 export type UserUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
   communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
   communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAttendancesInput = {
   id?: string
   email: string
+  googleId?: string | null
+  avatarUrl?: string | null
   nis?: string | null
   name: string
   passwordHash: string
   role?: $Enums.Role
+  status?: $Enums.UserStatus
   className?: string | null
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
   communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAttendancesInput = {
   id?: string
   email: string
+  googleId?: string | null
+  avatarUrl?: string | null
   nis?: string | null
   name: string
   passwordHash: string
   role?: $Enums.Role
+  status?: $Enums.UserStatus
   className?: string | null
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
   communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -683,69 +2039,133 @@ export type UserUpdateToOneWithWhereWithoutAttendancesInput = {
 export type UserUpdateWithoutAttendancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
   communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAttendancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
   communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedSessionsInput = {
   id?: string
   email: string
+  googleId?: string | null
+  avatarUrl?: string | null
   nis?: string | null
   name: string
   passwordHash: string
   role?: $Enums.Role
+  status?: $Enums.UserStatus
   className?: string | null
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
   communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedSessionsInput = {
   id?: string
   email: string
+  googleId?: string | null
+  avatarUrl?: string | null
   nis?: string | null
   name: string
   passwordHash: string
   role?: $Enums.Role
+  status?: $Enums.UserStatus
   className?: string | null
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
   communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedSessionsInput = {
@@ -767,69 +2187,133 @@ export type UserUpdateToOneWithWhereWithoutCreatedSessionsInput = {
 export type UserUpdateWithoutCreatedSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
   communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
   communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommunityMessagesInput = {
   id?: string
   email: string
+  googleId?: string | null
+  avatarUrl?: string | null
   nis?: string | null
   name: string
   passwordHash: string
   role?: $Enums.Role
+  status?: $Enums.UserStatus
   className?: string | null
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommunityMessagesInput = {
   id?: string
   email: string
+  googleId?: string | null
+  avatarUrl?: string | null
   nis?: string | null
   name: string
   passwordHash: string
   role?: $Enums.Role
+  status?: $Enums.UserStatus
   className?: string | null
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
   createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommunityMessagesInput = {
@@ -851,35 +2335,875 @@ export type UserUpdateToOneWithWhereWithoutCommunityMessagesInput = {
 export type UserUpdateWithoutCommunityMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommunityMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
   createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCreatedCompetitionsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCreatedCompetitionsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCreatedCompetitionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedCompetitionsInput, Prisma.UserUncheckedCreateWithoutCreatedCompetitionsInput>
+}
+
+export type UserUpsertWithoutCreatedCompetitionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedCompetitionsInput, Prisma.UserUncheckedUpdateWithoutCreatedCompetitionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedCompetitionsInput, Prisma.UserUncheckedCreateWithoutCreatedCompetitionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedCompetitionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedCompetitionsInput, Prisma.UserUncheckedUpdateWithoutCreatedCompetitionsInput>
+}
+
+export type UserUpdateWithoutCreatedCompetitionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedCompetitionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCreatedAchievementsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCreatedAchievementsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCreatedAchievementsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAchievementsInput, Prisma.UserUncheckedCreateWithoutCreatedAchievementsInput>
+}
+
+export type UserUpsertWithoutCreatedAchievementsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAchievementsInput, Prisma.UserUncheckedUpdateWithoutCreatedAchievementsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAchievementsInput, Prisma.UserUncheckedCreateWithoutCreatedAchievementsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedAchievementsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAchievementsInput, Prisma.UserUncheckedUpdateWithoutCreatedAchievementsInput>
+}
+
+export type UserUpdateWithoutCreatedAchievementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedAchievementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCreatedGalleryItemsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCreatedGalleryItemsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCreatedGalleryItemsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedGalleryItemsInput, Prisma.UserUncheckedCreateWithoutCreatedGalleryItemsInput>
+}
+
+export type UserUpsertWithoutCreatedGalleryItemsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedGalleryItemsInput, Prisma.UserUncheckedUpdateWithoutCreatedGalleryItemsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedGalleryItemsInput, Prisma.UserUncheckedCreateWithoutCreatedGalleryItemsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedGalleryItemsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedGalleryItemsInput, Prisma.UserUncheckedUpdateWithoutCreatedGalleryItemsInput>
+}
+
+export type UserUpdateWithoutCreatedGalleryItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedGalleryItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSessionsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedStudentsInput
+  approvedStudents?: Prisma.UserCreateNestedManyWithoutApprovedByInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedStudentsInput
+  rejectedStudents?: Prisma.UserCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutSessionsInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedStudents?: Prisma.UserUncheckedCreateNestedManyWithoutRejectedByInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTargetUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutUserInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedCreateNestedManyWithoutCreatedByInput
+  communityMessages?: Prisma.CommunityMessageUncheckedCreateNestedManyWithoutSenderInput
+  createdCompetitions?: Prisma.CompetitionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAchievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutSessionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
+}
+
+export type UserUpsertWithoutSessionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSessionsInput, Prisma.UserUncheckedUpdateWithoutSessionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSessionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSessionsInput, Prisma.UserUncheckedUpdateWithoutSessionsInput>
+}
+
+export type UserUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateManyApprovedByInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  rejectedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserCreateManyRejectedByInput = {
+  id?: string
+  email: string
+  googleId?: string | null
+  avatarUrl?: string | null
+  nis?: string | null
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  status?: $Enums.UserStatus
+  className?: string | null
+  isActive?: boolean
+  mustChangePassword?: boolean
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserUpdateWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedStudentsNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserUpdateWithoutRejectedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedStudentsNestedInput
+  approvedStudents?: Prisma.UserUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRejectedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedStudents?: Prisma.UserUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedStudents?: Prisma.UserUncheckedUpdateManyWithoutRejectedByNestedInput
+  adminAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+  targetAuditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTargetUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutUserNestedInput
+  createdSessions?: Prisma.AttendanceSessionUncheckedUpdateManyWithoutCreatedByNestedInput
+  communityMessages?: Prisma.CommunityMessageUncheckedUpdateManyWithoutSenderNestedInput
+  createdCompetitions?: Prisma.CompetitionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAchievements?: Prisma.AchievementUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGalleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutCreatedByNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutRejectedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nis?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  className?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -888,17 +3212,33 @@ export type UserUncheckedUpdateWithoutCommunityMessagesInput = {
  */
 
 export type UserCountOutputType = {
+  approvedStudents: number
+  rejectedStudents: number
+  adminAuditLogs: number
+  targetAuditLogs: number
   enrollments: number
   attendances: number
   createdSessions: number
   communityMessages: number
+  createdCompetitions: number
+  createdAchievements: number
+  createdGalleryItems: number
+  sessions: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  approvedStudents?: boolean | UserCountOutputTypeCountApprovedStudentsArgs
+  rejectedStudents?: boolean | UserCountOutputTypeCountRejectedStudentsArgs
+  adminAuditLogs?: boolean | UserCountOutputTypeCountAdminAuditLogsArgs
+  targetAuditLogs?: boolean | UserCountOutputTypeCountTargetAuditLogsArgs
   enrollments?: boolean | UserCountOutputTypeCountEnrollmentsArgs
   attendances?: boolean | UserCountOutputTypeCountAttendancesArgs
   createdSessions?: boolean | UserCountOutputTypeCountCreatedSessionsArgs
   communityMessages?: boolean | UserCountOutputTypeCountCommunityMessagesArgs
+  createdCompetitions?: boolean | UserCountOutputTypeCountCreatedCompetitionsArgs
+  createdAchievements?: boolean | UserCountOutputTypeCountCreatedAchievementsArgs
+  createdGalleryItems?: boolean | UserCountOutputTypeCountCreatedGalleryItemsArgs
+  sessions?: boolean | UserCountOutputTypeCountSessionsArgs
 }
 
 /**
@@ -909,6 +3249,34 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovedStudentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRejectedStudentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAdminAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditLogWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTargetAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditLogWhereInput
 }
 
 /**
@@ -939,97 +3307,205 @@ export type UserCountOutputTypeCountCommunityMessagesArgs<ExtArgs extends runtim
   where?: Prisma.CommunityMessageWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedCompetitionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CompetitionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedAchievementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AchievementWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedGalleryItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GalleryItemWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SessionWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  googleId?: boolean
+  avatarUrl?: boolean
   nis?: boolean
   name?: boolean
   passwordHash?: boolean
   role?: boolean
+  status?: boolean
   className?: boolean
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: boolean
+  approvedAt?: boolean
+  approvedById?: boolean
+  rejectedAt?: boolean
+  rejectedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  approvedBy?: boolean | Prisma.User$approvedByArgs<ExtArgs>
+  approvedStudents?: boolean | Prisma.User$approvedStudentsArgs<ExtArgs>
+  rejectedBy?: boolean | Prisma.User$rejectedByArgs<ExtArgs>
+  rejectedStudents?: boolean | Prisma.User$rejectedStudentsArgs<ExtArgs>
+  adminAuditLogs?: boolean | Prisma.User$adminAuditLogsArgs<ExtArgs>
+  targetAuditLogs?: boolean | Prisma.User$targetAuditLogsArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   attendances?: boolean | Prisma.User$attendancesArgs<ExtArgs>
   createdSessions?: boolean | Prisma.User$createdSessionsArgs<ExtArgs>
   communityMessages?: boolean | Prisma.User$communityMessagesArgs<ExtArgs>
+  createdCompetitions?: boolean | Prisma.User$createdCompetitionsArgs<ExtArgs>
+  createdAchievements?: boolean | Prisma.User$createdAchievementsArgs<ExtArgs>
+  createdGalleryItems?: boolean | Prisma.User$createdGalleryItemsArgs<ExtArgs>
+  sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  googleId?: boolean
+  avatarUrl?: boolean
   nis?: boolean
   name?: boolean
   passwordHash?: boolean
   role?: boolean
+  status?: boolean
   className?: boolean
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: boolean
+  approvedAt?: boolean
+  approvedById?: boolean
+  rejectedAt?: boolean
+  rejectedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  approvedBy?: boolean | Prisma.User$approvedByArgs<ExtArgs>
+  rejectedBy?: boolean | Prisma.User$rejectedByArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  googleId?: boolean
+  avatarUrl?: boolean
   nis?: boolean
   name?: boolean
   passwordHash?: boolean
   role?: boolean
+  status?: boolean
   className?: boolean
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: boolean
+  approvedAt?: boolean
+  approvedById?: boolean
+  rejectedAt?: boolean
+  rejectedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  approvedBy?: boolean | Prisma.User$approvedByArgs<ExtArgs>
+  rejectedBy?: boolean | Prisma.User$rejectedByArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
   id?: boolean
   email?: boolean
+  googleId?: boolean
+  avatarUrl?: boolean
   nis?: boolean
   name?: boolean
   passwordHash?: boolean
   role?: boolean
+  status?: boolean
   className?: boolean
   isActive?: boolean
   mustChangePassword?: boolean
+  rejectionReason?: boolean
+  approvedAt?: boolean
+  approvedById?: boolean
+  rejectedAt?: boolean
+  rejectedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "nis" | "name" | "passwordHash" | "role" | "className" | "isActive" | "mustChangePassword" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "googleId" | "avatarUrl" | "nis" | "name" | "passwordHash" | "role" | "status" | "className" | "isActive" | "mustChangePassword" | "rejectionReason" | "approvedAt" | "approvedById" | "rejectedAt" | "rejectedById" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  approvedBy?: boolean | Prisma.User$approvedByArgs<ExtArgs>
+  approvedStudents?: boolean | Prisma.User$approvedStudentsArgs<ExtArgs>
+  rejectedBy?: boolean | Prisma.User$rejectedByArgs<ExtArgs>
+  rejectedStudents?: boolean | Prisma.User$rejectedStudentsArgs<ExtArgs>
+  adminAuditLogs?: boolean | Prisma.User$adminAuditLogsArgs<ExtArgs>
+  targetAuditLogs?: boolean | Prisma.User$targetAuditLogsArgs<ExtArgs>
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   attendances?: boolean | Prisma.User$attendancesArgs<ExtArgs>
   createdSessions?: boolean | Prisma.User$createdSessionsArgs<ExtArgs>
   communityMessages?: boolean | Prisma.User$communityMessagesArgs<ExtArgs>
+  createdCompetitions?: boolean | Prisma.User$createdCompetitionsArgs<ExtArgs>
+  createdAchievements?: boolean | Prisma.User$createdAchievementsArgs<ExtArgs>
+  createdGalleryItems?: boolean | Prisma.User$createdGalleryItemsArgs<ExtArgs>
+  sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  approvedBy?: boolean | Prisma.User$approvedByArgs<ExtArgs>
+  rejectedBy?: boolean | Prisma.User$rejectedByArgs<ExtArgs>
+}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  approvedBy?: boolean | Prisma.User$approvedByArgs<ExtArgs>
+  rejectedBy?: boolean | Prisma.User$rejectedByArgs<ExtArgs>
+}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    approvedBy: Prisma.$UserPayload<ExtArgs> | null
+    approvedStudents: Prisma.$UserPayload<ExtArgs>[]
+    rejectedBy: Prisma.$UserPayload<ExtArgs> | null
+    rejectedStudents: Prisma.$UserPayload<ExtArgs>[]
+    adminAuditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    targetAuditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     attendances: Prisma.$AttendancePayload<ExtArgs>[]
     createdSessions: Prisma.$AttendanceSessionPayload<ExtArgs>[]
     communityMessages: Prisma.$CommunityMessagePayload<ExtArgs>[]
+    createdCompetitions: Prisma.$CompetitionPayload<ExtArgs>[]
+    createdAchievements: Prisma.$AchievementPayload<ExtArgs>[]
+    createdGalleryItems: Prisma.$GalleryItemPayload<ExtArgs>[]
+    sessions: Prisma.$SessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
+    googleId: string | null
+    avatarUrl: string | null
     nis: string | null
     name: string
     passwordHash: string
     role: $Enums.Role
+    status: $Enums.UserStatus
     className: string | null
     isActive: boolean
     mustChangePassword: boolean
+    rejectionReason: string | null
+    approvedAt: Date | null
+    approvedById: string | null
+    rejectedAt: Date | null
+    rejectedById: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1426,10 +3902,20 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  approvedBy<T extends Prisma.User$approvedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  approvedStudents<T extends Prisma.User$approvedStudentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedStudentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  rejectedBy<T extends Prisma.User$rejectedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$rejectedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  rejectedStudents<T extends Prisma.User$rejectedStudentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$rejectedStudentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  adminAuditLogs<T extends Prisma.User$adminAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adminAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  targetAuditLogs<T extends Prisma.User$targetAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$targetAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrollments<T extends Prisma.User$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attendances<T extends Prisma.User$attendancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdSessions<T extends Prisma.User$createdSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendanceSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   communityMessages<T extends Prisma.User$communityMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$communityMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommunityMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdCompetitions<T extends Prisma.User$createdCompetitionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdCompetitionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompetitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdAchievements<T extends Prisma.User$createdAchievementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdAchievementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdGalleryItems<T extends Prisma.User$createdGalleryItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdGalleryItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GalleryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1461,13 +3947,21 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
+  readonly googleId: Prisma.FieldRef<"User", 'String'>
+  readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
   readonly nis: Prisma.FieldRef<"User", 'String'>
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
+  readonly status: Prisma.FieldRef<"User", 'UserStatus'>
   readonly className: Prisma.FieldRef<"User", 'String'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly mustChangePassword: Prisma.FieldRef<"User", 'Boolean'>
+  readonly rejectionReason: Prisma.FieldRef<"User", 'String'>
+  readonly approvedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly approvedById: Prisma.FieldRef<"User", 'String'>
+  readonly rejectedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly rejectedById: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -1724,6 +4218,10 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1794,6 +4292,10 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Users to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1860,6 +4362,140 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.approvedBy
+ */
+export type User$approvedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * User.approvedStudents
+ */
+export type User$approvedStudentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * User.rejectedBy
+ */
+export type User$rejectedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * User.rejectedStudents
+ */
+export type User$rejectedStudentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * User.adminAuditLogs
+ */
+export type User$adminAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditLog
+   */
+  select?: Prisma.AuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditLog
+   */
+  omit?: Prisma.AuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditLogInclude<ExtArgs> | null
+  where?: Prisma.AuditLogWhereInput
+  orderBy?: Prisma.AuditLogOrderByWithRelationInput | Prisma.AuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.AuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * User.targetAuditLogs
+ */
+export type User$targetAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditLog
+   */
+  select?: Prisma.AuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditLog
+   */
+  omit?: Prisma.AuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditLogInclude<ExtArgs> | null
+  where?: Prisma.AuditLogWhereInput
+  orderBy?: Prisma.AuditLogOrderByWithRelationInput | Prisma.AuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.AuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
 }
 
 /**
@@ -1956,6 +4592,102 @@ export type User$communityMessagesArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.CommunityMessageScalarFieldEnum | Prisma.CommunityMessageScalarFieldEnum[]
+}
+
+/**
+ * User.createdCompetitions
+ */
+export type User$createdCompetitionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Competition
+   */
+  select?: Prisma.CompetitionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Competition
+   */
+  omit?: Prisma.CompetitionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompetitionInclude<ExtArgs> | null
+  where?: Prisma.CompetitionWhereInput
+  orderBy?: Prisma.CompetitionOrderByWithRelationInput | Prisma.CompetitionOrderByWithRelationInput[]
+  cursor?: Prisma.CompetitionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CompetitionScalarFieldEnum | Prisma.CompetitionScalarFieldEnum[]
+}
+
+/**
+ * User.createdAchievements
+ */
+export type User$createdAchievementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Achievement
+   */
+  select?: Prisma.AchievementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Achievement
+   */
+  omit?: Prisma.AchievementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AchievementInclude<ExtArgs> | null
+  where?: Prisma.AchievementWhereInput
+  orderBy?: Prisma.AchievementOrderByWithRelationInput | Prisma.AchievementOrderByWithRelationInput[]
+  cursor?: Prisma.AchievementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AchievementScalarFieldEnum | Prisma.AchievementScalarFieldEnum[]
+}
+
+/**
+ * User.createdGalleryItems
+ */
+export type User$createdGalleryItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GalleryItem
+   */
+  select?: Prisma.GalleryItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GalleryItem
+   */
+  omit?: Prisma.GalleryItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GalleryItemInclude<ExtArgs> | null
+  where?: Prisma.GalleryItemWhereInput
+  orderBy?: Prisma.GalleryItemOrderByWithRelationInput | Prisma.GalleryItemOrderByWithRelationInput[]
+  cursor?: Prisma.GalleryItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GalleryItemScalarFieldEnum | Prisma.GalleryItemScalarFieldEnum[]
+}
+
+/**
+ * User.sessions
+ */
+export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Session
+   */
+  select?: Prisma.SessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Session
+   */
+  omit?: Prisma.SessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SessionInclude<ExtArgs> | null
+  where?: Prisma.SessionWhereInput
+  orderBy?: Prisma.SessionOrderByWithRelationInput | Prisma.SessionOrderByWithRelationInput[]
+  cursor?: Prisma.SessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
 }
 
 /**

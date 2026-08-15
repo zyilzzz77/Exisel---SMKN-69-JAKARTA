@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
+import { AdminHeader } from "@/components/admin-header";
 import { AttendanceQrDisplay } from "@/components/attendance-qr-display";
+import { AttendanceLivePanel } from "@/components/attendance/attendance-live-panel";
 import { AttendanceSessionForm } from "@/components/forms/attendance-session-form";
 import { readSession } from "@/lib/auth/session";
 import { getPrisma } from "@/lib/database/prisma";
@@ -78,25 +80,25 @@ export default async function AdminExtracurricularSessionPage({ params }: PagePr
     },
   });
 
-  const program = programs.find((item) => slugify(item.name) === requestedSlug);
+const program = programs.find((item) => slugify(item.name) === requestedSlug);
   if (!program) notFound();
+  const admin = await getPrisma().user.findUnique({
+    where: { id: session.userId },
+    select: { name: true, isActive: true },
+  });
+  if (!admin?.isActive) redirect("/admin/login");
   const schedule = program.schedules[0];
   const activeSession = program.attendanceSessions[0] ?? null;
 
   return (
     <main className={styles.page}>
-      <div className={styles.announcement}>Portal pembina / kode kehadiran <span>Waktu Jakarta</span></div>
-      <header className={styles.header}>
-        <Link className={styles.brand} href="/admin/dashboard">
-          <Image alt="Logo SMK Negeri 69 Jakarta" height={948} src="/logo-smkn69.webp" width={758} />
-          <span><strong>EXISEL</strong><small>Generator sesi kehadiran</small></span>
-        </Link>
-        <nav aria-label="Navigasi admin">
-          <Link href="/admin/dashboard">Kehadiran</Link>
-          <Link href="/admin/laporan">Laporan</Link>
-          <Link href="/ekstrakurikuler">Katalog ekskul</Link>
-        </nav>
-      </header>
+      <AdminHeader
+        activeItem="attendance"
+        adminName={admin.name}
+        announcement="Portal pembina / kode kehadiran • Waktu Jakarta"
+        brandSubtitle="Generator sesi kehadiran"
+        roleLabel="Admin / Pembina"
+      />
 
       <div className={styles.shell}>
         <Link className={styles.backLink} href="/admin/dashboard">← Kembali ke monitoring</Link>
@@ -133,7 +135,12 @@ export default async function AdminExtracurricularSessionPage({ params }: PagePr
               <p className={styles.muted}>Belum ada QR aktif untuk agenda ini.</p>
             )}
             <AttendanceSessionForm active={Boolean(activeSession)} extracurricularId={program.id} />
-            <p className={styles.sessionRule}>QR dapat dibuat pada hari apa pun untuk kegiatan, lomba, atau testing. Setiap QR hanya berlaku pada siklus 4 detiknya; tekan Selesai untuk menutup sesi dan membuat sesi baru.</p>
+            <p className={styles.sessionRule}>QR berganti setiap 4 detik dan token lama langsung kedaluwarsa. Siswa memindai QR dengan Google Lens/kamera; jika sudah login, kehadiran langsung tercatat.</p>
+          </article>
+
+          <article className={styles.sessionCard}>
+            <span className={styles.cardNumber}>03 / Kehadiran langsung</span>
+            <AttendanceLivePanel programId={program.id} programName={program.name} />
           </article>
         </section>
       </div>

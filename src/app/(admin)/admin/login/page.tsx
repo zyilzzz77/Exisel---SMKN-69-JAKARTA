@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { AdminLoginForm } from "@/components/forms/admin-login-form";
+import { getAuthenticatedSessionUser } from "@/lib/auth/authorization";
 import styles from "./admin-login.module.css";
 
 export const metadata: Metadata = {
@@ -9,7 +11,12 @@ export const metadata: Metadata = {
   description: "Akses monitoring kehadiran ekstrakurikuler untuk admin dan guru.",
 };
 
-export default function AdminLoginPage() {
+export default async function AdminLoginPage() {
+  const adminUser = await getAuthenticatedSessionUser("ADMIN");
+  if (adminUser?.isActive) {
+    redirect("/admin/dashboard");
+  }
+
   return (
     <main className={styles.page}>
       <a className="skip-link" href="#admin-login-form">
@@ -17,7 +24,12 @@ export default function AdminLoginPage() {
       </a>
 
       <header className={styles.header}>
-        <Link className={styles.brand} href="/" aria-label="Kembali ke EXISEL">
+        <Link
+          aria-label="Kembali ke EXISEL"
+          className={styles.brand}
+          href="/"
+          prefetch={false}
+        >
           <span className={styles.brandLogo}>
             <Image
               alt="Logo SMK Negeri 69 Jakarta"
@@ -32,7 +44,7 @@ export default function AdminLoginPage() {
             <small>Admin & guru</small>
           </span>
         </Link>
-        <Link className={styles.studentLink} href="/login">
+        <Link className={styles.studentLink} href="/login" prefetch={false}>
           Login siswa →
         </Link>
       </header>

@@ -52,13 +52,19 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  AuditLog: 'AuditLog',
   Extracurricular: 'Extracurricular',
   Schedule: 'Schedule',
   Enrollment: 'Enrollment',
   Attendance: 'Attendance',
   AttendanceSession: 'AttendanceSession',
+  AttendanceIntent: 'AttendanceIntent',
   LoginThrottle: 'LoginThrottle',
-  CommunityMessage: 'CommunityMessage'
+  CommunityMessage: 'CommunityMessage',
+  Competition: 'Competition',
+  Achievement: 'Achievement',
+  GalleryItem: 'GalleryItem',
+  Session: 'Session'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -80,18 +86,38 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
+  googleId: 'googleId',
+  avatarUrl: 'avatarUrl',
   nis: 'nis',
   name: 'name',
   passwordHash: 'passwordHash',
   role: 'role',
+  status: 'status',
   className: 'className',
   isActive: 'isActive',
   mustChangePassword: 'mustChangePassword',
+  rejectionReason: 'rejectionReason',
+  approvedAt: 'approvedAt',
+  approvedById: 'approvedById',
+  rejectedAt: 'rejectedAt',
+  rejectedById: 'rejectedById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  adminId: 'adminId',
+  targetUserId: 'targetUserId',
+  action: 'action',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
 export const ExtracurricularScalarFieldEnum = {
@@ -138,6 +164,11 @@ export const AttendanceScalarFieldEnum = {
   attendanceDate: 'attendanceDate',
   status: 'status',
   reason: 'reason',
+  attendanceMethod: 'attendanceMethod',
+  attendanceSessionId: 'attendanceSessionId',
+  checkedInAt: 'checkedInAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
   submittedAt: 'submittedAt',
   updatedAt: 'updatedAt'
 } as const
@@ -156,6 +187,20 @@ export const AttendanceSessionScalarFieldEnum = {
 } as const
 
 export type AttendanceSessionScalarFieldEnum = (typeof AttendanceSessionScalarFieldEnum)[keyof typeof AttendanceSessionScalarFieldEnum]
+
+
+export const AttendanceIntentScalarFieldEnum = {
+  id: 'id',
+  intentTokenHash: 'intentTokenHash',
+  attendanceSessionId: 'attendanceSessionId',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt',
+  consumedAt: 'consumedAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent'
+} as const
+
+export type AttendanceIntentScalarFieldEnum = (typeof AttendanceIntentScalarFieldEnum)[keyof typeof AttendanceIntentScalarFieldEnum]
 
 
 export const LoginThrottleScalarFieldEnum = {
@@ -182,12 +227,92 @@ export const CommunityMessageScalarFieldEnum = {
 export type CommunityMessageScalarFieldEnum = (typeof CommunityMessageScalarFieldEnum)[keyof typeof CommunityMessageScalarFieldEnum]
 
 
+export const CompetitionScalarFieldEnum = {
+  id: 'id',
+  extracurricularId: 'extracurricularId',
+  createdById: 'createdById',
+  title: 'title',
+  organizer: 'organizer',
+  description: 'description',
+  eventDate: 'eventDate',
+  registrationDeadline: 'registrationDeadline',
+  location: 'location',
+  level: 'level',
+  registrationUrl: 'registrationUrl',
+  isPublished: 'isPublished',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompetitionScalarFieldEnum = (typeof CompetitionScalarFieldEnum)[keyof typeof CompetitionScalarFieldEnum]
+
+
+export const AchievementScalarFieldEnum = {
+  id: 'id',
+  extracurricularId: 'extracurricularId',
+  createdById: 'createdById',
+  title: 'title',
+  competitionName: 'competitionName',
+  rank: 'rank',
+  level: 'level',
+  achievedAt: 'achievedAt',
+  description: 'description',
+  isPublished: 'isPublished',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AchievementScalarFieldEnum = (typeof AchievementScalarFieldEnum)[keyof typeof AchievementScalarFieldEnum]
+
+
+export const GalleryItemScalarFieldEnum = {
+  id: 'id',
+  extracurricularId: 'extracurricularId',
+  createdById: 'createdById',
+  imageUrl: 'imageUrl',
+  altText: 'altText',
+  caption: 'caption',
+  takenAt: 'takenAt',
+  position: 'position',
+  isPublished: 'isPublished',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GalleryItemScalarFieldEnum = (typeof GalleryItemScalarFieldEnum)[keyof typeof GalleryItemScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt',
+  lastSeenAt: 'lastSeenAt',
+  revokedAt: 'revokedAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  deviceName: 'deviceName',
+  createdBy: 'createdBy'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -204,4 +329,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

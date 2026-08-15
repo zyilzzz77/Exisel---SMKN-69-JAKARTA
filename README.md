@@ -62,6 +62,16 @@ pnpm dev
 
 Buka <http://localhost:3000>.
 
+## Login Google dan verifikasi siswa
+
+EXISEL mendukung login Google untuk siswa. Akun Google baru tidak langsung
+mendapat akses: siswa wajib mengisi Nama, NIS, dan Kelas, lalu menunggu
+persetujuan admin/guru. Login email dan password lama tetap tersedia.
+
+Ikuti [`GOOGLE_LOGIN.md`](./GOOGLE_LOGIN.md) untuk membuat OAuth Web Client,
+mendaftarkan redirect URI lokal/production, mengisi environment, dan menguji
+alur registrasi sampai persetujuan admin.
+
 ## Deployment production ke VPS
 
 Konfigurasi Docker production dengan Caddy dan SSL otomatis tersedia di

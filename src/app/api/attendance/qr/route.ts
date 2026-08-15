@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { readSession } from "@/lib/auth/session";
+import { getActiveSessionUser } from "@/lib/auth/authorization";
 import {
   ATTENDANCE_QR_ROTATION_MS,
   createAttendanceQrPayload,
@@ -13,8 +13,7 @@ export const dynamic = "force-dynamic";
 const querySchema = z.string().uuid();
 
 export async function GET(request: Request) {
-  const session = await readSession();
-  if (!session || session.role !== "ADMIN") {
+  if (!(await getActiveSessionUser("ADMIN"))) {
     return NextResponse.json({ message: "Tidak terautentikasi." }, { status: 401 });
   }
 
@@ -45,6 +44,7 @@ export async function GET(request: Request) {
     dateKey,
     sessionNonce: attendanceSession.code,
     now: serverNow,
+    baseUrl: new URL(request.url).origin,
   });
 
   return NextResponse.json(

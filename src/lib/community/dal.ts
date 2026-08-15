@@ -2,7 +2,6 @@ import "server-only";
 
 import { cache } from "react";
 import { getPrisma } from "@/lib/database/prisma";
-import { readSession } from "@/lib/auth/session";
 
 export type CommunityChannel = {
   id: string;

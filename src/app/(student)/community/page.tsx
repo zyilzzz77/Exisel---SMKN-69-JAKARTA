@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { readSession } from "@/lib/auth/session";
-import { getPrisma } from "@/lib/database/prisma";
+import { requireApprovedStudent } from "@/lib/auth/authorization";
 import { getCommunityChannelData } from "@/lib/community/dal";
 import { CommunityView } from "@/components/community/community-view";
 
@@ -16,23 +15,8 @@ type PageProps = {
 
 export default async function CommunityPage({ searchParams }: PageProps) {
   const { channel } = await searchParams;
-  const session = await readSession();
-
-  let currentUser: { name: string; role: string } | null = null;
-  let isAdmin = false;
-
-  if (session?.userId) {
-    const user = await getPrisma().user.findUnique({
-      where: { id: session.userId },
-      select: { name: true, role: true, isActive: true },
-    });
-    if (user?.isActive) {
-      currentUser = { name: user.name, role: user.role };
-      if (user.role === "ADMIN") {
-        isAdmin = true;
-      }
-    }
-  }
+  const student = await requireApprovedStudent();
+  const currentUser = { name: student.name, role: student.role };
 
   const { channels, activeChannel, messages } = await getCommunityChannelData(channel);
 
@@ -41,7 +25,7 @@ export default async function CommunityPage({ searchParams }: PageProps) {
       activeChannel={activeChannel}
       channels={channels}
       currentUser={currentUser}
-      isAdmin={isAdmin}
+      isAdmin={false}
       messages={messages}
     />
   );

@@ -1,8 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getActiveSessionUser } from "@/lib/auth/authorization";
 import { getPrisma } from "@/lib/database/prisma";
-import { readSession } from "@/lib/auth/session";
 
 export type ActionState = {
   success?: boolean;
@@ -15,25 +15,12 @@ export async function sendCommunityMessageAction(
   content: string,
 ): Promise<ActionState> {
   try {
-    const session = await readSession();
-    if (!session?.userId) {
-      return { error: "Silakan login terlebih dahulu untuk mengirim pesan." };
-    }
-
-    const prisma = getPrisma();
-    const user = await prisma.user.findUnique({
-      where: { id: session.userId },
-      select: { id: true, role: true, isActive: true },
-    });
-
-    if (!user || !user.isActive) {
-      return { error: "Sesi pengguna tidak valid." };
-    }
-
-    if (user.role !== "ADMIN") {
+    const user = await getActiveSessionUser("ADMIN");
+    if (!user) {
       return { error: "Akses ditolak. Hanya Admin dan Guru yang dapat mengirim pengumuman." };
     }
 
+    const prisma = getPrisma();
     const trimmedContent = content.trim();
     if (!trimmedContent) {
       return { error: "Pesan tidak boleh kosong." };
@@ -78,21 +65,12 @@ export async function updateCommunityMessageAction(
   content: string,
 ): Promise<ActionState> {
   try {
-    const session = await readSession();
-    if (!session?.userId) {
-      return { error: "Silakan login terlebih dahulu." };
-    }
-
-    const prisma = getPrisma();
-    const user = await prisma.user.findUnique({
-      where: { id: session.userId },
-      select: { id: true, role: true, isActive: true },
-    });
-
-    if (!user || !user.isActive || user.role !== "ADMIN") {
+    const user = await getActiveSessionUser("ADMIN");
+    if (!user) {
       return { error: "Akses ditolak." };
     }
 
+    const prisma = getPrisma();
     const trimmedContent = content.trim();
     if (!trimmedContent) {
       return { error: "Isi pesan tidak boleh kosong." };
@@ -135,21 +113,12 @@ export async function deleteCommunityMessageAction(
   messageId: string,
 ): Promise<ActionState> {
   try {
-    const session = await readSession();
-    if (!session?.userId) {
-      return { error: "Silakan login terlebih dahulu." };
-    }
-
-    const prisma = getPrisma();
-    const user = await prisma.user.findUnique({
-      where: { id: session.userId },
-      select: { id: true, role: true, isActive: true },
-    });
-
-    if (!user || !user.isActive || user.role !== "ADMIN") {
+    const user = await getActiveSessionUser("ADMIN");
+    if (!user) {
       return { error: "Akses ditolak." };
     }
 
+    const prisma = getPrisma();
     const existingMessage = await prisma.communityMessage.findUnique({
       where: { id: messageId },
     });

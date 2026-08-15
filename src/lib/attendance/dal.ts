@@ -3,6 +3,7 @@ import "server-only";
 import { cache } from "react";
 import { redirect } from "next/navigation";
 import { readSession } from "@/lib/auth/session";
+import { requireApprovedStudent } from "@/lib/auth/authorization";
 import { reconcilePastAttendances } from "@/lib/attendance/reconcile";
 import { getAttendanceProgramReports } from "@/lib/attendance/report";
 import { getPrisma } from "@/lib/database/prisma";
@@ -35,11 +36,7 @@ function isAdminStatus(value: string | undefined): value is AdminAttendanceStatu
 
 export const getStudentAttendanceData = cache(
   async (selectedExtracurricularId?: string) => {
-    const session = await readSession();
-
-    if (!session || session.role !== "STUDENT") {
-      redirect("/login");
-    }
+    const student = await requireApprovedStudent();
 
     const dateKey = getJakartaDateKey();
     await reconcilePastAttendances(dateKey);
@@ -47,8 +44,9 @@ export const getStudentAttendanceData = cache(
     const day = getSchoolDay(dateKey);
     const user = await getPrisma().user.findFirst({
       where: {
-        id: session.userId,
+        id: student.id,
         role: "STUDENT",
+        status: "APPROVED",
         isActive: true,
       },
       select: {
@@ -83,7 +81,7 @@ export const getStudentAttendanceData = cache(
                 },
                 attendances: {
                   where: {
-                    userId: session.userId,
+                    userId: student.id,
                     attendanceDate,
                   },
                   select: {

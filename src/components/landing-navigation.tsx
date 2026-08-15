@@ -95,14 +95,14 @@ export function LandingNavigation() {
 
 type StudentHeaderItem =
   | "dashboard"
-  | "programs"
+  | "competitions"
   | "community"
   | "attendance"
   | "schedule"
   | "account";
 
 export function StudentHeaderNav({
-  activeItem = "community",
+  activeItem,
   followDashboardScroll = false,
 }: {
   activeItem?: StudentHeaderItem;
@@ -110,7 +110,7 @@ export function StudentHeaderNav({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [trackedActiveItem, setTrackedActiveItem] =
-    useState<StudentHeaderItem>(activeItem);
+    useState<StudentHeaderItem | undefined>(activeItem);
 
   useEffect(() => {
     if (!followDashboardScroll) {

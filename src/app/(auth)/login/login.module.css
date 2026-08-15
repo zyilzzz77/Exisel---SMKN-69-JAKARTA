@@ -374,6 +374,83 @@
   font-size: 14px;
 }
 
+.oauthPanel {
+  display: grid;
+  gap: 10px;
+  padding: 24px 32px 0;
+}
+
+.googleButton {
+  display: grid;
+  min-height: 58px;
+  grid-template-columns: 26px 1fr auto;
+  align-items: center;
+  gap: 13px;
+  padding: 11px 17px;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: 5px 5px 0 var(--ink);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 900;
+  text-decoration: none;
+  transition: box-shadow 140ms ease, transform 140ms ease;
+}
+
+.googleButton:hover,
+.googleButton:focus-visible {
+  box-shadow: 8px 8px 0 var(--blue);
+  outline: none;
+  transform: translate(-2px, -2px);
+}
+
+.googleButton > span:last-child { font-size: 21px; }
+.googleIcon { width: 24px; height: 24px; }
+
+.oauthPanel > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.oauthError {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 3px solid var(--ink);
+  background: #ffdad6;
+  color: #93000a;
+  font-size: 11px;
+}
+
+.oauthError strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 13px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 32px -8px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.divider::before,
+.divider::after {
+  height: 2px;
+  flex: 1;
+  background: var(--ink);
+  content: "";
+  opacity: .25;
+}
+
 .form {
   display: grid;
   gap: 22px;
@@ -840,6 +917,9 @@
   .cardIntro {
     padding: 24px 20px 0;
   }
+
+  .oauthPanel { padding: 22px 20px 0; }
+  .divider { margin-inline: 20px; }
 
   .cardIntro h2 {
     font-size: 34px;

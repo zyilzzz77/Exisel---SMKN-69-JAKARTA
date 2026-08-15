@@ -4,6 +4,8 @@ import { cache } from "react";
 import { redirect } from "next/navigation";
 import { getPrisma } from "@/lib/database/prisma";
 import { readSession } from "@/lib/auth/session";
+import { requireApprovedStudent } from "@/lib/auth/authorization";
+import { getStudentStatusDestination } from "@/lib/auth/student-status";
 import { reconcilePastAttendances } from "@/lib/attendance/reconcile";
 import { getJakartaDateKey, toDatabaseDate } from "@/lib/school-date";
 
@@ -28,6 +30,7 @@ export const getCurrentUser = cache(async () => {
       role: true,
       className: true,
       isActive: true,
+      status: true,
       mustChangePassword: true,
     },
   });
@@ -36,18 +39,22 @@ export const getCurrentUser = cache(async () => {
     redirect("/login");
   }
 
+  if (user.role === "STUDENT" && user.status !== "APPROVED") {
+    redirect(getStudentStatusDestination(user.status));
+  }
+
   return user;
 });
 
 export const getStudentDashboard = cache(async () => {
-  const session = await verifySession();
+  const approvedStudent = await requireApprovedStudent();
   const dateKey = getJakartaDateKey();
   const attendanceDate = toDatabaseDate(dateKey);
   await reconcilePastAttendances(dateKey);
   const prisma = getPrisma();
   const [user, extracurriculars] = await prisma.$transaction([
     prisma.user.findUnique({
-      where: { id: session.userId },
+      where: { id: approvedStudent.id },
       select: {
         id: true,
         email: true,
@@ -81,7 +88,7 @@ export const getStudentDashboard = cache(async () => {
                 },
                 attendances: {
                   where: {
-                    userId: session.userId,
+                    userId: approvedStudent.id,
                     attendanceDate,
                   },
                   select: {
@@ -172,6 +179,7 @@ export const getPublicExtracurricularData = cache(async () => {
             role: true,
             className: true,
             isActive: true,
+            status: true,
             enrollments: {
               where: { status: { in: ["PENDING", "APPROVED"] } },
               select: {
@@ -194,7 +202,10 @@ export const getPublicExtracurricularData = cache(async () => {
 
   return {
     extracurriculars,
-    user: currentUser?.isActive ? currentUser : null,
+    user:
+      currentUser?.isActive && currentUser.status === "APPROVED"
+        ? currentUser
+        : null,
   };
 });
 
@@ -203,7 +214,7 @@ const UUID_PATTERN =
 
 export const getStudentRegistrationData = cache(
   async (extracurricularId?: string) => {
-    const session = await verifySession();
+    const approvedStudent = await requireApprovedStudent();
     const prisma = getPrisma();
     const validExtracurricularId =
       extracurricularId && UUID_PATTERN.test(extracurricularId)
@@ -212,7 +223,7 @@ export const getStudentRegistrationData = cache(
 
     const [user, extracurricular] = await prisma.$transaction([
       prisma.user.findUnique({
-        where: { id: session.userId },
+        where: { id: approvedStudent.id },
         select: {
           id: true,
           name: true,

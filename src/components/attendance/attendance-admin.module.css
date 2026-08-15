@@ -1,0 +1,130 @@
+.attendanceQrPanel,
+.attendanceLivePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.attendanceQrPanel header,
+.attendanceLivePanel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.attendanceQrPanel header span,
+.attendanceLivePanel header span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.attendanceQrPanel header strong,
+.attendanceLivePanel header strong {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+}
+
+.attendanceQrPanel img,
+.attendanceQrImage {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 0 auto;
+  border: 3px solid var(--ink);
+  border-radius: 0.75rem;
+  background: #ffffff;
+}
+
+.attendanceQrHint,
+.attendanceQrEmpty,
+.attendanceLiveEmpty,
+.attendanceLiveError {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: color-mix(in oklab, var(--ink) 70%, transparent);
+  margin: 0;
+}
+
+.attendanceLiveError {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+.attendanceQrActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.attendanceQrActions form {
+  display: contents;
+}
+
+.attendanceQrActions button {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--ink);
+  border-radius: 0.5rem;
+  background: var(--blue);
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.regenerateForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.regenerateForm button {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--ink);
+  border-radius: 0.5rem;
+  background: var(--blue);
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.regenerateMessage,
+.regenerateError {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.regenerateError {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+.attendanceLiveTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.attendanceLiveTable th,
+.attendanceLiveTable td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--ink) 20%, transparent);
+}
+
+.attendanceLiveTable th {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--ink) 60%, transparent);
+}
+
+.attendanceLiveTable td:nth-child(3) {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

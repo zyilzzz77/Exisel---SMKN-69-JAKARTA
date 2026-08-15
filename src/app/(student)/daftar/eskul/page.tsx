@@ -109,7 +109,7 @@ export default async function ExtracurricularRegistrationPage({
             </span>
           </Link>
 
-          <StudentHeaderNav activeItem="programs" />
+          <StudentHeaderNav />
 
           <div className={styles.accountArea}>
             <span className={styles.avatar} aria-hidden="true">

@@ -3,9 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
+import { ContentImage } from "@/components/content-image";
 import { PromoVideoPlayer } from "@/components/promo-video-player";
 import { StudentHeaderNav } from "@/components/landing-navigation";
 import { getPublicExtracurricularData } from "@/lib/auth/dal";
+import { getPrisma } from "@/lib/database/prisma";
 import styles from "./detail.module.css";
 
 type DetailPageProps = {
@@ -348,6 +350,15 @@ function formatTime(value: Date) {
     .replace(".", ":");
 }
 
+function formatContentDate(value: Date) {
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "numeric",
+    month: "long",
+    timeZone: "UTC",
+    year: "numeric",
+  }).format(value);
+}
+
 function initials(name: string) {
   return name
     .split(/\s+/)
@@ -380,6 +391,33 @@ export default async function ExtracurricularDetailPage({
   );
 
   if (!program) notFound();
+
+  const [achievements, galleryItems] = await Promise.all([
+    getPrisma().achievement.findMany({
+      where: { extracurricularId: program.id, isPublished: true },
+      orderBy: [{ achievedAt: "desc" }, { createdAt: "desc" }],
+      select: {
+        id: true,
+        title: true,
+        competitionName: true,
+        rank: true,
+        level: true,
+        achievedAt: true,
+        description: true,
+      },
+    }),
+    getPrisma().galleryItem.findMany({
+      where: { extracurricularId: program.id, isPublished: true },
+      orderBy: [{ position: "asc" }, { createdAt: "desc" }],
+      select: {
+        id: true,
+        imageUrl: true,
+        altText: true,
+        caption: true,
+        takenAt: true,
+      },
+    }),
+  ]);
 
   const presentation = programDetails[program.name] ?? {
     number: "—",
@@ -469,7 +507,7 @@ export default async function ExtracurricularDetailPage({
             </span>
           </Link>
 
-          <StudentHeaderNav activeItem="programs" />
+          <StudentHeaderNav />
 
           <div className={styles.accountActions}>
             {user ? (
@@ -648,6 +686,73 @@ export default async function ExtracurricularDetailPage({
             </figure>
           </section>
         ) : null}
+
+        <section className={styles.achievementSection} aria-labelledby="achievement-title">
+          <div className={styles.sectionHeading}>
+            <p className={styles.eyebrow}>Jejak yang membanggakan</p>
+            <h2 id="achievement-title">Prestasi {program.name}.</h2>
+          </div>
+          {achievements.length > 0 ? (
+            <div className={styles.achievementGrid}>
+              {achievements.map((achievement, index) => (
+                <article key={achievement.id}>
+                  <div className={styles.achievementTop}>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <span>{achievement.level ?? "Prestasi ekskul"}</span>
+                  </div>
+                  <strong className={styles.rank}>{achievement.rank}</strong>
+                  <h3>{achievement.title}</h3>
+                  <p>{achievement.description ?? "Pencapaian terbaik yang diraih melalui latihan, kerja tim, dan keberanian untuk berkompetisi."}</p>
+                  <div className={styles.achievementMeta}>
+                    <span>{achievement.competitionName ?? "Agenda kompetisi"}</span>
+                    <time dateTime={achievement.achievedAt.toISOString().slice(0, 10)}>
+                      {formatContentDate(achievement.achievedAt)}
+                    </time>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.contentEmpty}>
+              <span>Prestasi berikutnya bisa dimulai dari kamu.</span>
+              <p>Pembina akan menambahkan rekam pencapaian {program.name} di bagian ini.</p>
+            </div>
+          )}
+        </section>
+
+        <section className={styles.gallerySection} aria-labelledby="gallery-title">
+          <div className={styles.sectionHeading}>
+            <p className={styles.eyebrow}>Momen latihan & kegiatan</p>
+            <h2 id="gallery-title">Galeri {program.name}.</h2>
+          </div>
+          {galleryItems.length > 0 ? (
+            <div className={styles.galleryGrid}>
+              {galleryItems.map((item, index) => (
+                <figure key={item.id}>
+                  <div className={styles.galleryImage}>
+                    <ContentImage alt={item.altText} src={item.imageUrl} />
+                  </div>
+                  <figcaption>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <div>
+                      <strong>{item.caption ?? item.altText}</strong>
+                      {item.takenAt ? (
+                        <time dateTime={item.takenAt.toISOString().slice(0, 10)}>
+                          {formatContentDate(item.takenAt)}
+                        </time>
+                      ) : null}
+                    </div>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.contentEmpty}>
+              <span>Galeri sedang disiapkan.</span>
+              <p>Dokumentasi terbaru {program.name} akan tampil setelah diterbitkan pembina.</p>
+            </div>
+          )}
+        </section>
 
         <section className={styles.skillsSection} aria-labelledby="skills-title">
           <div className={styles.sectionHeading}>

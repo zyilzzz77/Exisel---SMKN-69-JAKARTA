@@ -55,6 +55,10 @@ services:
       SESSION_SECRET: ${SESSION_SECRET:?Isi SESSION_SECRET di .env.production}
       SESSION_COOKIE_SECURE: "true"
       NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:?Isi NEXT_PUBLIC_APP_URL di .env.production}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:?Isi GOOGLE_CLIENT_ID di .env.production}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:?Isi GOOGLE_CLIENT_SECRET di .env.production}
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:?Isi GOOGLE_REDIRECT_URI di .env.production}
+      GOOGLE_ALLOWED_EMAIL_DOMAIN: ${GOOGLE_ALLOWED_EMAIL_DOMAIN:-}
     expose:
       - "3000"
     depends_on:

@@ -40,12 +40,32 @@ function initials(name: string) {
 export default async function AttendancePage({
   searchParams,
 }: {
-  searchParams: Promise<{ ekskul?: string | string[] }>;
+  searchParams: Promise<{
+    ekskul?: string | string[];
+    already?: string | string[];
+    programName?: string | string[];
+    checkedInAt?: string | string[];
+  }>;
 }) {
   const query = await searchParams;
   const data = await getStudentAttendanceData(getFirst(query.ekskul));
   const selectedProgram = data.selectedProgram;
   const schedule = selectedProgram?.schedules[0];
+  const already = getFirst(query.already) === "1";
+  const programName = getFirst(query.programName);
+  const checkedInAt = getFirst(query.checkedInAt);
+  const qrSuccess = Boolean(programName);
+
+  const qrCheckedTime = checkedInAt
+    ? new Intl.DateTimeFormat("id-ID", {
+        timeZone: "Asia/Jakarta",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+        .format(new Date(checkedInAt))
+        .replace(".", ":")
+    : null;
 
   return (
     <main className={styles.page}>
@@ -91,6 +111,22 @@ export default async function AttendancePage({
       </header>
 
       <div className={styles.shell} id="attendance-content">
+        {qrSuccess ? (
+          <section className={styles.qrBanner} role="status" aria-live="polite">
+            <span aria-hidden="true">{already ? "✓" : "✓"}</span>
+            <div>
+              <strong>
+                {already
+                  ? `Kehadiranmu di ${programName} sudah tercatat.`
+                  : `Kehadiranmu di ${programName} berhasil dicatat.`}
+              </strong>
+              {qrCheckedTime ? (
+                <span>Pukul {qrCheckedTime} WIB</span>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
+
         <section className={styles.hero}>
           <div>
             <p className={styles.eyebrow}>Presensi mandiri / Hari kegiatan</p>

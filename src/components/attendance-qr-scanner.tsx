@@ -113,7 +113,7 @@ export function AttendanceQrScanner({ extracurricularId, sessionActive }: { extr
 
         const controls = reader.scan(video, (result) => {
             const token = result?.getText() ?? "";
-            if (!token.startsWith("exisel://attendance?") || busyRef.current || token === rejectedTokenRef.current) return;
+            if (!token.includes("/attendance/scan?") || busyRef.current || token === rejectedTokenRef.current) return;
             busyRef.current = true;
             rejectedTokenRef.current = token;
             void verify(token);

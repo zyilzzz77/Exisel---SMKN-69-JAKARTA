@@ -9,6 +9,7 @@ import {
   deleteCommunityMessageAction,
   type ActionState,
 } from "@/actions/community";
+import { AdminHeader } from "@/components/admin-header";
 import type { CommunityChannel, CommunityMessageItem } from "@/lib/community/dal";
 import styles from "@/app/(admin)/admin/community/admin-community.module.css";
 import publicStyles from "@/components/community/community.module.css";
@@ -82,29 +83,42 @@ export function AdminCommunityManager({
   }
 
   return (
-    <div className={styles.page}>
-      <header className={styles.header}>
-        <div>
-          <h1 className={styles.headerTitle}>Pengelola Exisel Community</h1>
-          <p className={styles.headerSub}>
-            Kirim pengumuman resmi ke 8 channel ekstrakurikuler SMKN 69 Jakarta.
-          </p>
-        </div>
-        <Link className={styles.publicLink} href="/community" target="_blank">
-          Buka Tampilan Komunitas <span aria-hidden="true">↗</span>
-        </Link>
-      </header>
+    <main className={styles.adminPage}>
+      <a className="skip-link" href="#community-manager">
+        Lewati ke pengelola Community
+      </a>
 
-      {status?.message ? (
-        <div className={styles.alertSuccess}>✓ {status.message}</div>
-      ) : null}
-      {status?.error ? (
-        <div className={styles.alertError}>⚠️ {status.error}</div>
-      ) : null}
+      <AdminHeader
+        activeItem="community"
+        adminName={adminName}
+        announcement="Ruang pengumuman admin & pembina ekstrakurikuler"
+        brandSubtitle="Kelola Community"
+      />
 
-      <div className={styles.grid}>
-        {/* Left Column: Message Composer */}
-        <section className={styles.card}>
+      <div className={styles.page} id="community-manager">
+        <header className={styles.header}>
+          <div>
+            <p className={styles.eyebrow}>Community resmi / 8 channel ekskul</p>
+            <h1 className={styles.headerTitle}>Pengelola Exisel Community</h1>
+            <p className={styles.headerSub}>
+              Kirim pengumuman resmi ke 8 channel ekstrakurikuler SMKN 69 Jakarta.
+            </p>
+          </div>
+          <Link className={styles.publicLink} href="/community" target="_blank">
+            Buka Tampilan Komunitas <span aria-hidden="true">↗</span>
+          </Link>
+        </header>
+
+        {status?.message ? (
+          <div className={styles.alertSuccess}>✓ {status.message}</div>
+        ) : null}
+        {status?.error ? (
+          <div className={styles.alertError}>⚠️ {status.error}</div>
+        ) : null}
+
+        <div className={styles.grid}>
+          {/* Left Column: Message Composer */}
+          <section className={styles.card}>
           <h2 className={styles.cardTitle}>
             <span className={styles.cardIcon}>✍️</span> Tulis Pengumuman Baru
           </h2>
@@ -188,10 +202,10 @@ export function AdminCommunityManager({
               {isPending ? "Mengirim..." : "Kirim Pengumuman →"}
             </button>
           </form>
-        </section>
+          </section>
 
-        {/* Right Column: Recent Messages List */}
-        <section className={styles.card}>
+          {/* Right Column: Recent Messages List */}
+          <section className={styles.card}>
           <h2 className={styles.cardTitle}>
             <span className={styles.cardIcon}>📋</span> Riwayat Pengumuman
           </h2>
@@ -240,13 +254,13 @@ export function AdminCommunityManager({
               })
             )}
           </div>
-        </section>
-      </div>
+          </section>
+        </div>
 
-      {/* Edit Modal */}
-      {editingMsg ? (
-        <div className={styles.modalOverlay} role="presentation">
-          <div className={styles.modalContent}>
+        {/* Edit Modal */}
+        {editingMsg ? (
+          <div className={styles.modalOverlay} role="presentation">
+            <div className={styles.modalContent}>
             <h3 className={styles.modalTitle}>Edit Pesan Pengumuman</h3>
             <textarea
               className={styles.textarea}
@@ -271,14 +285,14 @@ export function AdminCommunityManager({
                 {isPending ? "Menyimpan..." : "Simpan Perubahan"}
               </button>
             </div>
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
 
-      {/* Delete Confirmation Modal */}
-      {deletingMsgId ? (
-        <div className={styles.modalOverlay} role="presentation">
-          <div className={styles.modalContent}>
+        {/* Delete Confirmation Modal */}
+        {deletingMsgId ? (
+          <div className={styles.modalOverlay} role="presentation">
+            <div className={styles.modalContent}>
             <h3 className={styles.modalTitle}>Hapus Pesan Pengumuman?</h3>
             <p style={{ margin: 0, fontSize: "13px", color: "var(--muted)" }}>
               Pesan yang telah dihapus tidak akan ditampilkan lagi kepada siswa di halaman Community.
@@ -300,9 +314,10 @@ export function AdminCommunityManager({
                 {isPending ? "Menghapus..." : "Ya, Hapus Pesan"}
               </button>
             </div>
+            </div>
           </div>
-        </div>
-      ) : null}
-    </div>
+        ) : null}
+      </div>
+    </main>
   );
 }

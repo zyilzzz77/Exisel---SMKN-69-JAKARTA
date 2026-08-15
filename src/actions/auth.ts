@@ -7,6 +7,8 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getPrisma } from "@/lib/database/prisma";
 import { createSession, deleteSession } from "@/lib/auth/session";
+import { getStudentStatusDestination } from "@/lib/auth/student-status";
+import { hasAttendanceIntentCookie } from "@/lib/attendance/attendance-intent";
 
 const MAX_LOGIN_ATTEMPTS = 5;
 const BLOCK_DURATION_MS = 15 * 60 * 1000;
@@ -39,6 +41,7 @@ async function authenticateAction(
   _previousState: LoginState,
   formData: FormData,
 ): Promise<LoginState> {
+  let successfulRedirect = redirectTo;
   const result = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -85,6 +88,7 @@ async function authenticateAction(
         id: true,
         passwordHash: true,
         role: true,
+        status: true,
         isActive: true,
       },
     });
@@ -146,8 +150,24 @@ async function authenticateAction(
     }
 
     await prisma.loginThrottle.deleteMany({ where: { key: throttleKey } });
-    await createSession({ userId: user.id, role: user.role });
-  } catch {
+    await createSession({
+      userId: user.id,
+      role: user.role,
+      ipAddress: clientAddress,
+      userAgent: requestHeaders.get("user-agent") || undefined,
+      createdBy: "login",
+    });
+
+    if (user.role === "STUDENT") {
+      const hasPendingAttendance = await hasAttendanceIntentCookie();
+      if (hasPendingAttendance && user.status === "APPROVED") {
+        successfulRedirect = "/attendance/resume";
+      } else {
+        successfulRedirect = getStudentStatusDestination(user.status);
+      }
+    }
+  } catch (error) {
+    console.error("Login authentication error:", error);
     return {
       status: "unavailable",
       message:
@@ -155,7 +175,7 @@ async function authenticateAction(
     };
   }
 
-  redirect(redirectTo);
+  redirect(successfulRedirect);
 }
 
 export async function loginAction(

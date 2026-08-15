@@ -153,7 +153,14 @@ Di editor, ganti `ACME_EMAIL` dengan email aktif. Pastikan nilai berikut tetap:
 ```dotenv
 DOMAIN=exisel.web.id
 NEXT_PUBLIC_APP_URL=https://exisel.web.id
+GOOGLE_REDIRECT_URI=https://exisel.web.id/api/auth/google/callback
 ```
+
+Isi `GOOGLE_CLIENT_ID` dan `GOOGLE_CLIENT_SECRET` menggunakan OAuth 2.0 Web
+Client milik project Google Cloud EXISEL. Pada Google Cloud, Authorized redirect
+URI harus sama persis dengan nilai `GOOGLE_REDIRECT_URI` di atas. Biarkan
+`GOOGLE_ALLOWED_EMAIL_DOMAIN` kosong jika siswa memakai akun Gmail pribadi.
+Panduan lengkap tersedia di [`GOOGLE_LOGIN.md`](./GOOGLE_LOGIN.md).
 
 Jangan commit `.env.production` dan jangan mengirim isinya melalui chat.
 

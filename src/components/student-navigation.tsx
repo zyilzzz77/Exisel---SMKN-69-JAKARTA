@@ -13,9 +13,9 @@ const studentNavigationItems = [
     label: "Jadwal",
   },
   {
-    id: "programs",
-    href: "/ekstrakurikuler",
-    label: "Pilihan ekskul",
+    id: "competitions",
+    href: "/lomba",
+    label: "Lomba",
   },
   {
     id: "community",

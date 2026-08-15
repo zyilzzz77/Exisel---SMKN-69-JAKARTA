@@ -9,11 +9,17 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/AuditLog'
 export type * from './models/Extracurricular'
 export type * from './models/Schedule'
 export type * from './models/Enrollment'
 export type * from './models/Attendance'
 export type * from './models/AttendanceSession'
+export type * from './models/AttendanceIntent'
 export type * from './models/LoginThrottle'
 export type * from './models/CommunityMessage'
+export type * from './models/Competition'
+export type * from './models/Achievement'
+export type * from './models/GalleryItem'
+export type * from './models/Session'
 export type * from './commonInputTypes'

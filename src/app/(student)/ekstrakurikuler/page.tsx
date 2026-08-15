@@ -230,7 +230,7 @@ export default async function ExtracurricularPage({
             </span>
           </Link>
 
-          <StudentHeaderNav activeItem="programs" />
+          <StudentHeaderNav />
 
           <div className={styles.accountActions}>
             {user ? (

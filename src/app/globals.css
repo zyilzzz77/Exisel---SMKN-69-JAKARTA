@@ -1472,7 +1472,8 @@ a {
     grid-row: 1;
   }
 
-  .desktop-nav {
+  .desktop-nav,
+  .admin-desktop-nav {
     display: none !important;
     width: 100%;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1482,7 +1483,8 @@ a {
     white-space: normal;
   }
 
-  .desktop-nav.mobile-menu-open {
+  .desktop-nav.mobile-menu-open,
+  .admin-desktop-nav.admin-mobile-menu-open {
     display: grid !important;
     position: absolute;
     top: 100%;
@@ -1498,7 +1500,8 @@ a {
     animation: mobile-menu-enter 180ms ease-out both;
   }
 
-  .desktop-nav a {
+  .desktop-nav a,
+  .admin-desktop-nav a {
     width: 100%;
     min-height: 40px;
     padding: 7px 6px;

@@ -1,0 +1,52 @@
+.dialog {
+  position: fixed;
+  inset: 0;
+  width: min(calc(100% - 32px), 540px);
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  overflow: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink);
+}
+
+.dialog::backdrop { background: rgb(7 9 16 / 72%); backdrop-filter: blur(4px); }
+.confirmPanel, .successPanel { border: var(--border); background: var(--white); box-shadow: 9px 9px 0 var(--ink); }
+.modalHeader { display: flex; min-height: 76px; align-items: center; justify-content: space-between; gap: 20px; padding: 17px 22px; border-bottom: 3px solid var(--ink); }
+.modalHeader span { font-size: 10px; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
+.modalHeader strong { display: grid; width: 38px; height: 38px; place-items: center; border: 3px solid var(--ink); border-radius: 50%; background: var(--white); box-shadow: 3px 3px 0 var(--ink); font-family: var(--font-display), sans-serif; font-size: 20px; }
+.approve { background: #c8f6d2; }
+.reject { background: #ffdad6; }
+.suspend { background: var(--orange); }
+.modalBody { display: grid; gap: 16px; padding: 25px 24px 27px; }
+.studentLabel { margin: 0; color: var(--blue); font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.modalBody h2 { margin: -6px 0 0; font-family: var(--font-display), sans-serif; font-size: clamp(28px, 5vw, 38px); letter-spacing: -.045em; line-height: 1; }
+.studentName { padding: 11px 13px; border: 2px solid var(--ink); background: var(--paper); font-size: 13px; overflow-wrap: anywhere; }
+.description { margin: 0; color: var(--muted); font-size: 12px; }
+.reasonField { display: grid; gap: 7px; }
+.reasonField > span { display: flex; justify-content: space-between; gap: 12px; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+.reasonField small { color: #a31919; font-size: 8px; }
+.reasonField textarea { width: 100%; resize: vertical; padding: 11px 12px; border: 3px solid var(--ink); border-radius: 5px; background: var(--white); box-shadow: 3px 3px 0 var(--ink); color: var(--ink); font: inherit; font-size: 12px; }
+.reasonField textarea:focus { background: #fff5f3; outline: 3px solid #d73333; outline-offset: 2px; }
+.errorMessage { margin: 0; padding: 10px 12px; border: 2px solid #9f1f1f; background: #ffdad6; color: #78000a; font-size: 11px; font-weight: 800; }
+.modalActions { display: grid; grid-template-columns: 1fr 1.25fr; gap: 10px; margin-top: 4px; }
+.modalActions button, .successPanel button { min-height: 48px; padding: 10px 13px; border: 3px solid var(--ink); border-radius: 5px; background: var(--white); box-shadow: 3px 3px 0 var(--ink); cursor: pointer; color: var(--ink); font: inherit; font-size: 11px; font-weight: 900; }
+.modalActions button:hover:not(:disabled), .modalActions button:focus-visible, .successPanel button:hover, .successPanel button:focus-visible { box-shadow: 5px 5px 0 var(--ink); transform: translate(-1px, -1px); }
+.modalActions button:disabled { cursor: wait; opacity: .65; }
+.modalActions .approveButton { background: var(--blue); color: var(--white); }
+.modalActions .rejectButton { background: #d73333; color: var(--white); }
+.modalActions .suspendButton { background: var(--orange); }
+.successPanel { display: grid; place-items: center; gap: 11px; padding: 34px 28px 30px; text-align: center; }
+.successIcon { display: grid; width: 68px; height: 68px; place-items: center; border: 3px solid var(--ink); border-radius: 50%; background: #42d66b; box-shadow: 5px 5px 0 var(--ink); font-family: var(--font-display), sans-serif; font-size: 32px; font-weight: 900; }
+.successPanel > p:first-of-type { margin: 8px 0 0; color: var(--blue); font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.successPanel h2 { margin: 0; font-family: var(--font-display), sans-serif; font-size: 30px; letter-spacing: -.04em; }
+.successPanel > p:last-of-type { max-width: 360px; margin: 0; color: var(--muted); font-size: 11px; }
+.successPanel button { min-width: 170px; margin-top: 8px; background: var(--blue); color: var(--white); }
+
+@media (max-width: 540px) {
+  .dialog { width: calc(100% - 24px); }
+  .modalBody { padding: 21px 17px 23px; }
+  .modalActions { grid-template-columns: 1fr; }
+}

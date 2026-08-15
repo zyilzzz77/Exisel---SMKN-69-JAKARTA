@@ -17,6 +17,27 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const UserStatus = {
+  INCOMPLETE: 'INCOMPLETE',
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  SUSPENDED: 'SUSPENDED'
+} as const
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
+export const AuditAction = {
+  STUDENT_APPROVED: 'STUDENT_APPROVED',
+  STUDENT_REJECTED: 'STUDENT_REJECTED',
+  STUDENT_SUSPENDED: 'STUDENT_SUSPENDED',
+  STUDENT_UNSUSPENDED: 'STUDENT_UNSUSPENDED'
+} as const
+
+export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction]
+
+
 export const DayOfWeek = {
   MONDAY: 'MONDAY',
   TUESDAY: 'TUESDAY',

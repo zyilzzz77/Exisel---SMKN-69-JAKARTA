@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { adminLogoutAction } from "@/actions/auth";
-import { AdminNavigation } from "@/components/admin-navigation";
+import { AdminHeader } from "@/components/admin-header";
 import { getAdminAttendanceDashboard } from "@/lib/attendance/dal";
 import styles from "./admin-dashboard.module.css";
 
@@ -46,15 +45,6 @@ const programToneClasses = {
 
 function getFirst(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
-}
-
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("");
 }
 
 function slugify(value: string) {
@@ -105,47 +95,12 @@ export default async function AdminAttendanceDashboard({
         Lewati ke tabel kehadiran
       </a>
 
-      <div className={styles.announcement}>
-        <span className={styles.liveDot} aria-hidden="true" />
-        Portal monitoring admin & guru
-      </div>
-
-      <header className={styles.header}>
-        <div className={styles.headerInner}>
-          <Link className={styles.brand} href="/admin/dashboard">
-            <span className={styles.brandLogo}>
-              <Image
-                alt="Logo SMK Negeri 69 Jakarta"
-                height={948}
-                priority
-                src="/logo-smkn69.webp"
-                width={758}
-              />
-            </span>
-            <span>
-              <strong>EXISEL</strong>
-              <small>Monitoring kehadiran</small>
-            </span>
-          </Link>
-
-          <AdminNavigation activeItem="attendance" className={styles.navigation} />
-
-          <div className={styles.accountActions}>
-            <span className={styles.avatar} aria-hidden="true">
-              {initials(data.admin.name)}
-            </span>
-            <div className={styles.accountCopy}>
-              <strong>{data.admin.name}</strong>
-              <span>Admin / Guru</span>
-            </div>
-            <form action={adminLogoutAction}>
-              <button className={styles.logoutButton} type="submit">
-                Keluar ↗
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
+      <AdminHeader
+        activeItem="attendance"
+        adminName={data.admin.name}
+        announcement="Portal monitoring admin & guru"
+        brandSubtitle="Monitoring kehadiran"
+      />
 
       <div className={styles.shell}>
         <section className={styles.hero}>

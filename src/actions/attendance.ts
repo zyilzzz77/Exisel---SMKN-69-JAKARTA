@@ -1,8 +1,9 @@
 "use server";
 
+import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { readSession } from "@/lib/auth/session";
+import { getActiveSessionUser } from "@/lib/auth/authorization";
 import { getPrisma } from "@/lib/database/prisma";
 import { validateAttendanceQrPayload } from "@/lib/attendance/rotating-qr";
 import {
@@ -11,6 +12,13 @@ import {
   normalizePrismaJakartaTimestamp,
   toDatabaseDate,
 } from "@/lib/school-date";
+
+async function requestOrigin(): Promise<string> {
+  const headerStore = await headers();
+  const host = headerStore.get("host");
+  if (!host) return "";
+  return `http://${host}`;
+}
 
 const attendanceSchema = z
   .object({
@@ -75,8 +83,8 @@ export async function submitAttendanceAction(
     };
   }
 
-  const session = await readSession();
-  if (!session || session.role !== "STUDENT") {
+  const student = await getActiveSessionUser("STUDENT");
+  if (!student) {
     return {
       status: "error",
       message: "Sesi siswa berakhir. Silakan login kembali.",
@@ -92,10 +100,10 @@ export async function submitAttendanceAction(
     const outcome = await prisma.$transaction(async (transaction) => {
       const enrollment = await transaction.enrollment.findFirst({
         where: {
-          userId: session.userId,
+          userId: student.id,
           extracurricularId: parsed.data.extracurricularId,
           status: "APPROVED",
-          user: { role: "STUDENT", isActive: true },
+          user: { role: "STUDENT", status: "APPROVED", isActive: true },
           extracurricular: {
             isActive: true,
             schedules: { some: { day } },
@@ -141,6 +149,7 @@ export async function submitAttendanceAction(
             extracurricularId: enrollment.extracurricularId,
             dateKey,
             sessionNonce: sessionCode.code,
+            allowedOrigins: [await requestOrigin()],
           })
         ) {
           return "invalidCode" as const;
@@ -189,7 +198,7 @@ export async function submitAttendanceAction(
       .findUnique({
         where: {
           userId_extracurricularId_attendanceDate: {
-            userId: session.userId,
+            userId: student.id,
             extracurricularId: parsed.data.extracurricularId,
             attendanceDate,
           },

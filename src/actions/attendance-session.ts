@@ -3,7 +3,7 @@
 import { randomBytes } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { readSession } from "@/lib/auth/session";
+import { getActiveSessionUser } from "@/lib/auth/authorization";
 import { getPrisma } from "@/lib/database/prisma";
 import { getJakartaDateKey, toDatabaseDate } from "@/lib/school-date";
 
@@ -38,8 +38,8 @@ export async function generateAttendanceSessionAction(
     return { status: "error", message: "Ekskul tidak valid." };
   }
 
-  const session = await readSession();
-  if (!session || session.role !== "ADMIN") {
+  const admin = await getActiveSessionUser("ADMIN");
+  if (!admin) {
     return { status: "error", message: "Sesi admin berakhir. Silakan login kembali." };
   }
 
@@ -93,13 +93,13 @@ export async function generateAttendanceSessionAction(
       },
       create: {
         extracurricularId: program.id,
-        createdById: session.userId,
+        createdById: admin.id,
         sessionDate: attendanceDate,
         code,
         expiresAt,
       },
       update: {
-        createdById: session.userId,
+        createdById: admin.id,
         code,
         expiresAt,
       },
@@ -110,7 +110,7 @@ export async function generateAttendanceSessionAction(
     revalidatePath("/kehadiran");
     return {
       status: "success",
-      message: `QR dinamis ${program.name} aktif. Tekan Selesai setelah absensi selesai.`,
+      message: `QR absensi ${program.name} aktif. Tekan Selesai setelah absensi selesai.`,
     };
   } catch {
     return {
@@ -131,8 +131,7 @@ export async function finishAttendanceSessionAction(
     return { status: "error", message: "Ekskul tidak valid." };
   }
 
-  const session = await readSession();
-  if (!session || session.role !== "ADMIN") {
+  if (!(await getActiveSessionUser("ADMIN"))) {
     return { status: "error", message: "Sesi admin berakhir. Silakan login kembali." };
   }
 

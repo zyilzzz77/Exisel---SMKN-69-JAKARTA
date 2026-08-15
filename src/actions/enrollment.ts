@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { readSession } from "@/lib/auth/session";
+import { requireApprovedStudent } from "@/lib/auth/authorization";
 import { getPrisma } from "@/lib/database/prisma";
 
 const extracurricularIdSchema = z.string().uuid();
@@ -35,11 +35,7 @@ export async function registerExtracurricularAction(
     redirect("/ekstrakurikuler");
   }
 
-  const session = await readSession();
-
-  if (!session || session.role !== "STUDENT") {
-    redirect("/login");
-  }
+  const student = await requireApprovedStudent();
 
   const prisma = getPrisma();
   let outcome: RegistrationOutcome = "unavailable";
@@ -51,8 +47,9 @@ export async function registerExtracurricularAction(
           const [user, extracurricular, existingEnrollment] = await Promise.all([
             transaction.user.findFirst({
               where: {
-                id: session.userId,
+                id: student.id,
                 role: "STUDENT",
+                status: "APPROVED",
                 isActive: true,
               },
               select: { id: true, nis: true },
@@ -74,7 +71,7 @@ export async function registerExtracurricularAction(
             transaction.enrollment.findUnique({
               where: {
                 userId_extracurricularId: {
-                  userId: session.userId,
+                  userId: student.id,
                   extracurricularId: parsedId.data,
                 },
               },
