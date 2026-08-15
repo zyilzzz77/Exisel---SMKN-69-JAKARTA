@@ -17,6 +17,17 @@ type RecordsPayload = {
   records: RecordRow[];
 };
 
+function formatTime(value: string) {
+  return new Intl.DateTimeFormat("id-ID", {
+    timeZone: "Asia/Jakarta",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+    .format(new Date(value))
+    .replace(".", ":");
+}
+
 export function AttendanceLivePanel({
   programId,
   programName,
@@ -64,46 +75,59 @@ export function AttendanceLivePanel({
 
   return (
     <div className={styles.attendanceLivePanel}>
-      <header>
-        <span>Kehadiran Langsung</span>
+      <header className={styles.attendanceLiveHeader}>
+        <div className={styles.attendanceLiveStatus}>
+          <span className={styles.attendanceLiveDot} aria-hidden="true" />
+          <span>Live</span>
+        </div>
         <strong>
           {data ? `${data.present} / ${data.total} hadir` : "Memuat..."}
         </strong>
       </header>
+
       {error ? <p className={styles.attendanceLiveError}>{error}</p> : null}
+
       {data && data.records.length > 0 ? (
-        <table className={styles.attendanceLiveTable}>
-          <thead>
-            <tr>
-              <th>Nama</th>
-              <th>Kelas</th>
-              <th>Waktu</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.records.map((record) => (
-              <tr key={record.id}>
-                <td>{record.studentName}</td>
-                <td>{record.className ?? "-"}</td>
-                <td>
-                  {new Intl.DateTimeFormat("id-ID", {
-                    timeZone: "Asia/Jakarta",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false,
-                  })
-                    .format(new Date(record.checkedInAt))
-                    .replace(".", ":")}
-                </td>
+        <div className={styles.attendanceLiveTableWrap}>
+          <table className={styles.attendanceLiveTable}>
+            <thead>
+              <tr>
+                <th scope="col">Nama</th>
+                <th scope="col">Kelas</th>
+                <th scope="col">Waktu</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.records.map((record) => (
+                <tr key={record.id}>
+                  <td className={styles.attendanceLiveName}>
+                    {record.studentName}
+                  </td>
+                  <td>
+                    <span className={styles.attendanceLiveClass}>
+                      {record.className ?? "-"}
+                    </span>
+                  </td>
+                  <td className={styles.attendanceLiveTime}>
+                    {formatTime(record.checkedInAt)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
-        <p className={styles.attendanceLiveEmpty}>
-          Belum ada siswa yang hadir melalui QR untuk {programName}.
-        </p>
+        <div className={styles.attendanceLiveEmpty}>
+          <strong>Belum ada yang hadir</strong>
+          <span>
+            Belum ada siswa yang tercatat hadir lewat QR untuk {programName}.
+          </span>
+        </div>
       )}
+
+      <footer className={styles.attendanceLiveFooter}>
+        <span>Pembaruan otomatis setiap 5 detik</span>
+      </footer>
     </div>
   );
 }

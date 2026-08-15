@@ -24,6 +24,8 @@
 .infoCard,.sessionCard { min-height:310px; padding:28px; border:var(--border); border-radius:var(--radius); box-shadow:8px 8px 0 var(--ink); background:var(--white); }
 .sessionCard { background:var(--blue); color:var(--white); }
 .sessionCard .cardNumber { color:var(--white); }
+.liveCard { grid-column:1 / -1; min-height:0; padding:28px; border:var(--border); border-radius:var(--radius); box-shadow:8px 8px 0 var(--ink); background:var(--white); }
+.liveCard .cardNumber { margin-bottom:20px; }
 .infoCard h2 { margin:36px 0 10px; font-family:var(--font-display),sans-serif; font-size:54px; letter-spacing:-.06em; }
 .infoCard p { margin:0 0 16px; font-weight:800; line-height:1.5; }
 .muted { color:var(--muted); font-size:13px; font-weight:600 !important; }

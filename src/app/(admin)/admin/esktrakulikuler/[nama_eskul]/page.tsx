@@ -138,7 +138,7 @@ const program = programs.find((item) => slugify(item.name) === requestedSlug);
             <p className={styles.sessionRule}>QR berganti setiap 25 detik dan token lama langsung kedaluwarsa. Siswa memindai QR dengan Google Lens/kamera; jika sudah login, kehadiran langsung tercatat.</p>
           </article>
 
-          <article className={styles.sessionCard}>
+          <article className={styles.liveCard}>
             <span className={styles.cardNumber}>03 / Kehadiran langsung</span>
             <AttendanceLivePanel programId={program.id} programName={program.name} />
           </article>
