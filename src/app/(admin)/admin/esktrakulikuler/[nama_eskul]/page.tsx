@@ -106,7 +106,7 @@ const program = programs.find((item) => slugify(item.name) === requestedSlug);
           <div>
             <p className={styles.eyebrow}>Sesi hari ini / {dateKey}</p>
             <h1>QR kehadiran <span>{program.name}.</span></h1>
-            <p>Tampilkan QR dinamis kepada siswa. QR berganti setiap 4 detik dan token sebelumnya langsung kedaluwarsa.</p>
+            <p>Tampilkan QR dinamis kepada siswa. QR berganti setiap 15 detik dan token sebelumnya langsung kedaluwarsa.</p>
           </div>
           <div className={styles.logoFrame}>
             {logos[program.name] ? <Image alt={`Logo ${program.name}`} height={220} src={logos[program.name]} width={220} /> : <strong>{program.name.slice(0, 2).toUpperCase()}</strong>}
@@ -135,7 +135,7 @@ const program = programs.find((item) => slugify(item.name) === requestedSlug);
               <p className={styles.muted}>Belum ada QR aktif untuk agenda ini.</p>
             )}
             <AttendanceSessionForm active={Boolean(activeSession)} extracurricularId={program.id} />
-            <p className={styles.sessionRule}>QR berganti setiap 4 detik dan token lama langsung kedaluwarsa. Siswa memindai QR dengan Google Lens/kamera; jika sudah login, kehadiran langsung tercatat.</p>
+            <p className={styles.sessionRule}>QR berganti setiap 15 detik dan token lama langsung kedaluwarsa. Siswa memindai QR dengan Google Lens/kamera; jika sudah login, kehadiran langsung tercatat.</p>
           </article>
 
           <article className={styles.sessionCard}>

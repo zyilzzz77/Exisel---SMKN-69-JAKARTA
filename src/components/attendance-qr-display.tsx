@@ -154,7 +154,7 @@ export function AttendanceQrDisplay({
         <strong>QR berganti dalam {remaining} detik</strong>
         <span>Token lama langsung kedaluwarsa.</span>
         <div className={styles.qrProgress}>
-          <i style={{ width: `${(remaining / 4) * 100}%` }} />
+          <i style={{ width: `${(remaining / (data ? data.rotationMs / 1_000 : 4)) * 100}%` }} />
         </div>
         {error ? <small role="alert">{error}</small> : null}
       </div>

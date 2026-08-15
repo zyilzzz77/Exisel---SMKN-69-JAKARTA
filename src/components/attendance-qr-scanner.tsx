@@ -22,7 +22,7 @@ export function AttendanceQrScanner({ extracurricularId, sessionActive }: { extr
   useEffect(() => {
     let cancelled = false;
     let activeStream: MediaStream | null = null;
-    const reader = new BrowserQRCodeReader(undefined, { delayBetweenScanAttempts: 100 });
+    const reader = new BrowserQRCodeReader(undefined, { delayBetweenScanAttempts: 300 });
 
     const stopCamera = () => {
       controlsRef.current?.stop();
@@ -111,16 +111,34 @@ export function AttendanceQrScanner({ extracurricularId, sessionActive }: { extr
         video.srcObject = activeStream;
         await video.play();
 
-        const controls = reader.scan(video, (result) => {
+        await new Promise<void>((resolve) => {
+          if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+            resolve();
+            return;
+          }
+          const onReady = () => {
+            video.removeEventListener("canplay", onReady);
+            resolve();
+          };
+          video.addEventListener("canplay", onReady);
+        });
+
+        const controlsPromise = reader.decodeFromVideoElement(video, (result) => {
             const token = result?.getText() ?? "";
             if (!token.includes("/attendance/scan?") || busyRef.current || token === rejectedTokenRef.current) return;
             busyRef.current = true;
             rejectedTokenRef.current = token;
             void verify(token);
           });
-        if (cancelled) return controls.stop();
-        controlsRef.current = controls;
-        setCameraState("ready");
+        if (cancelled) return void controlsPromise.then((controls) => controls.stop());
+        controlsPromise.then((controls) => {
+          if (cancelled) {
+            controls.stop();
+            return;
+          }
+          controlsRef.current = controls;
+          setCameraState("ready");
+        });
       } catch (error) {
         stopCamera();
 
@@ -171,7 +189,7 @@ export function AttendanceQrScanner({ extracurricularId, sessionActive }: { extr
         ) : null}
         {pending ? <div className={styles.scanProcessing}>Memeriksa QR terbaru...</div> : null}
       </div>
-      <p className={styles.scannerHint}>Pemindaian berjalan otomatis. QR berganti setiap 4 detik dan QR lama langsung ditolak backend.{!sessionActive ? " Minta admin mengaktifkan sesi QR dahulu." : ""}</p>
+      <p className={styles.scannerHint}>Pemindaian berjalan otomatis. QR berganti setiap 15 detik dan QR lama langsung ditolak backend.{!sessionActive ? " Minta admin mengaktifkan sesi QR dahulu." : ""}</p>
       {state.message ? (
         <div className={`${styles.formMessage} ${state.status === "success" || state.status === "alreadySubmitted" ? styles.messageSuccess : styles.messageError}`} role={state.status === "success" ? "status" : "alert"}>
           <strong>{state.status === "success" ? "Kehadiran berhasil disimpan." : state.status === "alreadySubmitted" ? "Kehadiran sudah tercatat." : "QR belum diterima."}</strong>

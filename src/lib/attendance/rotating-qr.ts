@@ -2,7 +2,7 @@ import "server-only";
 
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-export const ATTENDANCE_QR_ROTATION_MS = 4_000;
+export const ATTENDANCE_QR_ROTATION_MS = 15_000;
 const QR_VERSION = "1";
 
 function qrBaseUrl(host?: string | null) {
