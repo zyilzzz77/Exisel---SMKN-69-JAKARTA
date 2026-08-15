@@ -138,6 +138,29 @@ export async function POST(request: Request) {
     );
   }
 
+  // Perketat keanggotaan: siswa wajib terdaftar (enrollment APPROVED) pada
+  // ekskul yang QR-nya dipindai sebelum boleh absen. Dicek eksplisit di sini
+  // dan diulang secara transaksional di processAttendance.
+  const enrollment = await prisma.enrollment.findFirst({
+    where: {
+      userId: user.id,
+      extracurricularId: attendanceSession.extracurricularId,
+      status: "APPROVED",
+    },
+    select: { id: true },
+  });
+
+  if (!enrollment) {
+    return NextResponse.json(
+      {
+        message:
+          "Kamu belum terdaftar di ekskul ini. Daftar dahulu sebelum bisa absen.",
+        error: "NOT_EXTRACURRICULAR_MEMBER",
+      },
+      { status: 403, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+
   const outcome = await processAttendance({
     userId: user.id,
     attendanceSessionId: attendanceSession.id,
@@ -170,8 +193,12 @@ export async function POST(request: Request) {
     );
   }
 
+  const message =
+    outcome.error === "NOT_EXTRACURRICULAR_MEMBER"
+      ? "Kamu belum terdaftar di ekskul ini. Daftar dahulu sebelum bisa absen."
+      : "Kehadiran belum dapat disimpan. Coba lagi.";
   return NextResponse.json(
-    { message: "Kehadiran belum dapat disimpan. Coba lagi.", error: outcome.error },
+    { message, error: outcome.error },
     { status: 410, headers: { "Cache-Control": "no-store" } },
   );
 }

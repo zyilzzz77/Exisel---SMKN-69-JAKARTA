@@ -6,10 +6,8 @@ import styles from "@/app/attendance/attendance.module.css";
 
 export function AttendanceScanView({
   payload,
-  requiresLogin,
 }: {
   payload: string;
-  requiresLogin: boolean;
 }) {
   const router = useRouter();
   const [state, setState] = useState<"processing" | "error">("processing");
@@ -66,10 +64,12 @@ export function AttendanceScanView({
   }, [router, payload]);
 
   useEffect(() => {
-    if (requiresLogin) return;
+    // Selalu kirim token ke server. Jika belum login, API membuat intent
+    // absensi lalu mengarahkan ke /login; setelah login siswa dilanjutkan ke
+    // /attendance/resume (keanggotaan ekskul tetap divalidasi ulang).
     const initialSubmit = window.setTimeout(() => void submit(), 0);
     return () => window.clearTimeout(initialSubmit);
-  }, [requiresLogin, submit]);
+  }, [submit]);
 
   if (state === "error") {
     const query = new URLSearchParams({ message });

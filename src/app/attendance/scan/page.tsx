@@ -36,23 +36,21 @@ export default async function AttendanceScanPage({ searchParams }: PageProps) {
 
   const session = await readSession();
 
-  if (!session) {
-    return <AttendanceScanView payload={payload} requiresLogin />;
+  if (session) {
+    const user = await getPrisma().user.findFirst({
+      where: {
+        id: session.userId,
+        role: "STUDENT",
+        status: "APPROVED",
+        isActive: true,
+      },
+      select: { id: true },
+    });
+
+    if (!user) {
+      redirect("/login");
+    }
   }
 
-  const user = await getPrisma().user.findFirst({
-    where: {
-      id: session.userId,
-      role: "STUDENT",
-      status: "APPROVED",
-      isActive: true,
-    },
-    select: { id: true },
-  });
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  return <AttendanceScanView payload={payload} requiresLogin={false} />;
+  return <AttendanceScanView payload={payload} />;
 }

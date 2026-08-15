@@ -92,3 +92,27 @@
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 var(--ink);
 }
+
+.errorActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 0.75rem;
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.secondaryButton:hover {
+  background: var(--blue-light);
+}

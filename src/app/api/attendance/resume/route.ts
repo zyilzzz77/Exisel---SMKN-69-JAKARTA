@@ -79,8 +79,12 @@ export async function POST(request: Request) {
   });
 
   if (outcome.status === "error") {
+    const message =
+      outcome.error === "NOT_EXTRACURRICULAR_MEMBER"
+        ? "Kamu belum terdaftar di ekskul ini. Daftar dahulu sebelum bisa absen."
+        : "Kehadiran belum dapat disimpan. Silakan pindai QR kembali.";
     return NextResponse.json(
-      { message: "Kehadiran belum dapat disimpan. Silakan pindai QR kembali.", error: outcome.error },
+      { message, error: outcome.error },
       { status: 410, headers: { "Cache-Control": "no-store" } },
     );
   }
