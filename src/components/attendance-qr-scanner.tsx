@@ -3,12 +3,14 @@
 import { BrowserQRCodeReader } from "@zxing/browser";
 import type { IScannerControls } from "@zxing/browser";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { submitAttendanceAction, type AttendanceState } from "@/actions/attendance";
 import styles from "@/app/(student)/kehadiran/attendance.module.css";
 
 const initialState: AttendanceState = { status: "idle", message: "" };
 
 export function AttendanceQrScanner({ extracurricularId, sessionActive }: { extracurricularId: string; sessionActive: boolean }) {
+  const router = useRouter();
   const [state, setState] = useState(initialState);
   const [pending, setPending] = useState(false);
   const [cameraState, setCameraState] = useState<"starting" | "ready" | "blocked" | "stopped">("starting");
@@ -18,6 +20,8 @@ export function AttendanceQrScanner({ extracurricularId, sessionActive }: { extr
   const controlsRef = useRef<IScannerControls | null>(null);
   const busyRef = useRef(false);
   const rejectedTokenRef = useRef("");
+  const lastActivityRef = useRef(0);
+  const finishedRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -48,8 +52,10 @@ export function AttendanceQrScanner({ extracurricularId, sessionActive }: { extr
       setState(result);
       setPending(false);
       if (result.status === "success" || result.status === "alreadySubmitted") {
+        finishedRef.current = true;
         stopCamera();
         setCameraState("stopped");
+        router.refresh();
       } else {
         busyRef.current = false;
       }
@@ -61,6 +67,7 @@ export function AttendanceQrScanner({ extracurricularId, sessionActive }: { extr
 
       busyRef.current = false;
       rejectedTokenRef.current = "";
+      lastActivityRef.current = Date.now();
       setCameraState("starting");
       setCameraError("");
 
@@ -112,18 +119,21 @@ export function AttendanceQrScanner({ extracurricularId, sessionActive }: { extr
         await video.play();
 
         await new Promise<void>((resolve) => {
-          if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+          if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && video.videoWidth > 0) {
             resolve();
             return;
           }
           const onReady = () => {
-            video.removeEventListener("canplay", onReady);
-            resolve();
+            if (video.videoWidth > 0) {
+              video.removeEventListener("canplay", onReady);
+              resolve();
+            }
           };
           video.addEventListener("canplay", onReady);
         });
 
         const controlsPromise = reader.decodeFromVideoElement(video, (result) => {
+            lastActivityRef.current = Date.now();
             const token = result?.getText() ?? "";
             if (!token.includes("/attendance/scan?") || busyRef.current || token === rejectedTokenRef.current) return;
             busyRef.current = true;
@@ -164,11 +174,22 @@ export function AttendanceQrScanner({ extracurricularId, sessionActive }: { extr
     }
 
     void start();
+
+    const watchdog = window.setInterval(() => {
+      if (cancelled || finishedRef.current) return;
+      if (controlsRef.current && Date.now() - lastActivityRef.current > 12_000) {
+        controlsRef.current.stop();
+        controlsRef.current = null;
+        setRestartKey((value) => value + 1);
+      }
+    }, 4_000);
+
     return () => {
       cancelled = true;
+      window.clearInterval(watchdog);
       stopCamera();
     };
-  }, [extracurricularId, restartKey]);
+  }, [extracurricularId, restartKey, router]);
 
   return (
     <section className={styles.scannerPanel} aria-labelledby="scanner-title">
@@ -189,7 +210,7 @@ export function AttendanceQrScanner({ extracurricularId, sessionActive }: { extr
         ) : null}
         {pending ? <div className={styles.scanProcessing}>Memeriksa QR terbaru...</div> : null}
       </div>
-      <p className={styles.scannerHint}>Pemindaian berjalan otomatis. QR berganti setiap 15 detik dan QR lama langsung ditolak backend.{!sessionActive ? " Minta admin mengaktifkan sesi QR dahulu." : ""}</p>
+      <p className={styles.scannerHint}>Pemindaian berjalan otomatis. QR berganti setiap 25 detik dan QR lama langsung ditolak backend.{!sessionActive ? " Minta admin mengaktifkan sesi QR dahulu." : ""}</p>
       {state.message ? (
         <div className={`${styles.formMessage} ${state.status === "success" || state.status === "alreadySubmitted" ? styles.messageSuccess : styles.messageError}`} role={state.status === "success" ? "status" : "alert"}>
           <strong>{state.status === "success" ? "Kehadiran berhasil disimpan." : state.status === "alreadySubmitted" ? "Kehadiran sudah tercatat." : "QR belum diterima."}</strong>

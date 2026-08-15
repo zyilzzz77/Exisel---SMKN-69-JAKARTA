@@ -150,6 +150,7 @@ export async function POST(request: Request) {
       {
         message: "Kehadiran kamu sudah tercatat.",
         status: "success",
+        extracurricularId: attendanceSession.extracurricularId,
         programName: outcome.programName,
         checkedInAt: outcome.checkedInAt.toISOString(),
       },
@@ -162,6 +163,7 @@ export async function POST(request: Request) {
       {
         message: "Kehadiran kamu sudah tercatat.",
         status: "already_attended",
+        extracurricularId: attendanceSession.extracurricularId,
         programName: outcome.programName,
       },
       { status: 200, headers: { "Cache-Control": "no-store" } },

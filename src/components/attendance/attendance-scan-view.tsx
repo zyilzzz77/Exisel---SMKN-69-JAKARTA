@@ -30,6 +30,7 @@ export function AttendanceScanView({
       const result = (await response.json().catch(() => ({}))) as {
         status?: string;
         error?: string;
+        extracurricularId?: string;
         programName?: string;
         checkedInAt?: string;
         message?: string;
@@ -37,6 +38,7 @@ export function AttendanceScanView({
 
       if (response.ok && (result.status === "success" || result.status === "already_attended")) {
         const query = new URLSearchParams({
+          ekskul: result.extracurricularId ?? "",
           already: result.status === "already_attended" ? "1" : "",
           programName: result.programName ?? "Ekskul",
           checkedInAt: result.checkedInAt ?? "",
