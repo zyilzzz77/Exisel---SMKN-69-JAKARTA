@@ -20,6 +20,7 @@ export function AttendanceResumeView() {
         const payload = (await response.json().catch(() => ({}))) as {
           status?: string;
           error?: string;
+          extracurricularId?: string;
           programName?: string;
           checkedInAt?: string;
           message?: string;
@@ -29,11 +30,13 @@ export function AttendanceResumeView() {
 
         if (response.ok && (payload.status === "success" || payload.status === "already_attended")) {
           const query = new URLSearchParams({
+            ekskul: payload.extracurricularId ?? "",
             already: payload.status === "already_attended" ? "1" : "",
             programName: payload.programName ?? "Ekskul",
             checkedInAt: payload.checkedInAt ?? "",
           });
-          router.replace(`/kehadiran?${query.toString()}`);
+          // Navigasi penuh agar halaman kehadiran selalu dirender ulang dari server.
+          window.location.replace(`/kehadiran?${query.toString()}`);
           return;
         }
 

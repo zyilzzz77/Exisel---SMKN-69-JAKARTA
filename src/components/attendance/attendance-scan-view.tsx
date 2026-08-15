@@ -43,7 +43,9 @@ export function AttendanceScanView({
           programName: result.programName ?? "Ekskul",
           checkedInAt: result.checkedInAt ?? "",
         });
-        router.replace(`/kehadiran?${query.toString()}`);
+        // Gunakan navigasi penuh agar halaman kehadiran selalu dirender ulang dari
+        // server dengan data terbaru, sehingga form otomatis terkunci setelah scan.
+        window.location.replace(`/kehadiran?${query.toString()}`);
         return;
       }
 

@@ -55,6 +55,14 @@ export default async function AttendancePage({
   const programName = getFirst(query.programName);
   const checkedInAt = getFirst(query.checkedInAt);
   const qrSuccess = Boolean(programName);
+  // Scan QR sukses dijamin membuat catatan PRESENT di database. Kalau data query
+  // belum kebaca (misal render/cache lambat), form tetap dikunci sebagai keamanan
+  // tambahan agar kehadiran selalu sinkron setelah scan.
+  const scannedPresent =
+    qrSuccess && !already && selectedProgram?.id === getFirst(query.ekskul);
+  const effectiveAttendance =
+    selectedProgram?.attendance ??
+    (scannedPresent ? { status: "PRESENT" as const, reason: null } : null);
 
   const qrCheckedTime = checkedInAt
     ? new Intl.DateTimeFormat("id-ID", {
@@ -158,46 +166,55 @@ export default async function AttendancePage({
           </nav>
         ) : null}
 
-        {selectedProgram && schedule ? (
+        {selectedProgram && (schedule || effectiveAttendance) ? (
           <section className={styles.attendanceGrid}>
             <AttendanceForm
               className={data.user.className ?? "Kelas belum tercatat"}
-              existingAttendance={selectedProgram.attendance}
+              existingAttendance={effectiveAttendance}
               attendanceSessionActive={Boolean(selectedProgram.attendanceCodeExpiresAt)}
               extracurricularId={selectedProgram.id}
               extracurricularName={selectedProgram.name}
-              key={`${selectedProgram.id}-${selectedProgram.attendance?.status ?? "new"}`}
+              key={`${selectedProgram.id}-${effectiveAttendance?.status ?? "new"}`}
               studentName={data.user.name}
             />
 
             <aside className={styles.scheduleCard}>
               <div className={styles.scheduleTop}>
                 <span>Jadwal hari ini</span>
-                <strong>{selectedProgram.attendance ? "Sudah diisi" : "Belum diisi"}</strong>
+                <strong>{effectiveAttendance ? "Sudah diisi" : "Belum diisi"}</strong>
               </div>
               <p className={styles.cardEyebrow}>{data.formattedDate}</p>
               <h2>{selectedProgram.name}</h2>
               <p>{selectedProgram.description}</p>
 
               <dl className={styles.scheduleData}>
-                <div>
-                  <dt>Waktu</dt>
-                  <dd>
-                    {formatTime(schedule.startTime)}–{formatTime(schedule.endTime)}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Lokasi</dt>
-                  <dd>{schedule.location}</dd>
-                </div>
+                {schedule ? (
+                  <>
+                    <div>
+                      <dt>Waktu</dt>
+                      <dd>
+                        {formatTime(schedule.startTime)}–{formatTime(schedule.endTime)}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Lokasi</dt>
+                      <dd>{schedule.location}</dd>
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <dt>Kegiatan</dt>
+                    <dd>Sesi QR hari ini</dd>
+                  </div>
+                )}
                 <div>
                   <dt>Status terakhir</dt>
                   <dd>
-                    {selectedProgram.attendance?.status === "PRESENT"
+                    {effectiveAttendance?.status === "PRESENT"
                       ? "Hadir"
-                      : selectedProgram.attendance?.status === "EXCUSED"
+                      : effectiveAttendance?.status === "EXCUSED"
                         ? "Izin"
-                        : selectedProgram.attendance?.status === "ABSENT"
+                        : effectiveAttendance?.status === "ABSENT"
                           ? "Tidak hadir"
                           : "Belum mengisi"}
                   </dd>

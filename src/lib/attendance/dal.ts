@@ -69,6 +69,14 @@ export const getStudentAttendanceData = cache(
                     },
                   },
                 },
+                {
+                  attendances: {
+                    some: {
+                      userId: student.id,
+                      attendanceDate,
+                    },
+                  },
+                },
               ],
             },
           },

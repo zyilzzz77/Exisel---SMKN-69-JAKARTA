@@ -91,6 +91,7 @@ export async function POST(request: Request) {
     {
       message: "Kehadiran kamu sudah tercatat.",
       status: outcome.status,
+      extracurricularId: session.extracurricular.id,
       programName: outcome.programName,
       ...(outcome.status === "success"
         ? { checkedInAt: outcome.checkedInAt.toISOString() }
