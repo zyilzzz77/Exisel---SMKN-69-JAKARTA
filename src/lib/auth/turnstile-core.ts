@@ -116,7 +116,16 @@ export async function verifyTurnstile(input: {
       return { success: false, reason: "invalid_token" };
     }
 
-    if (result.action !== expectedAction) {
+    const isTestKey =
+      secretKey.startsWith(TEST_SECRET_PREFIX) ||
+      (result.metadata as { result_with_testing_key?: boolean } | undefined)
+        ?.result_with_testing_key === true;
+
+    if (result.action !== undefined) {
+      if (result.action !== expectedAction) {
+        return { success: false, reason: "action_mismatch" };
+      }
+    } else if (!isTestKey) {
       return { success: false, reason: "action_mismatch" };
     }
 
@@ -131,7 +140,12 @@ export async function verifyTurnstile(input: {
     return {
       success: true,
       hostname: typeof result.hostname === "string" ? result.hostname : "",
-      action: typeof result.action === "string" ? result.action : "",
+      action:
+        typeof result.action === "string"
+          ? result.action
+          : isTestKey
+            ? expectedAction
+            : "",
       challengeTs:
         typeof result.challenge_ts === "string" ? result.challenge_ts : "",
     };

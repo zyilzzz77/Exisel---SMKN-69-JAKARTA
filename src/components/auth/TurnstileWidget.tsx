@@ -84,6 +84,12 @@ export const TurnstileWidget = forwardRef<
   }));
 
   useEffect(() => {
+    if (typeof window.turnstile?.render === "function") {
+      renderWidget();
+    }
+  }, []);
+
+  useEffect(() => {
     return () => {
       if (widgetIdRef.current && typeof window.turnstile?.remove === "function") {
         window.turnstile.remove(widgetIdRef.current);
@@ -96,7 +102,7 @@ export const TurnstileWidget = forwardRef<
       <Script
         src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
         strategy="afterInteractive"
-        onLoad={renderWidget}
+        onReady={renderWidget}
         onError={() => setStatus("error")}
       />
       <div ref={containerRef} data-turnstile-status={status} />
