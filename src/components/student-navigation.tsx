@@ -29,8 +29,8 @@ const studentNavigationItems = [
   },
   {
     id: "account",
-    href: "/dashboard#akun",
-    label: "Akun",
+    href: "/profile",
+    label: "Profil",
   },
 ] as const;
 

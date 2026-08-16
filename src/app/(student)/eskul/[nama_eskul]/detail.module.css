@@ -140,9 +140,14 @@
 }
 
 .logoutButton {
-  min-height: 44px;
-  padding: 8px 14px;
+  min-height: 46px;
+  padding: 9px 16px;
+  border-width: 3px;
   background: var(--white);
+  font-family: var(--font-body), sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: none;
 }
 
 .primaryButton {

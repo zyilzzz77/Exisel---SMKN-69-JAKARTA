@@ -68,6 +68,15 @@ function formatTime(value: Date) {
   }).format(value);
 }
 
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
+}
+
 export default async function ExtracurricularRegistrationPage({
   searchParams,
 }: {
@@ -81,39 +90,32 @@ export default async function ExtracurricularRegistrationPage({
   const status = getFirst(query.status);
   const { user, extracurricular, enrollment } =
     await getStudentRegistrationData(selectedId);
-  const userInitial = user.name.trim().charAt(0).toUpperCase() || "S";
 
   return (
     <div className={styles.page}>
-      <div className={styles.announcement}>
-        <span className={styles.liveDot} aria-hidden="true" />
-        Pendaftaran ekstrakurikuler siswa
-        <span className={styles.announcementNote}>Data akun terisi otomatis</span>
-      </div>
-
       <header className={styles.header}>
         <div className={styles.headerInner}>
-          <Link className={styles.brand} href="/dashboard" aria-label="EXISEL dashboard">
+          <Link className={styles.brand} href="/" aria-label="EXISEL, kembali ke beranda">
             <span className={styles.brandLogo}>
               <Image
                 alt="Logo SMK Negeri 69 Jakarta"
-                height={112}
+                height={948}
                 priority
                 src="/logo-smkn69.webp"
-                width={88}
+                width={758}
               />
             </span>
             <span className={styles.brandCopy}>
               <strong>EXISEL</strong>
-              <small>SMKN 69 Jakarta</small>
+              <small>Pendaftaran ekskul</small>
             </span>
           </Link>
 
           <StudentHeaderNav />
 
-          <div className={styles.accountArea}>
+          <div className={styles.accountActions}>
             <span className={styles.avatar} aria-hidden="true">
-              {userInitial}
+              {initials(user.name)}
             </span>
             <ConfirmLogoutButton className={styles.logoutButton} />
           </div>

@@ -61,6 +61,8 @@ services:
       GOOGLE_ALLOWED_EMAIL_DOMAIN: ${GOOGLE_ALLOWED_EMAIL_DOMAIN:-}
     expose:
       - "3000"
+    volumes:
+      - uploads_data:/app/uploads
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -111,6 +113,7 @@ volumes:
   postgres_data:
   caddy_data:
   caddy_config:
+  uploads_data:
 
 networks:
   backend:

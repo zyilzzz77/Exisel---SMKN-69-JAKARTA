@@ -1,13 +1,13 @@
 .page {
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: clip;
   background: var(--paper);
 }
 
 .headerInner,
 .main,
 .footerInner {
-  width: min(100% - 80px, 1180px);
+  width: min(100% - 80px, 1280px);
   margin-inline: auto;
 }
 
@@ -19,7 +19,7 @@
   gap: 10px;
   padding-inline: 16px;
   border-bottom: 3px solid var(--ink);
-  background: var(--blue-light);
+  background: var(--orange);
   font-family: var(--font-display), sans-serif;
   font-size: 11px;
   font-weight: 800;
@@ -80,25 +80,28 @@
 }
 
 .brandCopy {
-  display: grid;
-  gap: 1px;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
 }
 
 .brandCopy strong {
   font-family: var(--font-display), sans-serif;
-  font-size: 22px;
+  font-size: 20px;
+  font-weight: 800;
   letter-spacing: -0.04em;
 }
 
 .brandCopy small {
+  margin-top: 5px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.accountArea {
+.accountActions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -107,33 +110,46 @@
 
 .avatar {
   display: grid;
-  width: 40px;
-  height: 40px;
   place-items: center;
+  width: 42px;
+  height: 42px;
   border: 3px solid var(--ink);
   border-radius: 50%;
-  background: var(--orange);
+  background: var(--blue-light);
   font-family: var(--font-display), sans-serif;
+  font-size: 13px;
   font-weight: 800;
 }
 
 .logoutButton {
-  min-height: 38px;
-  padding: 0 14px;
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 9px 16px;
   border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 4px 4px 0 var(--ink);
+  color: var(--ink);
   background: var(--white);
-  box-shadow: 3px 3px 0 var(--ink);
-  font: inherit;
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
   cursor: pointer;
+  font-family: var(--font-body), sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  transition: box-shadow 140ms ease, transform 140ms ease;
 }
 
 .logoutButton:hover,
 .logoutButton:focus-visible {
-  background: var(--blue-light);
-  transform: translate(-1px, -1px);
+  box-shadow: 7px 7px 0 var(--ink);
+  outline: none;
+  transform: translate(-2px, -2px);
+}
+
+.logoutButton:active {
+  box-shadow: none;
+  transform: translate(4px, 4px);
 }
 
 .main {
@@ -648,19 +664,15 @@
   text-align: right;
 }
 
-@media (max-width: 1040px) {
+@media (max-width: 1080px) {
   .headerInner,
   .main,
   .footerInner {
-    width: min(100% - 44px, 920px);
+    width: min(100% - 48px, 1280px);
   }
 
   .headerInner {
     grid-template-columns: 1fr auto;
-  }
-
-  .nav {
-    display: none;
   }
 
   .hero,
@@ -699,26 +711,121 @@
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 980px) {
+  .headerInner {
+    display: grid;
+    min-height: 68px;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .headerInner > :global(.mobile-menu-toggle) {
+    display: inline-flex !important;
+    width: 42px;
+    height: 42px;
+    grid-column: 3;
+    grid-row: 1;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    justify-self: end;
+    gap: 5px;
+    order: initial !important;
+    margin-left: 0 !important;
+    padding: 0;
+    border: 3px solid var(--ink);
+    border-radius: 9px;
+    background: var(--white);
+    box-shadow: 3px 3px 0 var(--ink);
+    color: var(--ink);
+  }
+
+  .headerInner > :global(.mobile-menu-toggle) span {
+    display: block;
+    width: 20px;
+    height: 3px;
+    border-radius: 999px;
+    background: currentColor;
+  }
+
+  .headerInner > :global(.desktop-nav) {
+    display: none !important;
+  }
+
+  .headerInner > :global(.desktop-nav.mobile-menu-open) {
+    display: grid !important;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 14px 16px;
+    border-bottom: 4px solid var(--ink);
+    background: var(--paper);
+    box-shadow: 0 8px 0 var(--ink);
+    white-space: normal;
+  }
+
+  .headerInner > :global(.desktop-nav.mobile-menu-open) a {
+    width: 100%;
+    min-height: 40px;
+    justify-content: center;
+    padding: 7px 6px;
+    text-align: center;
+  }
+
+  .accountActions {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    justify-self: end;
+  }
+}
+
+@media (max-width: 760px) {
   .headerInner,
   .main,
   .footerInner {
-    width: min(100% - 28px, 620px);
+    width: calc(100% - 32px);
   }
 
-  .announcementNote,
-  .brandCopy small,
-  .logoutButton {
+  .announcement {
+    min-height: 34px;
+    font-size: 9px;
+  }
+
+  .announcementNote {
     display: none;
   }
 
   .headerInner {
     min-height: 72px;
+    gap: 12px;
   }
 
   .brandLogo {
     width: 38px;
     height: 48px;
+  }
+
+  .brandCopy strong {
+    font-size: 18px;
+  }
+
+  .brandCopy small,
+  .avatar,
+  .logoutButton span {
+    display: none;
+  }
+
+  .logoutButton {
+    min-height: 40px;
+    padding: 7px 12px;
   }
 
   .main {

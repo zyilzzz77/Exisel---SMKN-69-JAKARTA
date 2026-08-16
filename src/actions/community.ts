@@ -2,6 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { getActiveSessionUser } from "@/lib/auth/authorization";
+import {
+  MAX_ATTACHMENT_SIZE,
+  ATTACHMENT_FILENAME_PATTERN,
+  isAllowedMime,
+} from "@/lib/community/attachments";
 import { getPrisma } from "@/lib/database/prisma";
 
 export type ActionState = {
@@ -10,9 +15,17 @@ export type ActionState = {
   message?: string;
 };
 
+export type CommunityAttachmentInput = {
+  path: string;
+  name: string;
+  size: number;
+  mime: string;
+};
+
 export async function sendCommunityMessageAction(
   extracurricularId: string,
   content: string,
+  attachment?: CommunityAttachmentInput | null,
 ): Promise<ActionState> {
   try {
     const user = await getActiveSessionUser("ADMIN");
@@ -22,12 +35,31 @@ export async function sendCommunityMessageAction(
 
     const prisma = getPrisma();
     const trimmedContent = content.trim();
-    if (!trimmedContent) {
-      return { error: "Pesan tidak boleh kosong." };
+    if (!trimmedContent && !attachment) {
+      return { error: "Pesan atau lampiran tidak boleh kosong." };
     }
 
     if (trimmedContent.length > 2000) {
       return { error: "Pesan tidak boleh melebihi 2000 karakter." };
+    }
+
+    if (attachment) {
+      if (!ATTACHMENT_FILENAME_PATTERN.test(attachment.path)) {
+        return { error: "Lampiran tidak valid." };
+      }
+      if (!attachment.name || attachment.name.length > 255) {
+        return { error: "Nama file tidak valid." };
+      }
+      if (
+        !Number.isInteger(attachment.size) ||
+        attachment.size <= 0 ||
+        attachment.size > MAX_ATTACHMENT_SIZE
+      ) {
+        return { error: "Ukuran file tidak valid." };
+      }
+      if (!isAllowedMime(attachment.mime)) {
+        return { error: "Tipe file tidak diizinkan." };
+      }
     }
 
     const eskul = await prisma.extracurricular.findUnique({
@@ -44,6 +76,10 @@ export async function sendCommunityMessageAction(
         extracurricularId: eskul.id,
         senderId: user.id,
         content: trimmedContent,
+        attachmentPath: attachment?.path ?? null,
+        attachmentName: attachment?.name ?? null,
+        attachmentSize: attachment?.size ?? null,
+        attachmentMime: attachment?.mime ?? null,
       },
     });
 

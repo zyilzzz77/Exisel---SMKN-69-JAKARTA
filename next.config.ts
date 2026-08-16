@@ -15,6 +15,15 @@ const nextConfig: NextConfig = {
     "192.168.110.14",
     "192.168.1.4",
   ],
+  // Google Login stores profile pictures on lh3.googleusercontent.com.
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

@@ -20,8 +20,18 @@ export type CommunityMessageModel = runtime.Types.Result.DefaultSelection<Prisma
 
 export type AggregateCommunityMessage = {
   _count: CommunityMessageCountAggregateOutputType | null
+  _avg: CommunityMessageAvgAggregateOutputType | null
+  _sum: CommunityMessageSumAggregateOutputType | null
   _min: CommunityMessageMinAggregateOutputType | null
   _max: CommunityMessageMaxAggregateOutputType | null
+}
+
+export type CommunityMessageAvgAggregateOutputType = {
+  attachmentSize: number | null
+}
+
+export type CommunityMessageSumAggregateOutputType = {
+  attachmentSize: number | null
 }
 
 export type CommunityMessageMinAggregateOutputType = {
@@ -29,6 +39,10 @@ export type CommunityMessageMinAggregateOutputType = {
   extracurricularId: string | null
   senderId: string | null
   content: string | null
+  attachmentPath: string | null
+  attachmentName: string | null
+  attachmentSize: number | null
+  attachmentMime: string | null
   isEdited: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -40,6 +54,10 @@ export type CommunityMessageMaxAggregateOutputType = {
   extracurricularId: string | null
   senderId: string | null
   content: string | null
+  attachmentPath: string | null
+  attachmentName: string | null
+  attachmentSize: number | null
+  attachmentMime: string | null
   isEdited: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -51,6 +69,10 @@ export type CommunityMessageCountAggregateOutputType = {
   extracurricularId: number
   senderId: number
   content: number
+  attachmentPath: number
+  attachmentName: number
+  attachmentSize: number
+  attachmentMime: number
   isEdited: number
   createdAt: number
   updatedAt: number
@@ -59,11 +81,23 @@ export type CommunityMessageCountAggregateOutputType = {
 }
 
 
+export type CommunityMessageAvgAggregateInputType = {
+  attachmentSize?: true
+}
+
+export type CommunityMessageSumAggregateInputType = {
+  attachmentSize?: true
+}
+
 export type CommunityMessageMinAggregateInputType = {
   id?: true
   extracurricularId?: true
   senderId?: true
   content?: true
+  attachmentPath?: true
+  attachmentName?: true
+  attachmentSize?: true
+  attachmentMime?: true
   isEdited?: true
   createdAt?: true
   updatedAt?: true
@@ -75,6 +109,10 @@ export type CommunityMessageMaxAggregateInputType = {
   extracurricularId?: true
   senderId?: true
   content?: true
+  attachmentPath?: true
+  attachmentName?: true
+  attachmentSize?: true
+  attachmentMime?: true
   isEdited?: true
   createdAt?: true
   updatedAt?: true
@@ -86,6 +124,10 @@ export type CommunityMessageCountAggregateInputType = {
   extracurricularId?: true
   senderId?: true
   content?: true
+  attachmentPath?: true
+  attachmentName?: true
+  attachmentSize?: true
+  attachmentMime?: true
   isEdited?: true
   createdAt?: true
   updatedAt?: true
@@ -131,6 +173,18 @@ export type CommunityMessageAggregateArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: CommunityMessageAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: CommunityMessageSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: CommunityMessageMinAggregateInputType
@@ -161,6 +215,8 @@ export type CommunityMessageGroupByArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   _count?: CommunityMessageCountAggregateInputType | true
+  _avg?: CommunityMessageAvgAggregateInputType
+  _sum?: CommunityMessageSumAggregateInputType
   _min?: CommunityMessageMinAggregateInputType
   _max?: CommunityMessageMaxAggregateInputType
 }
@@ -170,11 +226,17 @@ export type CommunityMessageGroupByOutputType = {
   extracurricularId: string
   senderId: string
   content: string
+  attachmentPath: string | null
+  attachmentName: string | null
+  attachmentSize: number | null
+  attachmentMime: string | null
   isEdited: boolean
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
   _count: CommunityMessageCountAggregateOutputType | null
+  _avg: CommunityMessageAvgAggregateOutputType | null
+  _sum: CommunityMessageSumAggregateOutputType | null
   _min: CommunityMessageMinAggregateOutputType | null
   _max: CommunityMessageMaxAggregateOutputType | null
 }
@@ -202,6 +264,10 @@ export type CommunityMessageWhereInput = {
   extracurricularId?: Prisma.UuidFilter<"CommunityMessage"> | string
   senderId?: Prisma.UuidFilter<"CommunityMessage"> | string
   content?: Prisma.StringFilter<"CommunityMessage"> | string
+  attachmentPath?: Prisma.StringNullableFilter<"CommunityMessage"> | string | null
+  attachmentName?: Prisma.StringNullableFilter<"CommunityMessage"> | string | null
+  attachmentSize?: Prisma.IntNullableFilter<"CommunityMessage"> | number | null
+  attachmentMime?: Prisma.StringNullableFilter<"CommunityMessage"> | string | null
   isEdited?: Prisma.BoolFilter<"CommunityMessage"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CommunityMessage"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CommunityMessage"> | Date | string
@@ -215,6 +281,10 @@ export type CommunityMessageOrderByWithRelationInput = {
   extracurricularId?: Prisma.SortOrder
   senderId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  attachmentPath?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentName?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentMime?: Prisma.SortOrderInput | Prisma.SortOrder
   isEdited?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -231,6 +301,10 @@ export type CommunityMessageWhereUniqueInput = Prisma.AtLeast<{
   extracurricularId?: Prisma.UuidFilter<"CommunityMessage"> | string
   senderId?: Prisma.UuidFilter<"CommunityMessage"> | string
   content?: Prisma.StringFilter<"CommunityMessage"> | string
+  attachmentPath?: Prisma.StringNullableFilter<"CommunityMessage"> | string | null
+  attachmentName?: Prisma.StringNullableFilter<"CommunityMessage"> | string | null
+  attachmentSize?: Prisma.IntNullableFilter<"CommunityMessage"> | number | null
+  attachmentMime?: Prisma.StringNullableFilter<"CommunityMessage"> | string | null
   isEdited?: Prisma.BoolFilter<"CommunityMessage"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CommunityMessage"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CommunityMessage"> | Date | string
@@ -244,13 +318,19 @@ export type CommunityMessageOrderByWithAggregationInput = {
   extracurricularId?: Prisma.SortOrder
   senderId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  attachmentPath?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentName?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentSize?: Prisma.SortOrderInput | Prisma.SortOrder
+  attachmentMime?: Prisma.SortOrderInput | Prisma.SortOrder
   isEdited?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.CommunityMessageCountOrderByAggregateInput
+  _avg?: Prisma.CommunityMessageAvgOrderByAggregateInput
   _max?: Prisma.CommunityMessageMaxOrderByAggregateInput
   _min?: Prisma.CommunityMessageMinOrderByAggregateInput
+  _sum?: Prisma.CommunityMessageSumOrderByAggregateInput
 }
 
 export type CommunityMessageScalarWhereWithAggregatesInput = {
@@ -261,6 +341,10 @@ export type CommunityMessageScalarWhereWithAggregatesInput = {
   extracurricularId?: Prisma.UuidWithAggregatesFilter<"CommunityMessage"> | string
   senderId?: Prisma.UuidWithAggregatesFilter<"CommunityMessage"> | string
   content?: Prisma.StringWithAggregatesFilter<"CommunityMessage"> | string
+  attachmentPath?: Prisma.StringNullableWithAggregatesFilter<"CommunityMessage"> | string | null
+  attachmentName?: Prisma.StringNullableWithAggregatesFilter<"CommunityMessage"> | string | null
+  attachmentSize?: Prisma.IntNullableWithAggregatesFilter<"CommunityMessage"> | number | null
+  attachmentMime?: Prisma.StringNullableWithAggregatesFilter<"CommunityMessage"> | string | null
   isEdited?: Prisma.BoolWithAggregatesFilter<"CommunityMessage"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CommunityMessage"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CommunityMessage"> | Date | string
@@ -270,6 +354,10 @@ export type CommunityMessageScalarWhereWithAggregatesInput = {
 export type CommunityMessageCreateInput = {
   id?: string
   content: string
+  attachmentPath?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
+  attachmentMime?: string | null
   isEdited?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -283,6 +371,10 @@ export type CommunityMessageUncheckedCreateInput = {
   extracurricularId: string
   senderId: string
   content: string
+  attachmentPath?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
+  attachmentMime?: string | null
   isEdited?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -292,6 +384,10 @@ export type CommunityMessageUncheckedCreateInput = {
 export type CommunityMessageUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachmentPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  attachmentMime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -305,6 +401,10 @@ export type CommunityMessageUncheckedUpdateInput = {
   extracurricularId?: Prisma.StringFieldUpdateOperationsInput | string
   senderId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachmentPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  attachmentMime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -316,6 +416,10 @@ export type CommunityMessageCreateManyInput = {
   extracurricularId: string
   senderId: string
   content: string
+  attachmentPath?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
+  attachmentMime?: string | null
   isEdited?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -325,6 +429,10 @@ export type CommunityMessageCreateManyInput = {
 export type CommunityMessageUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachmentPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  attachmentMime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -336,6 +444,10 @@ export type CommunityMessageUncheckedUpdateManyInput = {
   extracurricularId?: Prisma.StringFieldUpdateOperationsInput | string
   senderId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachmentPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  attachmentMime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -357,10 +469,18 @@ export type CommunityMessageCountOrderByAggregateInput = {
   extracurricularId?: Prisma.SortOrder
   senderId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  attachmentPath?: Prisma.SortOrder
+  attachmentName?: Prisma.SortOrder
+  attachmentSize?: Prisma.SortOrder
+  attachmentMime?: Prisma.SortOrder
   isEdited?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type CommunityMessageAvgOrderByAggregateInput = {
+  attachmentSize?: Prisma.SortOrder
 }
 
 export type CommunityMessageMaxOrderByAggregateInput = {
@@ -368,6 +488,10 @@ export type CommunityMessageMaxOrderByAggregateInput = {
   extracurricularId?: Prisma.SortOrder
   senderId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  attachmentPath?: Prisma.SortOrder
+  attachmentName?: Prisma.SortOrder
+  attachmentSize?: Prisma.SortOrder
+  attachmentMime?: Prisma.SortOrder
   isEdited?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -379,10 +503,18 @@ export type CommunityMessageMinOrderByAggregateInput = {
   extracurricularId?: Prisma.SortOrder
   senderId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  attachmentPath?: Prisma.SortOrder
+  attachmentName?: Prisma.SortOrder
+  attachmentSize?: Prisma.SortOrder
+  attachmentMime?: Prisma.SortOrder
   isEdited?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type CommunityMessageSumOrderByAggregateInput = {
+  attachmentSize?: Prisma.SortOrder
 }
 
 export type CommunityMessageCreateNestedManyWithoutSenderInput = {
@@ -469,9 +601,21 @@ export type CommunityMessageUncheckedUpdateManyWithoutExtracurricularNestedInput
   deleteMany?: Prisma.CommunityMessageScalarWhereInput | Prisma.CommunityMessageScalarWhereInput[]
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type CommunityMessageCreateWithoutSenderInput = {
   id?: string
   content: string
+  attachmentPath?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
+  attachmentMime?: string | null
   isEdited?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -483,6 +627,10 @@ export type CommunityMessageUncheckedCreateWithoutSenderInput = {
   id?: string
   extracurricularId: string
   content: string
+  attachmentPath?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
+  attachmentMime?: string | null
   isEdited?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -523,6 +671,10 @@ export type CommunityMessageScalarWhereInput = {
   extracurricularId?: Prisma.UuidFilter<"CommunityMessage"> | string
   senderId?: Prisma.UuidFilter<"CommunityMessage"> | string
   content?: Prisma.StringFilter<"CommunityMessage"> | string
+  attachmentPath?: Prisma.StringNullableFilter<"CommunityMessage"> | string | null
+  attachmentName?: Prisma.StringNullableFilter<"CommunityMessage"> | string | null
+  attachmentSize?: Prisma.IntNullableFilter<"CommunityMessage"> | number | null
+  attachmentMime?: Prisma.StringNullableFilter<"CommunityMessage"> | string | null
   isEdited?: Prisma.BoolFilter<"CommunityMessage"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CommunityMessage"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CommunityMessage"> | Date | string
@@ -532,6 +684,10 @@ export type CommunityMessageScalarWhereInput = {
 export type CommunityMessageCreateWithoutExtracurricularInput = {
   id?: string
   content: string
+  attachmentPath?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
+  attachmentMime?: string | null
   isEdited?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -543,6 +699,10 @@ export type CommunityMessageUncheckedCreateWithoutExtracurricularInput = {
   id?: string
   senderId: string
   content: string
+  attachmentPath?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
+  attachmentMime?: string | null
   isEdited?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -579,6 +739,10 @@ export type CommunityMessageCreateManySenderInput = {
   id?: string
   extracurricularId: string
   content: string
+  attachmentPath?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
+  attachmentMime?: string | null
   isEdited?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -588,6 +752,10 @@ export type CommunityMessageCreateManySenderInput = {
 export type CommunityMessageUpdateWithoutSenderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachmentPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  attachmentMime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -599,6 +767,10 @@ export type CommunityMessageUncheckedUpdateWithoutSenderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   extracurricularId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachmentPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  attachmentMime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -609,6 +781,10 @@ export type CommunityMessageUncheckedUpdateManyWithoutSenderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   extracurricularId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachmentPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  attachmentMime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -619,6 +795,10 @@ export type CommunityMessageCreateManyExtracurricularInput = {
   id?: string
   senderId: string
   content: string
+  attachmentPath?: string | null
+  attachmentName?: string | null
+  attachmentSize?: number | null
+  attachmentMime?: string | null
   isEdited?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -628,6 +808,10 @@ export type CommunityMessageCreateManyExtracurricularInput = {
 export type CommunityMessageUpdateWithoutExtracurricularInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachmentPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  attachmentMime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -639,6 +823,10 @@ export type CommunityMessageUncheckedUpdateWithoutExtracurricularInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   senderId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachmentPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  attachmentMime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -649,6 +837,10 @@ export type CommunityMessageUncheckedUpdateManyWithoutExtracurricularInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   senderId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachmentPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachmentSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  attachmentMime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -662,6 +854,10 @@ export type CommunityMessageSelect<ExtArgs extends runtime.Types.Extensions.Inte
   extracurricularId?: boolean
   senderId?: boolean
   content?: boolean
+  attachmentPath?: boolean
+  attachmentName?: boolean
+  attachmentSize?: boolean
+  attachmentMime?: boolean
   isEdited?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -675,6 +871,10 @@ export type CommunityMessageSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   extracurricularId?: boolean
   senderId?: boolean
   content?: boolean
+  attachmentPath?: boolean
+  attachmentName?: boolean
+  attachmentSize?: boolean
+  attachmentMime?: boolean
   isEdited?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -688,6 +888,10 @@ export type CommunityMessageSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   extracurricularId?: boolean
   senderId?: boolean
   content?: boolean
+  attachmentPath?: boolean
+  attachmentName?: boolean
+  attachmentSize?: boolean
+  attachmentMime?: boolean
   isEdited?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -701,13 +905,17 @@ export type CommunityMessageSelectScalar = {
   extracurricularId?: boolean
   senderId?: boolean
   content?: boolean
+  attachmentPath?: boolean
+  attachmentName?: boolean
+  attachmentSize?: boolean
+  attachmentMime?: boolean
   isEdited?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type CommunityMessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "extracurricularId" | "senderId" | "content" | "isEdited" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["communityMessage"]>
+export type CommunityMessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "extracurricularId" | "senderId" | "content" | "attachmentPath" | "attachmentName" | "attachmentSize" | "attachmentMime" | "isEdited" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["communityMessage"]>
 export type CommunityMessageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   extracurricular?: boolean | Prisma.ExtracurricularDefaultArgs<ExtArgs>
   sender?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -732,6 +940,10 @@ export type $CommunityMessagePayload<ExtArgs extends runtime.Types.Extensions.In
     extracurricularId: string
     senderId: string
     content: string
+    attachmentPath: string | null
+    attachmentName: string | null
+    attachmentSize: number | null
+    attachmentMime: string | null
     isEdited: boolean
     createdAt: Date
     updatedAt: Date
@@ -1165,6 +1377,10 @@ export interface CommunityMessageFieldRefs {
   readonly extracurricularId: Prisma.FieldRef<"CommunityMessage", 'String'>
   readonly senderId: Prisma.FieldRef<"CommunityMessage", 'String'>
   readonly content: Prisma.FieldRef<"CommunityMessage", 'String'>
+  readonly attachmentPath: Prisma.FieldRef<"CommunityMessage", 'String'>
+  readonly attachmentName: Prisma.FieldRef<"CommunityMessage", 'String'>
+  readonly attachmentSize: Prisma.FieldRef<"CommunityMessage", 'Int'>
+  readonly attachmentMime: Prisma.FieldRef<"CommunityMessage", 'String'>
   readonly isEdited: Prisma.FieldRef<"CommunityMessage", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"CommunityMessage", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CommunityMessage", 'DateTime'>

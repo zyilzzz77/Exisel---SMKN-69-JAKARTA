@@ -151,6 +151,38 @@
   box-shadow: 0 0 0 3px var(--blue-light);
 }
 
+.fileInput {
+  width: 100%;
+  padding: 10px 12px;
+  border: 3px dashed var(--ink);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.fileInput::file-selector-button {
+  margin-right: 12px;
+  padding: 8px 14px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  background: var(--orange);
+  color: var(--ink);
+  font-family: var(--font-display), sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.fileHint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
 .composerMeta {
   display: flex;
   align-items: center;

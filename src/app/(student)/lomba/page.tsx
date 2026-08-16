@@ -100,14 +100,9 @@ export default async function CompetitionPage({ searchParams }: CompetitionPageP
         Lewati ke daftar lomba
       </a>
 
-      <div className={styles.announcement} role="status">
-        <span className={styles.liveDot} aria-hidden="true" />
-        Info lomba diperbarui langsung oleh admin & pembina ekskul
-      </div>
-
       <header className={styles.header}>
         <div className={styles.headerInner}>
-          <Link className={styles.brand} href="/dashboard">
+          <Link className={styles.brand} href="/" aria-label="EXISEL, kembali ke beranda">
             <span className={styles.brandLogo}>
               <Image
                 alt="Logo SMK Negeri 69 Jakarta"

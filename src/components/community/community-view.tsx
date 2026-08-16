@@ -142,6 +142,86 @@ function getDateSeparatorLabel(dateInput: Date | string): string {
   return `${dateJakarta.getDate()} ${fullMonths[dateJakarta.getMonth()]} ${dateJakarta.getFullYear()}`;
 }
 
+type AttachmentData = {
+  path: string;
+  name: string;
+  size: number;
+  mime: string;
+};
+
+function formatFileSize(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function AttachmentView({ attachment }: { attachment: AttachmentData }) {
+  const url = `/api/community/files/${encodeURIComponent(attachment.path)}`;
+  const isImage = attachment.mime.startsWith("image/");
+  const isVideo = attachment.mime.startsWith("video/");
+  const isPdf = attachment.mime === "application/pdf";
+
+  if (isImage) {
+    return (
+      <a
+        className="mt-2 block overflow-hidden rounded-lg border-[3px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)]"
+        href={url}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          alt={attachment.name}
+          className="max-h-72 w-full object-cover"
+          src={url}
+        />
+      </a>
+    );
+  }
+
+  if (isVideo) {
+    return (
+      <div className="mt-2 overflow-hidden rounded-lg border-[3px] border-[var(--ink)] bg-black shadow-[4px_4px_0_var(--ink)]">
+        <video
+          className="block max-h-80 w-full"
+          controls
+          preload="metadata"
+          src={url}
+        />
+      </div>
+    );
+  }
+
+  const fileLabel = isPdf ? "Buka PDF" : "Buka file";
+
+  return (
+    <a
+      className="mt-2 flex items-center gap-3 rounded-lg border-[3px] border-[var(--ink)] bg-white p-3 shadow-[4px_4px_0_var(--ink)] transition-transform hover:-translate-y-0.5 hover:shadow-[5px_5px_0_var(--ink)]"
+      href={url}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      <span
+        aria-hidden="true"
+        className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-md border-2 border-[var(--ink)] bg-[var(--blue-light)] text-lg"
+      >
+        {isPdf ? "📄" : "📎"}
+      </span>
+      <span className="min-w-0 flex-1">
+        <strong className="block truncate text-sm text-[var(--ink)]">
+          {attachment.name}
+        </strong>
+        <span className="text-xs font-semibold text-[var(--muted)]">
+          {formatFileSize(attachment.size)}
+        </span>
+      </span>
+      <span className="flex-shrink-0 rounded-md border-2 border-[var(--ink)] bg-[var(--orange)] px-3 py-1.5 text-xs font-extrabold text-[var(--ink)]">
+        {fileLabel}
+      </span>
+    </a>
+  );
+}
+
 export function CommunityView({
   channels,
   activeChannel,
@@ -374,6 +454,9 @@ export function CommunityView({
                             <span className={styles.editedTag}> (diedit)</span>
                           ) : null}
                         </p>
+                        {msg.attachment ? (
+                          <AttachmentView attachment={msg.attachment} />
+                        ) : null}
                       </div>
                     ) : (
                       <article className={styles.messageCard}>
@@ -403,6 +486,9 @@ export function CommunityView({
                           <p className={styles.messageContent}>
                             {renderMessageWithLinks(msg.content)}
                           </p>
+                          {msg.attachment ? (
+                            <AttachmentView attachment={msg.attachment} />
+                          ) : null}
                         </div>
                       </article>
                     )}
@@ -413,7 +499,7 @@ export function CommunityView({
             <div ref={messagesEndRef} />
           </div>
 
-          <footer className={styles.readOnlyFooter}>
+          <footer className="flex flex-shrink-0 items-center justify-center gap-2 border-t-[3px] border-[var(--ink)] bg-[var(--blue-light)] px-4 py-3 pb-[max(12px,env(safe-area-inset-bottom))] text-center text-[11px] font-bold leading-snug text-[var(--ink)]">
             <span aria-hidden="true">🔒</span>
             <span>
               Channel ini bersifat Read-Only. Pesan hanya dapat dikirim oleh Admin dan Guru.

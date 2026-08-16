@@ -163,12 +163,6 @@ export default async function DashboardPage() {
         Lewati ke konten dashboard
       </a>
 
-      <div className={styles.announcement} role="status">
-        <span className={styles.liveDot} aria-hidden="true" />
-        Pendaftaran semester ganjil sedang dibuka
-        <span className={styles.announcementNote}>Pilih ekskulmu sekarang</span>
-      </div>
-
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <Link className={styles.brand} href="/" aria-label="EXISEL, kembali ke beranda">

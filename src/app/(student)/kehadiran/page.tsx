@@ -81,17 +81,9 @@ export default async function AttendancePage({
         Lewati ke form kehadiran
       </a>
 
-      <div className={styles.announcement}>
-        <span className={styles.liveDot} aria-hidden="true" />
-        <span className={styles.announcementText}>
-          Kehadiran ekskul / {data.formattedDate}
-        </span>
-        <span className={styles.announcementNote}>Waktu Jakarta</span>
-      </div>
-
       <header className={styles.header}>
         <div className={styles.headerInner}>
-          <Link className={styles.brand} href="/dashboard" aria-label="EXISEL dashboard">
+          <Link className={styles.brand} href="/" aria-label="EXISEL, kembali ke beranda">
             <span className={styles.brandLogo}>
               <Image
                 alt="Logo SMK Negeri 69 Jakarta"
@@ -103,7 +95,7 @@ export default async function AttendancePage({
             </span>
             <span className={styles.brandCopy}>
               <strong>EXISEL</strong>
-              <small>Kehadiran siswa</small>
+              <small>Presensi ekskul</small>
             </span>
           </Link>
 

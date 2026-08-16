@@ -47,7 +47,7 @@
 .shell,
 .headerInner,
 .footerInner {
-  width: min(100% - 80px, 1200px);
+  width: min(100% - 80px, 1280px);
   margin-inline: auto;
 }
 
@@ -106,36 +106,43 @@
   display: inline-flex;
   width: fit-content;
   align-items: center;
-  gap: 10px;
-  transform: translateX(10px);
+  gap: 12px;
 }
 
 .brandLogo {
-  width: 36px;
-  height: 46px;
+  display: inline-flex;
+  width: 44px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
 }
 
 .brandLogo img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
 .brandCopy {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   line-height: 1.05;
 }
 
 .brandCopy strong {
   font-family: var(--font-display), sans-serif;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
 }
 
 .brandCopy small {
   margin-top: 5px;
   color: var(--muted);
-  font-size: 7px;
+  font-size: 9px;
   font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -148,15 +155,46 @@
 
 .avatar {
   display: grid;
-  width: 40px;
-  height: 40px;
   place-items: center;
+  width: 42px;
+  height: 42px;
   border: 3px solid var(--ink);
   border-radius: 50%;
   background: var(--blue-light);
   font-family: var(--font-display), sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.logoutButton {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 4px 4px 0 var(--ink);
+  color: var(--ink);
+  background: var(--white);
+  cursor: pointer;
+  font-family: var(--font-body), sans-serif;
   font-size: 12px;
   font-weight: 800;
+  transition: box-shadow 140ms ease, transform 140ms ease;
+}
+
+.logoutButton:hover,
+.logoutButton:focus-visible {
+  box-shadow: 7px 7px 0 var(--ink);
+  outline: none;
+  transform: translate(-2px, -2px);
+}
+
+.logoutButton:active {
+  box-shadow: none;
+  transform: translate(4px, 4px);
 }
 
 .logoutButton {
@@ -247,7 +285,8 @@
 }
 
 .programTabs .activeTab {
-  background: var(--orange);
+  background: var(--blue);
+  color: var(--white);
 }
 
 .attendanceGrid {
@@ -369,7 +408,7 @@
   gap: 7px;
   padding: 24px;
   border: 3px solid var(--ink);
-  background: var(--orange);
+  background: var(--blue-light);
   box-shadow: 5px 5px 0 var(--ink);
 }
 

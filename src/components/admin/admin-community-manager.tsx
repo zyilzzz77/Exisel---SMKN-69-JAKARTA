@@ -8,6 +8,7 @@ import {
   updateCommunityMessageAction,
   deleteCommunityMessageAction,
   type ActionState,
+  type CommunityAttachmentInput,
 } from "@/actions/community";
 import { AdminHeader } from "@/components/admin-header";
 import type { CommunityChannel, CommunityMessageItem } from "@/lib/community/dal";
@@ -29,6 +30,9 @@ export function AdminCommunityManager({
     channels[0]?.id || "",
   );
   const [content, setContent] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [status, setStatus] = useState<ActionState | null>(null);
 
@@ -42,16 +46,71 @@ export function AdminCommunityManager({
   const selectedChannel =
     channels.find((c) => c.id === selectedChannelId) || channels[0];
 
+  function clearFile() {
+    if (filePreviewUrl) URL.revokeObjectURL(filePreviewUrl);
+    setFilePreviewUrl(null);
+    setFile(null);
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const next = e.target.files?.[0] ?? null;
+    if (filePreviewUrl) URL.revokeObjectURL(filePreviewUrl);
+    setFile(next);
+    setFilePreviewUrl(next ? URL.createObjectURL(next) : null);
+  }
+
+  function formatFileSize(bytes: number) {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!content.trim() || isPending) return;
+    if ((!content.trim() && !file) || isPending || isUploading) return;
 
     setStatus(null);
     startTransition(async () => {
-      const res = await sendCommunityMessageAction(selectedChannelId, content);
+      let attachment: CommunityAttachmentInput | null = null;
+
+      if (file) {
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append("file", file);
+        try {
+          const uploadResponse = await fetch("/api/community/upload", {
+            method: "POST",
+            body: formData,
+          });
+          const uploadResult = (await uploadResponse.json().catch(() => ({}))) as
+            | Partial<CommunityAttachmentInput>
+            | { message?: string };
+          if (!uploadResponse.ok) {
+            setStatus({
+              error:
+                (uploadResult as { message?: string }).message ||
+                "File gagal diunggah.",
+            });
+            return;
+          }
+          attachment = uploadResult as CommunityAttachmentInput;
+        } catch {
+          setStatus({ error: "File gagal diunggah. Coba lagi." });
+          return;
+        } finally {
+          setIsUploading(false);
+        }
+      }
+
+      const res = await sendCommunityMessageAction(
+        selectedChannelId,
+        content,
+        attachment,
+      );
       setStatus(res);
       if (res.success) {
         setContent("");
+        clearFile();
       }
     });
   }
@@ -167,8 +226,47 @@ export function AdminCommunityManager({
               </div>
             </div>
 
+            <div className={styles.fieldGroup}>
+              <label className={styles.label} htmlFor="message-file">
+                Lampiran (gambar, PDF, atau video)
+              </label>
+              <input
+                accept="image/*,application/pdf,video/*"
+                className={styles.fileInput}
+                id="message-file"
+                onChange={handleFileChange}
+                type="file"
+              />
+              <p className={styles.fileHint}>
+                Maksimal 15 MB · format: PNG, JPG, GIF, WEBP, PDF, MP4, WEBM, MOV.
+              </p>
+              {file ? (
+                <div className="mt-2 flex items-center gap-3 rounded-lg border-[3px] border-[var(--ink)] bg-[var(--blue-light)] p-3">
+                  <span
+                    aria-hidden="true"
+                    className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-md border-2 border-[var(--ink)] bg-white text-base"
+                  >
+                    {file.type === "application/pdf" ? "📄" : file.type.startsWith("video/") ? "🎬" : "🖼️"}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <strong className="block truncate text-sm">{file.name}</strong>
+                    <span className="text-xs font-semibold text-[var(--muted)]">
+                      {formatFileSize(file.size)}
+                    </span>
+                  </span>
+                  <button
+                    className="rounded-md border-2 border-[var(--ink)] bg-white px-2.5 py-1 text-xs font-extrabold"
+                    onClick={clearFile}
+                    type="button"
+                  >
+                    Hapus
+                  </button>
+                </div>
+              ) : null}
+            </div>
+
             {/* Live Preview Panel */}
-            {content.trim() ? (
+            {content.trim() || file ? (
               <div className={styles.previewBox}>
                 <div className={styles.previewHeader}>Live Preview Siswa</div>
                 <article className={publicStyles.messageCard}>
@@ -188,7 +286,47 @@ export function AdminCommunityManager({
                       <span className={publicStyles.roleBadge}>ADMIN</span>
                       <span className={publicStyles.timestamp}>Sekarang</span>
                     </div>
-                    <p className={publicStyles.messageContent}>{content}</p>
+                    {content.trim() ? (
+                      <p className={publicStyles.messageContent}>{content}</p>
+                    ) : null}
+                    {file ? (
+                      file.type.startsWith("image/") ? (
+                        <div className="mt-1 overflow-hidden rounded-lg border-[3px] border-[var(--ink)] bg-white shadow-[4px_4px_0_var(--ink)]">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            alt={file.name}
+                            className="max-h-60 w-full object-contain"
+                            src={filePreviewUrl ?? undefined}
+                          />
+                        </div>
+                      ) : file.type.startsWith("video/") ? (
+                        <div className="mt-1 overflow-hidden rounded-lg border-[3px] border-[var(--ink)] bg-black shadow-[4px_4px_0_var(--ink)]">
+                          <video
+                            className="block max-h-60 w-full"
+                            controls
+                            preload="metadata"
+                            src={filePreviewUrl ?? undefined}
+                          />
+                        </div>
+                      ) : (
+                        <div className="mt-1 flex items-center gap-3 rounded-lg border-[3px] border-[var(--ink)] bg-white p-3">
+                          <span
+                            aria-hidden="true"
+                            className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-md border-2 border-[var(--ink)] bg-[var(--blue-light)] text-base"
+                          >
+                            {file.type === "application/pdf" ? "📄" : "📎"}
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <strong className="block truncate text-sm">
+                              {file.name}
+                            </strong>
+                            <span className="text-xs font-semibold text-[var(--muted)]">
+                              {formatFileSize(file.size)}
+                            </span>
+                          </span>
+                        </div>
+                      )
+                    ) : null}
                   </div>
                 </article>
               </div>
@@ -196,10 +334,14 @@ export function AdminCommunityManager({
 
             <button
               className={styles.submitBtn}
-              disabled={!content.trim() || content.length > 2000 || isPending}
+              disabled={(!content.trim() && !file) || content.length > 2000 || isPending || isUploading}
               type="submit"
             >
-              {isPending ? "Mengirim..." : "Kirim Pengumuman →"}
+              {isUploading
+                ? "Mengunggah file..."
+                : isPending
+                  ? "Mengirim..."
+                  : "Kirim Pengumuman →"}
             </button>
           </form>
           </section>
@@ -214,12 +356,16 @@ export function AdminCommunityManager({
           </p>
 
           <div className={styles.msgList}>
-            {initialMessages.length === 0 ? (
-              <p style={{ color: "var(--muted)", fontSize: "13px" }}>
-                Belum ada pengumuman yang pernah dikirim.
-              </p>
-            ) : (
-              initialMessages.map((msg) => {
+            {(() => {
+              const filtered = initialMessages.filter((m) => m.channelId === selectedChannelId);
+              if (filtered.length === 0) {
+                return (
+                  <p style={{ color: "var(--muted)", fontSize: "13px" }}>
+                    Belum ada pengumuman di channel #{selectedChannel?.name || "ini"}.
+                  </p>
+                );
+              }
+              return filtered.map((msg) => {
                 const ch = channels.find((c) => c.id === msg.channelId);
                 return (
                   <div key={msg.id} className={styles.msgItem}>
@@ -249,10 +395,43 @@ export function AdminCommunityManager({
                       </div>
                     </div>
                     <p className={publicStyles.messageContent}>{msg.content}</p>
+                    {msg.attachment ? (
+                      <a
+                        className="mt-2 flex items-center gap-2 rounded-lg border-2 border-[var(--ink)] bg-[var(--blue-light)] p-2.5 no-underline"
+                        href={`/api/community/files/${encodeURIComponent(msg.attachment.path)}`}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span aria-hidden="true">
+                          {msg.attachment.mime === "application/pdf"
+                            ? "📄"
+                            : msg.attachment.mime.startsWith("video/")
+                              ? "🎬"
+                              : msg.attachment.mime.startsWith("image/")
+                                ? "🖼️"
+                                : "📎"}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <strong className="block truncate text-xs">
+                            {msg.attachment.name}
+                          </strong>
+                          <span className="text-[10px] font-semibold text-[var(--muted)]">
+                            {msg.attachment.size < 1024
+                              ? `${msg.attachment.size} B`
+                              : msg.attachment.size < 1024 * 1024
+                                ? `${(msg.attachment.size / 1024).toFixed(1)} KB`
+                                : `${(msg.attachment.size / (1024 * 1024)).toFixed(1)} MB`}
+                          </span>
+                        </span>
+                        <span className="text-[10px] font-extrabold text-[var(--blue)]">
+                          Buka ↗
+                        </span>
+                      </a>
+                    ) : null}
                   </div>
                 );
-              })
-            )}
+              });
+            })()}
           </div>
           </section>
         </div>

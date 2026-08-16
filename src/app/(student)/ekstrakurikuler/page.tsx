@@ -206,12 +206,6 @@ export default async function ExtracurricularPage({
         Lewati ke daftar ekstrakurikuler
       </a>
 
-      <div className={styles.announcement} role="status">
-        <span className={styles.liveDot} aria-hidden="true" />
-        Pendaftaran semester ganjil sedang dibuka
-        <span className={styles.announcementNote}>{totalAvailableSeats} kursi tersedia</span>
-      </div>
-
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <Link className={styles.brand} href="/" aria-label="EXISEL, kembali ke beranda">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { readSession } from "@/lib/auth/session";
 import { getPrisma } from "@/lib/database/prisma";
-import { getCommunityChannels, formatIndonesianTimestamp, type CommunityMessageItem } from "@/lib/community/dal";
+import { getCommunityChannels, mapCommunityMessage, type CommunityMessageItem } from "@/lib/community/dal";
 import { AdminCommunityManager } from "@/components/admin/admin-community-manager";
 
 export const metadata: Metadata = {
@@ -39,20 +39,7 @@ export default async function AdminCommunityPage() {
     take: 30,
   });
 
-  const initialMessages: CommunityMessageItem[] = rawMessages.map((msg) => ({
-    id: msg.id,
-    channelId: msg.extracurricularId,
-    content: msg.content,
-    isEdited: msg.isEdited,
-    createdAt: formatIndonesianTimestamp(msg.createdAt),
-    rawCreatedAt: msg.createdAt,
-    sender: {
-      id: msg.sender.id,
-      name: msg.sender.name,
-      role: msg.sender.role === "ADMIN" ? "ADMIN" : "STUDENT",
-      avatar: "/logo-smkn69.webp",
-    },
-  }));
+  const initialMessages: CommunityMessageItem[] = rawMessages.map(mapCommunityMessage);
 
   return (
     <AdminCommunityManager

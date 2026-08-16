@@ -12,6 +12,13 @@ export type CommunityChannel = {
   messageCount: number;
 };
 
+export type CommunityAttachment = {
+  path: string;
+  name: string;
+  size: number;
+  mime: string;
+};
+
 export type CommunityMessageItem = {
   id: string;
   channelId: string;
@@ -19,6 +26,7 @@ export type CommunityMessageItem = {
   isEdited: boolean;
   createdAt: string;
   rawCreatedAt: Date;
+  attachment: CommunityAttachment | null;
   sender: {
     id: string;
     name: string;
@@ -26,6 +34,50 @@ export type CommunityMessageItem = {
     avatar: string;
   };
 };
+
+type CommunityMessageWithSender = {
+  id: string;
+  extracurricularId: string;
+  content: string;
+  isEdited: boolean;
+  createdAt: Date;
+  attachmentPath: string | null;
+  attachmentName: string | null;
+  attachmentSize: number | null;
+  attachmentMime: string | null;
+  sender: { id: string; name: string; role: "ADMIN" | "STUDENT" };
+};
+
+export function mapCommunityMessage(
+  msg: CommunityMessageWithSender,
+): CommunityMessageItem {
+  return {
+    id: msg.id,
+    channelId: msg.extracurricularId,
+    content: msg.content,
+    isEdited: msg.isEdited,
+    createdAt: formatIndonesianTimestamp(msg.createdAt),
+    rawCreatedAt: msg.createdAt,
+    attachment:
+      msg.attachmentPath &&
+      msg.attachmentName &&
+      msg.attachmentSize != null &&
+      msg.attachmentMime
+        ? {
+            path: msg.attachmentPath,
+            name: msg.attachmentName,
+            size: msg.attachmentSize,
+            mime: msg.attachmentMime,
+          }
+        : null,
+    sender: {
+      id: msg.sender.id,
+      name: msg.sender.name,
+      role: msg.sender.role === "ADMIN" ? "ADMIN" : "STUDENT",
+      avatar: "/logo-smkn69.webp",
+    },
+  };
+}
 
 const LOGO_MAP: Record<string, string> = {
   PMR: "/logo-pmr.webp",
@@ -35,7 +87,7 @@ const LOGO_MAP: Record<string, string> = {
   ITC: "/logo-itc.webp",
   Paskibra: "/logo-paskibra.webp",
   Futsal: "/logo-futsal.webp",
-  Pramuka: "/logo-smkn69.webp",
+  Pramuka: "/logo-pramuka.webp",
 };
 
 export function slugifyEskul(name: string): string {
@@ -216,20 +268,7 @@ export const getCommunityChannelData = cache(
       },
     });
 
-    const messages: CommunityMessageItem[] = rawMessages.map((msg) => ({
-      id: msg.id,
-      channelId: msg.extracurricularId,
-      content: msg.content,
-      isEdited: msg.isEdited,
-      createdAt: formatIndonesianTimestamp(msg.createdAt),
-      rawCreatedAt: msg.createdAt,
-      sender: {
-        id: msg.sender.id,
-        name: msg.sender.name,
-        role: msg.sender.role === "ADMIN" ? "ADMIN" : "STUDENT",
-        avatar: "/logo-smkn69.webp",
-      },
-    }));
+    const messages: CommunityMessageItem[] = rawMessages.map(mapCommunityMessage);
 
     return {
       channels,
