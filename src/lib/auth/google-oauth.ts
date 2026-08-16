@@ -3,6 +3,8 @@ import "server-only";
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import { createRemoteJWKSet, jwtVerify } from "jose";
 
+import { getCanonicalAppOrigin } from "./url";
+
 const GOOGLE_AUTHORIZATION_ENDPOINT =
   "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_TOKEN_ENDPOINT = "https://oauth2.googleapis.com/token";
@@ -41,19 +43,15 @@ function base64Url(bytes: Buffer) {
   return bytes.toString("base64url");
 }
 
-function configuredRedirectUri(requestUrl: string) {
+function configuredRedirectUri(requestUrl?: string, request?: Request) {
   const explicitRedirect = process.env.GOOGLE_REDIRECT_URI?.trim();
   if (explicitRedirect) return explicitRedirect;
 
-  const configuredAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
-  const origin = configuredAppUrl
-    ? new URL(configuredAppUrl).origin
-    : new URL(requestUrl).origin;
-
-  return new URL("/api/auth/google/callback", origin).toString();
+  const origin = getCanonicalAppOrigin(request);
+  return `${origin}/api/auth/google/callback`;
 }
 
-export function getGoogleOAuthConfig(requestUrl: string): GoogleOAuthConfig {
+export function getGoogleOAuthConfig(requestUrl?: string, request?: Request): GoogleOAuthConfig {
   const clientId = process.env.GOOGLE_CLIENT_ID?.trim();
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
 
@@ -63,7 +61,7 @@ export function getGoogleOAuthConfig(requestUrl: string): GoogleOAuthConfig {
 
   let redirectUri: string;
   try {
-    redirectUri = configuredRedirectUri(requestUrl);
+    redirectUri = configuredRedirectUri(requestUrl, request);
   } catch {
     throw new GoogleOAuthError("google_invalid_configuration");
   }

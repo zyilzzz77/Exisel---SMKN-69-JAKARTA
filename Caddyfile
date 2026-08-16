@@ -22,7 +22,11 @@
 		-X-Powered-By
 	}
 
-	reverse_proxy app:3000
+	reverse_proxy app:3000 {
+		header_up Host {host}
+		header_up X-Forwarded-Host {host}
+		header_up X-Forwarded-Proto {scheme}
+	}
 
 	log {
 		output stdout

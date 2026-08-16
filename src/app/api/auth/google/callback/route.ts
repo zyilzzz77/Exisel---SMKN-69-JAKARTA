@@ -9,6 +9,7 @@ import {
 } from "@/lib/auth/google-oauth";
 import { createSession } from "@/lib/auth/session";
 import { getStudentStatusDestination } from "@/lib/auth/student-status";
+import { sanitizeInternalRedirect } from "@/lib/auth/url";
 import { hasAttendanceIntentCookie } from "@/lib/attendance/attendance-intent";
 import { getPrisma } from "@/lib/database/prisma";
 
@@ -17,10 +18,8 @@ export const dynamic = "force-dynamic";
 const OAUTH_COOKIE_PATH = "/api/auth/google";
 const OAUTH_ONLY_PASSWORD_MARKER = "!GOOGLE_OAUTH_ONLY!";
 
-function loginErrorUrl(requestUrl: string, code: string) {
-  const url = new URL("/login", requestUrl);
-  url.searchParams.set("googleError", code);
-  return url;
+function loginErrorUrl(code: string, request?: Request) {
+  return sanitizeInternalRedirect(`/login?googleError=${encodeURIComponent(code)}`, request);
 }
 
 async function clearOAuthCookies() {
@@ -71,7 +70,7 @@ export async function GET(request: Request) {
       throw new GoogleOAuthError("google_invalid_state");
     }
 
-    const config = getGoogleOAuthConfig(request.url);
+    const config = getGoogleOAuthConfig(request.url, request);
     const identity = await exchangeGoogleCode({
       code,
       codeVerifier,
@@ -180,7 +179,7 @@ export async function GET(request: Request) {
       destination = "/attendance/resume";
     }
 
-    return NextResponse.redirect(new URL(destination, request.url));
+    return NextResponse.redirect(sanitizeInternalRedirect(destination, request));
   } catch (error) {
     await clearOAuthCookies();
     const errorCode =
@@ -190,6 +189,6 @@ export async function GET(request: Request) {
           ? "google_account_conflict"
           : "google_login_failed";
 
-    return NextResponse.redirect(loginErrorUrl(request.url, errorCode));
+    return NextResponse.redirect(loginErrorUrl(errorCode, request));
   }
 }

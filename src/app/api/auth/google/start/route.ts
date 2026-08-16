@@ -5,6 +5,7 @@ import {
   getGoogleOAuthConfig,
   GOOGLE_OAUTH_COOKIES,
 } from "@/lib/auth/google-oauth";
+import { sanitizeInternalRedirect } from "@/lib/auth/url";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,7 @@ const OAUTH_COOKIE_PATH = "/api/auth/google";
 
 export async function GET(request: Request) {
   try {
-    const config = getGoogleOAuthConfig(request.url);
+    const config = getGoogleOAuthConfig(request.url, request);
     const authorization = createGoogleAuthorizationRequest(config);
     const cookieStore = await cookies();
     const cookieOptions = {
@@ -44,7 +45,7 @@ export async function GET(request: Request) {
     return NextResponse.redirect(authorization.authorizationUrl);
   } catch {
     return NextResponse.redirect(
-      new URL("/login?googleError=google_not_configured", request.url),
+      sanitizeInternalRedirect("/login?googleError=google_not_configured", request),
     );
   }
 }

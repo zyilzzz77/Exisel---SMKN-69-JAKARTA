@@ -9,7 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test:chatbot": "tsx --test src/lib/chatbot/eskul-chatbot.test.ts",
-    "test:auth": "tsx --test src/lib/auth/session.test.ts src/lib/auth/session-integration.test.ts src/lib/auth/student-status.test.ts src/lib/student/registration.test.ts",
+    "test:auth": "tsx --test src/lib/auth/session.test.ts src/lib/auth/session-integration.test.ts src/lib/auth/student-status.test.ts src/lib/student/registration.test.ts src/lib/auth/url.test.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:import:students": "prisma db execute --file private/imports/xi-sija-1-users.sql && prisma db execute --file private/imports/xi-sija-1-nis.sql",
