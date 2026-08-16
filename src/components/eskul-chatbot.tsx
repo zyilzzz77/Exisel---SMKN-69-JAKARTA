@@ -156,7 +156,7 @@ export function EskulChatbot() {
     scrollToBottom();
   }, [messages, isThinking]);
 
-  function sendMessage(value: string) {
+  async function sendMessage(value: string) {
     const question = value.trim();
     if (!question || isThinking) return;
 
@@ -170,28 +170,60 @@ export function EskulChatbot() {
     setInput("");
     setIsThinking(true);
 
-    setTimeout(() => {
-      let result;
-      try {
-        result = getEskulChatbotReply(
-          question,
-          conversationContext.current,
-        );
-      } catch {
-        result = getChatbotTechnicalErrorReply(conversationContext.current);
+    const historyForLLM = messages.map((m) => ({
+      role: (m.sender === "bot" ? "assistant" : "user") as "assistant" | "user",
+      content: m.text,
+    }));
+
+    try {
+      const response = await fetch("/api/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: question,
+          context: conversationContext.current,
+          history: historyForLLM,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("HTTP error");
       }
-      conversationContext.current = result.context;
-      persistTelemetry(result.telemetry);
+
+      const data = await response.json();
+      conversationContext.current = data.context;
+      persistTelemetry(data.telemetry);
+
       const botMessage: ChatMessage = {
         id: nextId.current++,
         sender: "bot",
-        text: result.text,
-        action: result.action,
+        text: data.reply?.text || "Maaf, tidak ada respon yang diterima.",
+        action: data.reply?.action,
         animate: true,
       };
       setMessages((current) => [...current, botMessage]);
+    } catch {
+      // Fallback lokal jika fetch network gagal total
+      let localFallback;
+      try {
+        localFallback = getEskulChatbotReply(question, conversationContext.current);
+      } catch {
+        localFallback = getChatbotTechnicalErrorReply(conversationContext.current);
+      }
+      conversationContext.current = localFallback.context;
+      persistTelemetry(localFallback.telemetry);
+
+      const botMessage: ChatMessage = {
+        id: nextId.current++,
+        sender: "bot",
+        text: localFallback.text,
+        action: localFallback.action,
+        animate: true,
+      };
+      setMessages((current) => [...current, botMessage]);
+    } finally {
       setIsThinking(false);
-    }, 350);
+    }
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
