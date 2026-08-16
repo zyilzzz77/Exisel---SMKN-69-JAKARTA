@@ -8,6 +8,7 @@ import {
   STUDENT_STATUSES,
   type StudentStatus,
 } from "@/lib/auth/student-status";
+import { STUDENT_CLASS_OPTIONS } from "@/lib/student/registration";
 import { getPrisma } from "@/lib/database/prisma";
 import styles from "./students.module.css";
 
@@ -119,9 +120,15 @@ export default async function AdminStudentsPage({
 
   if (!admin) redirect("/admin/login");
 
-  const classOptions = classRows
+  // Sinkronkan daftar kelas dengan kelas resmi sekolah (dipakai di form
+  // registrasi) lalu tambahkan kelas apa pun yang masih tersimpan di data
+  // siswa agar filter tidak terpotong hanya pada kelas yang sudah punya akun.
+  const dbClassNames = classRows
     .map((row) => row.className)
     .filter((value): value is string => Boolean(value));
+  const classOptions = [
+    ...new Set([...STUDENT_CLASS_OPTIONS, ...dbClassNames]),
+  ].sort((left, right) => left.localeCompare(right, "id", { numeric: true }));
   const selectedClass = classOptions.includes(requestedClass)
     ? requestedClass
     : "";
