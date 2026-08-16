@@ -74,6 +74,17 @@ function persistTelemetry(telemetry?: ChatbotTelemetry) {
   }
 }
 
+function renderFormattedText(text: string) {
+  // Simple clean markdown formatter for **bold**
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
+
 function TypewriterBotMessage({
   message,
   onClosePanel,
@@ -94,12 +105,13 @@ function TypewriterBotMessage({
     let index = 0;
     const fullText = message.text;
     const interval = setInterval(() => {
-      index++;
+      index += 2;
       setDisplayedText(fullText.slice(0, index));
       onTypingStep();
 
       if (index >= fullText.length) {
         clearInterval(interval);
+        setDisplayedText(fullText);
         setIsFinished(true);
       }
     }, 12);
@@ -111,7 +123,7 @@ function TypewriterBotMessage({
     <article className={styles.botMessage}>
       <span>EksiBot</span>
       <p>
-        {displayedText}
+        {renderFormattedText(displayedText)}
         {!isFinished ? <span className={styles.typingCursor}>|</span> : null}
       </p>
       {isFinished && message.action ? (
@@ -129,6 +141,8 @@ export function EskulChatbot() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
   const [isThinking, setIsThinking] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [blockedUntilText, setBlockedUntilText] = useState<string | null>(null);
   const nextId = useRef(2);
   const conversationContext = useRef(createChatbotContext());
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -141,6 +155,38 @@ export function EskulChatbot() {
       block: "nearest",
     });
   };
+
+  // Cek status blokir dari database secara otomatis saat mount dan saat chatbot dibuka
+  useEffect(() => {
+    fetch("/api/chatbot", { method: "GET" })
+      .then(async (res) => {
+        if (!res.ok) return;
+        const data = await res.json().catch(() => ({}));
+        if (data.isBlocked && data.blockedUntil) {
+          setIsBlocked(true);
+          const formatted = new Intl.DateTimeFormat("id-ID", {
+            timeZone: "Asia/Jakarta",
+            day: "numeric",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+          }).format(new Date(data.blockedUntil));
+          setBlockedUntilText(formatted);
+          setMessages([
+            {
+              id: 1,
+              sender: "bot",
+              text: `Akses asisten AI Eksibot kamu sedang diblokir hingga ${formatted} WIB karena pelanggaran keamanan (${data.reason || "aktivitas mencurigakan"}).`,
+              animate: false,
+            },
+          ]);
+        } else {
+          setIsBlocked(false);
+          setBlockedUntilText(null);
+        }
+      })
+      .catch(() => {});
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -186,18 +232,31 @@ export function EskulChatbot() {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("HTTP error");
+      const data = await response.json().catch(() => ({}));
+
+      if (data.isBlocked) {
+        setIsBlocked(true);
+        if (data.blockedUntil) {
+          const formatted = new Intl.DateTimeFormat("id-ID", {
+            timeZone: "Asia/Jakarta",
+            day: "numeric",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+          }).format(new Date(data.blockedUntil));
+          setBlockedUntilText(formatted);
+        }
       }
 
-      const data = await response.json();
-      conversationContext.current = data.context;
+      if (data.context) {
+        conversationContext.current = data.context;
+      }
       persistTelemetry(data.telemetry);
 
       const botMessage: ChatMessage = {
         id: nextId.current++,
         sender: "bot",
-        text: data.reply?.text || "Maaf, tidak ada respon yang diterima.",
+        text: data.reply?.text || "Maaf, terjadi kendala saat memproses jawaban.",
         action: data.reply?.action,
         animate: true,
       };
@@ -310,7 +369,7 @@ export function EskulChatbot() {
             <div ref={messageEndRef} />
           </div>
 
-          {messages.length === 1 ? (
+          {messages.length === 1 && !isBlocked ? (
             <div
               className={styles.quickQuestions}
               aria-label="Pertanyaan cepat"
@@ -327,32 +386,48 @@ export function EskulChatbot() {
             </div>
           ) : null}
 
-          <form className={styles.inputForm} onSubmit={handleSubmit}>
-            <label className="sr-only" htmlFor={`${panelId}-input`}>
-              Tulis pertanyaan tentang ekstrakurikuler
-            </label>
-            <textarea
-              autoComplete="off"
-              id={`${panelId}-input`}
-              maxLength={2000}
-              onChange={(event) => setInput(event.target.value)}
-              onKeyDown={handleInputKeyDown}
-              placeholder="Tanya beberapa hal sekaligus…"
-              ref={inputRef}
-              rows={2}
-              value={input}
-            />
-            <button
-              aria-label="Kirim pertanyaan"
-              disabled={!input.trim()}
-              type="submit"
-            >
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <path d="m4 4 17 8-17 8 3-8-3-8Z" />
-                <path d="M7 12h14" />
-              </svg>
-            </button>
-          </form>
+          {isBlocked ? (
+            <div className={styles.blockedInputContainer} role="alert">
+              <span className={styles.blockedIcon} aria-hidden="true">
+                !
+              </span>
+              <div className={styles.blockedText}>
+                <strong>Akses Chatbot Terblokir</strong>
+                <p>
+                  {blockedUntilText
+                    ? `Diblokir selama 2 hari (hingga ${blockedUntilText} WIB).`
+                    : "Akses kamu diblokir sementara karena aktivitas mencurigakan."}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <form className={styles.inputForm} onSubmit={handleSubmit}>
+              <label className="sr-only" htmlFor={`${panelId}-input`}>
+                Tulis pertanyaan tentang ekstrakurikuler
+              </label>
+              <textarea
+                autoComplete="off"
+                id={`${panelId}-input`}
+                maxLength={2000}
+                onChange={(event) => setInput(event.target.value)}
+                onKeyDown={handleInputKeyDown}
+                placeholder="Tanya beberapa hal sekaligus…"
+                ref={inputRef}
+                rows={2}
+                value={input}
+              />
+              <button
+                aria-label="Kirim pertanyaan"
+                disabled={!input.trim()}
+                type="submit"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="m4 4 17 8-17 8 3-8-3-8Z" />
+                  <path d="M7 12h14" />
+                </svg>
+              </button>
+            </form>
+          )}
         </section>
       ) : null}
 

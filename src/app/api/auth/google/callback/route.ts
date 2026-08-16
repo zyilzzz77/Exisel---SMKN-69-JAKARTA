@@ -12,6 +12,10 @@ import { getStudentStatusDestination } from "@/lib/auth/student-status";
 import { sanitizeInternalRedirect } from "@/lib/auth/url";
 import { hasAttendanceIntentCookie } from "@/lib/attendance/attendance-intent";
 import { getPrisma } from "@/lib/database/prisma";
+import {
+  OAUTH_INTENT_COOKIE,
+  validateOAuthIntentCookie,
+} from "@/lib/auth/oauth-intent";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +28,7 @@ function loginErrorUrl(code: string, request?: Request) {
 
 async function clearOAuthCookies() {
   const cookieStore = await cookies();
-  for (const name of Object.values(GOOGLE_OAUTH_COOKIES)) {
+  for (const name of [...Object.values(GOOGLE_OAUTH_COOKIES), OAUTH_INTENT_COOKIE]) {
     cookieStore.set(name, "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -67,6 +71,13 @@ export async function GET(request: Request) {
       !codeVerifier ||
       !oauthValuesMatch(receivedState, expectedState)
     ) {
+      throw new GoogleOAuthError("google_invalid_state");
+    }
+
+    // OAuth intent: bukti transaksi ini sudah lolos Turnstile.
+    // Harus ada, terikat ke state, belum kedaluwarsa, dan sekali pakai.
+    const intent = await validateOAuthIntentCookie(receivedState);
+    if (!intent.ok) {
       throw new GoogleOAuthError("google_invalid_state");
     }
 
@@ -177,6 +188,13 @@ export async function GET(request: Request) {
 
     if (destination === "/dashboard" && (await hasAttendanceIntentCookie())) {
       destination = "/attendance/resume";
+    }
+
+    if (intent.returnTo && intent.returnTo !== "/dashboard") {
+      // Prioritas QR attendance flow; selain itu hormati returnTo yang aman
+      if (destination !== "/attendance/resume") {
+        destination = intent.returnTo;
+      }
     }
 
     return NextResponse.redirect(sanitizeInternalRedirect(destination, request));

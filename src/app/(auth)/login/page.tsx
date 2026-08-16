@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { LoginForm } from "@/components/forms/login-form";
+import { LoginPanel } from "@/components/auth/LoginPanel";
 import { getAuthenticatedSessionUser } from "@/lib/auth/authorization";
 import { getStudentStatusDestination } from "@/lib/auth/student-status";
 import styles from "./login.module.css";
@@ -170,7 +170,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               <span className={styles.cardNumber}>01 / LOGIN</span>
             </div>
 
-            <div className={styles.cardIntro}>
+<div className={styles.cardIntro}>
               <h2 id="login-title">Selamat datang kembali.</h2>
               <p>
                 Gunakan akun Google untuk melanjutkan. Siswa baru perlu
@@ -178,38 +178,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               </p>
             </div>
 
-            <div className={styles.oauthPanel}>
-              <a className={styles.googleButton} href="/api/auth/google/start">
-                <svg
-                  aria-hidden="true"
-                  className={styles.googleIcon}
-                  viewBox="0 0 24 24"
-                >
-                  <path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.8 3-4.3 3-7.3Z" />
-                  <path fill="#34A853" d="M12 22c2.7 0 5-.9 6.6-2.5L15.4 17c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22Z" />
-                  <path fill="#FBBC05" d="M6.4 13.9A6 6 0 0 1 6.1 12c0-.7.1-1.3.3-1.9V7.5H3.1A10 10 0 0 0 2 12c0 1.6.4 3.1 1.1 4.5l3.3-2.6Z" />
-                  <path fill="#EA4335" d="M12 6c1.5 0 2.8.5 3.8 1.5l2.9-2.8A9.7 9.7 0 0 0 12 2a10 10 0 0 0-8.9 5.5l3.3 2.6A6 6 0 0 1 12 6Z" />
-                </svg>
-                <span>Lanjutkan dengan Google</span>
-                <span aria-hidden="true">→</span>
-              </a>
-              <p>
-                Google hanya memverifikasi identitas. Akses EXISEL tetap harus
-                disetujui admin sekolah.
-              </p>
-              {googleError ? (
-                <div className={styles.oauthError} role="alert">
-                  <strong>Google Login belum berhasil.</strong>
-                  <span>{googleError}</span>
-                </div>
-              ) : null}
-            </div>
-
-            <div className={styles.divider}>
-              <span>atau masuk dengan akun lama</span>
-            </div>
-
-            <LoginForm />
+            <LoginPanel googleError={googleError} />
 
             <div className={styles.helpBox}>
               <span className={styles.helpIcon} aria-hidden="true">

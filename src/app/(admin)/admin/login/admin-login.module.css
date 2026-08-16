@@ -243,6 +243,18 @@
   padding: 26px 28px 28px;
 }
 
+.turnstileWrapper {
+  width: 100%;
+  min-height: 65px;
+  display: flex;
+  justify-content: center;
+}
+
+.turnstileWrapper > div {
+  width: 100%;
+  max-width: 304px;
+}
+
 .fieldGroup {
   display: grid;
   gap: 7px;

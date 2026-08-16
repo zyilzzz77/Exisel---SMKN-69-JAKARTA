@@ -63,6 +63,11 @@ export type AttendanceIntent = Prisma.AttendanceIntentModel
  */
 export type LoginThrottle = Prisma.LoginThrottleModel
 /**
+ * Model ChatbotBlock
+ * 
+ */
+export type ChatbotBlock = Prisma.ChatbotBlockModel
+/**
  * Model CommunityMessage
  * 
  */

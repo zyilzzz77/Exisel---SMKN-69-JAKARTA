@@ -10,7 +10,9 @@ import type { ChatMessageItem, EksibotServiceResponse } from "./types";
 const DETAIL_REQUEST_PATTERNS = [
   /\b(jelaskan|jelasin|detail|lengkap|rincian|lebih detail|bagaimana cara|step by step|urutan|langkah-langkah)\b/i,
   /\b(kenapa|mengapa|apa bedanya|perbedaan|alasan)\b/i,
-  /\b(bagaimana alur|gimana cara|tolong jelaskan)\b/i,
+  /\b(bagaimana alur|gimana cara|gimana daftarnya|tolong jelaskan|apa itu|apa sih|ceritain)\b/i,
+  /\b(lokasi namsel|smkn 69|dimana namsel|alamat sekolah|gedung sekolah)\b/i,
+  /\b(tentang|tentang ekskul|apa maksud|tujuannya apa|kegiatannya apa aja)\b/i,
 ];
 
 function isDetailRequest(message: string): boolean {
@@ -21,7 +23,12 @@ export async function processEksibotMessage(
   message: string,
   context: ChatbotContext,
   history: ChatMessageItem[] = [],
-): Promise<{ reply: EksibotServiceResponse; context: ChatbotContext; rawResult?: ChatbotResult }> {
+): Promise<{
+  reply: EksibotServiceResponse;
+  context: ChatbotContext;
+  rawResult?: ChatbotResult;
+  safetyViolation?: "unsafe" | "secret" | "coding" | "off_topic" | "restricted";
+}> {
   // 1. Safety & Off-Topic Filter
   const safetyCheck = isUnsafeOrOffTopic(message);
   if (safetyCheck.isBlocked) {
@@ -31,6 +38,7 @@ export async function processEksibotMessage(
         source: "filter",
       },
       context,
+      safetyViolation: safetyCheck.reason,
     };
   }
 

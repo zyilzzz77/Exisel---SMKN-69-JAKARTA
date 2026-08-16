@@ -162,6 +162,15 @@ URI harus sama persis dengan nilai `GOOGLE_REDIRECT_URI` di atas. Biarkan
 `GOOGLE_ALLOWED_EMAIL_DOMAIN` kosong jika siswa memakai akun Gmail pribadi.
 Panduan lengkap tersedia di [`GOOGLE_LOGIN.md`](./GOOGLE_LOGIN.md).
 
+Isi konfigurasi Cloudflare Turnstile:
+```dotenv
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=0x4AAAAAA...
+TURNSTILE_SECRET_KEY=0x4AAAAAA...
+TURNSTILE_EXPECTED_HOSTNAME=exisel.web.id
+TURNSTILE_ENABLED=true
+TURNSTILE_SITEVERIFY_TIMEOUT_MS=5000
+```
+
 Jangan commit `.env.production` dan jangan mengirim isinya melalui chat.
 
 ## 7. Opsional tetapi disarankan: pindahkan 36 akun dari database lokal

@@ -9,6 +9,7 @@ import { getPrisma } from "@/lib/database/prisma";
 import { createSession, deleteSession } from "@/lib/auth/session";
 import { getStudentStatusDestination } from "@/lib/auth/student-status";
 import { hasAttendanceIntentCookie } from "@/lib/attendance/attendance-intent";
+import { isTurnstileEnabled, verifyTurnstile } from "@/lib/auth/turnstile";
 
 const MAX_LOGIN_ATTEMPTS = 5;
 const BLOCK_DURATION_MS = 15 * 60 * 1000;
@@ -24,10 +25,11 @@ const loginSchema = z.object({
     .string()
     .min(6, "Password minimal terdiri dari 6 karakter.")
     .max(128, "Password maksimal terdiri dari 128 karakter."),
+  turnstileToken: z.string().max(2048).optional(),
 });
 
 export type LoginState = {
-  status: "idle" | "error" | "blocked" | "unavailable";
+  status: "idle" | "error" | "blocked" | "unavailable" | "captcha";
   message: string;
   errors?: {
     email?: string[];
@@ -45,6 +47,7 @@ async function authenticateAction(
   const result = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
+    turnstileToken: formData.get("turnstileToken") ?? undefined,
   });
 
   if (!result.success) {
@@ -65,6 +68,31 @@ async function authenticateAction(
     requestHeaders.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     requestHeaders.get("x-real-ip") ||
     "local";
+
+  // Turnstile dijalankan setelah rate limit check, sebelum kerja database
+  if (isTurnstileEnabled()) {
+    try {
+      const turnstile = await verifyTurnstile({
+        token: result.data.turnstileToken ?? "",
+        remoteIp: clientAddress === "local" ? undefined : clientAddress,
+        expectedAction: "login",
+      });
+
+      if (!turnstile.success) {
+        return {
+          status: "captcha",
+          message: "Verifikasi keamanan gagal. Silakan coba lagi.",
+        };
+      }
+    } catch (error) {
+      console.error("Turnstile verification error:", error);
+      return {
+        status: "captcha",
+        message: "Verifikasi keamanan gagal. Silakan coba lagi.",
+      };
+    }
+  }
+
   const throttleKey = createHash("sha256")
     .update(`${result.data.email}|${clientAddress}`)
     .digest("hex");

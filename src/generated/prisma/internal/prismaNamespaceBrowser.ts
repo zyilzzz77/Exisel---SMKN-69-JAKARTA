@@ -60,6 +60,7 @@ export const ModelName = {
   AttendanceSession: 'AttendanceSession',
   AttendanceIntent: 'AttendanceIntent',
   LoginThrottle: 'LoginThrottle',
+  ChatbotBlock: 'ChatbotBlock',
   CommunityMessage: 'CommunityMessage',
   Competition: 'Competition',
   Achievement: 'Achievement',
@@ -211,6 +212,18 @@ export const LoginThrottleScalarFieldEnum = {
 } as const
 
 export type LoginThrottleScalarFieldEnum = (typeof LoginThrottleScalarFieldEnum)[keyof typeof LoginThrottleScalarFieldEnum]
+
+
+export const ChatbotBlockScalarFieldEnum = {
+  key: 'key',
+  reason: 'reason',
+  blockedUntil: 'blockedUntil',
+  violationCount: 'violationCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChatbotBlockScalarFieldEnum = (typeof ChatbotBlockScalarFieldEnum)[keyof typeof ChatbotBlockScalarFieldEnum]
 
 
 export const CommunityMessageScalarFieldEnum = {

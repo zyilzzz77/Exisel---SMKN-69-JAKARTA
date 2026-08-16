@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useId, useRef, useState } from "react";
+import { useActionState, useEffect, useId, useRef, useState } from "react";
 import { loginAction, type LoginState } from "@/actions/auth";
 import styles from "@/app/(auth)/login/login.module.css";
 
@@ -9,7 +9,19 @@ const initialLoginState: LoginState = {
   message: "",
 };
 
-export function LoginForm() {
+type LoginFormProps = {
+  turnstileToken: string | null;
+  turnstileConfigured: boolean;
+  onTurnstileReset: () => void;
+  turnstileSlot?: React.ReactNode;
+};
+
+export function LoginForm({
+  turnstileToken,
+  turnstileConfigured,
+  onTurnstileReset,
+  turnstileSlot,
+}: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const lastTouchToggleAt = useRef(0);
@@ -21,6 +33,20 @@ export function LoginForm() {
   const emailErrorId = useId();
   const passwordHintId = useId();
   const passwordErrorId = useId();
+
+  // Reset widget Turnstile setelah percobaan login gagal
+  const lastStatusRef = useRef(state.status);
+  useEffect(() => {
+    if (
+      lastStatusRef.current !== "idle" &&
+      (state.status === "error" || state.status === "captcha" || state.status === "blocked")
+    ) {
+      onTurnstileReset();
+    }
+    lastStatusRef.current = state.status;
+  }, [state.status, onTurnstileReset]);
+
+  const canSubmit = !pending && (!turnstileConfigured || turnstileToken !== null);
 
   function togglePassword() {
     setShowPassword((current) => !current);
@@ -36,6 +62,8 @@ export function LoginForm() {
 
   return (
     <form className={styles.form} action={formAction}>
+      <input type="hidden" name="turnstileToken" value={turnstileToken ?? ""} />
+
       <div className={styles.fieldGroup}>
         <div className={styles.labelRow}>
           <label htmlFor="email">Email</label>
@@ -133,6 +161,8 @@ export function LoginForm() {
         )}
       </div>
 
+      {turnstileSlot}
+
       {state.message ? (
         <div
           className={`${styles.formMessage} ${
@@ -146,14 +176,26 @@ export function LoginForm() {
               ? "Akses ditunda."
               : state.status === "unavailable"
                 ? "Layanan belum tersambung."
-                : "Belum pas."}
+                : state.status === "captcha"
+                  ? "Pemeriksaan keamanan."
+                  : "Belum pas."}
           </strong>
           <span>{state.message}</span>
         </div>
       ) : null}
 
-      <button className={styles.submitButton} type="submit" disabled={pending}>
-        <span>{pending ? "Memeriksa data..." : "Masuk ke EXISEL"}</span>
+      <button
+        className={styles.submitButton}
+        type="submit"
+        disabled={!canSubmit}
+      >
+        <span>
+          {pending
+            ? "Memeriksa data..."
+            : !turnstileConfigured || turnstileToken !== null
+              ? "Masuk ke EXISEL"
+              : "Tunggu pemeriksaan keamanan..."}
+        </span>
         <span aria-hidden="true">→</span>
       </button>
     </form>

@@ -406,6 +406,7 @@ export const ModelName = {
   AttendanceSession: 'AttendanceSession',
   AttendanceIntent: 'AttendanceIntent',
   LoginThrottle: 'LoginThrottle',
+  ChatbotBlock: 'ChatbotBlock',
   CommunityMessage: 'CommunityMessage',
   Competition: 'Competition',
   Achievement: 'Achievement',
@@ -426,7 +427,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "auditLog" | "extracurricular" | "schedule" | "enrollment" | "attendance" | "attendanceSession" | "attendanceIntent" | "loginThrottle" | "communityMessage" | "competition" | "achievement" | "galleryItem" | "session"
+    modelProps: "user" | "auditLog" | "extracurricular" | "schedule" | "enrollment" | "attendance" | "attendanceSession" | "attendanceIntent" | "loginThrottle" | "chatbotBlock" | "communityMessage" | "competition" | "achievement" | "galleryItem" | "session"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1096,6 +1097,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ChatbotBlock: {
+      payload: Prisma.$ChatbotBlockPayload<ExtArgs>
+      fields: Prisma.ChatbotBlockFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ChatbotBlockFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatbotBlockPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ChatbotBlockFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatbotBlockPayload>
+        }
+        findFirst: {
+          args: Prisma.ChatbotBlockFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatbotBlockPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ChatbotBlockFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatbotBlockPayload>
+        }
+        findMany: {
+          args: Prisma.ChatbotBlockFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatbotBlockPayload>[]
+        }
+        create: {
+          args: Prisma.ChatbotBlockCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatbotBlockPayload>
+        }
+        createMany: {
+          args: Prisma.ChatbotBlockCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ChatbotBlockCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatbotBlockPayload>[]
+        }
+        delete: {
+          args: Prisma.ChatbotBlockDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatbotBlockPayload>
+        }
+        update: {
+          args: Prisma.ChatbotBlockUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatbotBlockPayload>
+        }
+        deleteMany: {
+          args: Prisma.ChatbotBlockDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ChatbotBlockUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ChatbotBlockUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatbotBlockPayload>[]
+        }
+        upsert: {
+          args: Prisma.ChatbotBlockUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatbotBlockPayload>
+        }
+        aggregate: {
+          args: Prisma.ChatbotBlockAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateChatbotBlock>
+        }
+        groupBy: {
+          args: Prisma.ChatbotBlockGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatbotBlockGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ChatbotBlockCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatbotBlockCountAggregateOutputType> | number
+        }
+      }
+    }
     CommunityMessage: {
       payload: Prisma.$CommunityMessagePayload<ExtArgs>
       fields: Prisma.CommunityMessageFieldRefs
@@ -1635,6 +1710,18 @@ export const LoginThrottleScalarFieldEnum = {
 export type LoginThrottleScalarFieldEnum = (typeof LoginThrottleScalarFieldEnum)[keyof typeof LoginThrottleScalarFieldEnum]
 
 
+export const ChatbotBlockScalarFieldEnum = {
+  key: 'key',
+  reason: 'reason',
+  blockedUntil: 'blockedUntil',
+  violationCount: 'violationCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChatbotBlockScalarFieldEnum = (typeof ChatbotBlockScalarFieldEnum)[keyof typeof ChatbotBlockScalarFieldEnum]
+
+
 export const CommunityMessageScalarFieldEnum = {
   id: 'id',
   extracurricularId: 'extracurricularId',
@@ -2092,6 +2179,7 @@ export type GlobalOmitConfig = {
   attendanceSession?: Prisma.AttendanceSessionOmit
   attendanceIntent?: Prisma.AttendanceIntentOmit
   loginThrottle?: Prisma.LoginThrottleOmit
+  chatbotBlock?: Prisma.ChatbotBlockOmit
   communityMessage?: Prisma.CommunityMessageOmit
   competition?: Prisma.CompetitionOmit
   achievement?: Prisma.AchievementOmit

@@ -220,6 +220,18 @@ model LoginThrottle {
   @@map("login_throttles")
 }
 
+model ChatbotBlock {
+  key           String    @id @db.VarChar(128)
+  reason        String    @db.VarChar(255)
+  blockedUntil  DateTime  @map("blocked_until") @db.Timestamptz(3)
+  violationCount Int      @default(1) @map("violation_count")
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([blockedUntil])
+  @@map("chatbot_blocks")
+}
+
 model CommunityMessage {
   id                String          @id @default(uuid()) @db.Uuid
   extracurricularId String          @map("extracurricular_id") @db.Uuid
