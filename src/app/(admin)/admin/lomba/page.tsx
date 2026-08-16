@@ -128,15 +128,15 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
             </p>
           </div>
           <div className={styles.heroStats}>
-            <article>
+            <article className={styles.statCompetition}>
               <span>Lomba</span>
               <strong>{selectedProgram?.competitions.length ?? 0}</strong>
             </article>
-            <article>
+            <article className={styles.statAchievement}>
               <span>Prestasi</span>
               <strong>{selectedProgram?.achievements.length ?? 0}</strong>
             </article>
-            <article>
+            <article className={styles.statGallery}>
               <span>Galeri</span>
               <strong>{selectedProgram?.galleryItems.length ?? 0}</strong>
             </article>
@@ -183,55 +183,67 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
             </div>
 
             <section className={styles.managerSection} aria-labelledby="competition-manager-title">
-              <div className={styles.sectionIntro}>
-                <span>01</span>
-                <div>
-                  <p className={styles.eyebrow}>Agenda kompetisi</p>
-                  <h2 id="competition-manager-title">Informasi lomba</h2>
-                  <p>Tambahkan lomba yang relevan dan tautan pendaftarannya.</p>
+              <div className={styles.sectionHeader}>
+                <div className={styles.sectionIntro}>
+                  <span>01</span>
+                  <div>
+                    <p className={styles.eyebrow}>Agenda kompetisi</p>
+                    <h2 id="competition-manager-title">Informasi lomba</h2>
+                    <p>Tambahkan lomba yang relevan dan tautan pendaftarannya.</p>
+                  </div>
                 </div>
+                <span className={styles.sectionCount}>
+                  {selectedProgram.competitions.length} lomba
+                </span>
               </div>
 
-              <form action={createCompetitionAction} className={styles.createForm}>
-                <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                <h3>Tambah lomba baru</h3>
-                <div className={styles.formGrid}>
-                  <label className={styles.wideField}>
-                    <span>Judul lomba *</span>
-                    <input maxLength={180} name="title" placeholder="Contoh: Lomba Paskibra Tingkat DKI" required />
-                  </label>
-                  <label>
-                    <span>Penyelenggara</span>
-                    <input maxLength={180} name="organizer" placeholder="Nama penyelenggara" />
-                  </label>
-                  <label>
-                    <span>Tingkat</span>
-                    <input maxLength={80} name="level" placeholder="Sekolah / Kota / Nasional" />
-                  </label>
-                  <label>
-                    <span>Tanggal lomba *</span>
-                    <input name="eventDate" required type="date" />
-                  </label>
-                  <label>
-                    <span>Batas pendaftaran</span>
-                    <input name="registrationDeadline" type="date" />
-                  </label>
-                  <label className={styles.wideField}>
-                    <span>Lokasi</span>
-                    <input maxLength={180} name="location" placeholder="Lokasi kegiatan" />
-                  </label>
-                  <label className={styles.wideField}>
-                    <span>Deskripsi *</span>
-                    <textarea maxLength={5000} name="description" placeholder="Syarat, kategori, dan informasi penting lomba" required rows={4} />
-                  </label>
-                  <label className={styles.wideField}>
-                    <span>Tautan pendaftaran (HTTPS)</span>
-                    <input name="registrationUrl" placeholder="https://..." type="url" />
-                  </label>
-                </div>
-                <PublishedToggle />
-                <button className={styles.primaryButton} type="submit">Terbitkan lomba →</button>
-              </form>
+              <details className={styles.createPanel}>
+                <summary>
+                  <span className={styles.addIcon} aria-hidden="true">＋</span>
+                  Tambah lomba baru
+                </summary>
+                <form action={createCompetitionAction} className={styles.createForm}>
+                  <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
+                  <div className={styles.formGrid}>
+                    <label className={styles.wideField}>
+                      <span>Judul lomba *</span>
+                      <input maxLength={180} name="title" placeholder="Contoh: Lomba Paskibra Tingkat DKI" required />
+                    </label>
+                    <label>
+                      <span>Penyelenggara</span>
+                      <input maxLength={180} name="organizer" placeholder="Nama penyelenggara" />
+                    </label>
+                    <label>
+                      <span>Tingkat</span>
+                      <input maxLength={80} name="level" placeholder="Sekolah / Kota / Nasional" />
+                    </label>
+                    <label>
+                      <span>Tanggal lomba *</span>
+                      <input name="eventDate" required type="date" />
+                    </label>
+                    <label>
+                      <span>Batas pendaftaran</span>
+                      <input name="registrationDeadline" type="date" />
+                    </label>
+                    <label className={styles.wideField}>
+                      <span>Lokasi</span>
+                      <input maxLength={180} name="location" placeholder="Lokasi kegiatan" />
+                    </label>
+                    <label className={styles.wideField}>
+                      <span>Deskripsi *</span>
+                      <textarea maxLength={5000} name="description" placeholder="Syarat, kategori, dan informasi penting lomba" required rows={4} />
+                    </label>
+                    <label className={styles.wideField}>
+                      <span>Tautan pendaftaran (HTTPS)</span>
+                      <input name="registrationUrl" placeholder="https://..." type="url" />
+                    </label>
+                  </div>
+                  <div className={styles.formFooter}>
+                    <PublishedToggle />
+                    <button className={styles.primaryButton} type="submit">Terbitkan lomba →</button>
+                  </div>
+                </form>
+              </details>
 
               <div className={styles.contentList}>
                 {selectedProgram.competitions.length > 0 ? (
@@ -243,7 +255,11 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
                             {competition.isPublished ? "Tayang" : "Draf"}
                           </span>
                           <h3>{competition.title}</h3>
-                          <p>{dateValue(competition.eventDate)} · {competition.location ?? "Lokasi menyusul"}</p>
+                          <p className={styles.cardMeta}>
+                            <span className={styles.metaChip}>{dateValue(competition.eventDate)}</span>
+                            {competition.location ? <span className={styles.metaChip}>{competition.location}</span> : null}
+                            {competition.level ? <span className={styles.metaChip}>{competition.level}</span> : null}
+                          </p>
                         </div>
                         <form action={deleteCompetitionAction}>
                           <input name="id" type="hidden" value={competition.id} />
@@ -251,7 +267,7 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
                           <button className={styles.deleteButton} type="submit">Hapus</button>
                         </form>
                       </div>
-                      <details>
+                      <details className={styles.editPanel}>
                         <summary>Edit informasi lomba</summary>
                         <form action={updateCompetitionAction} className={styles.editForm}>
                           <input name="id" type="hidden" value={competition.id} />
@@ -266,41 +282,60 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
                             <label className={styles.wideField}><span>Deskripsi *</span><textarea defaultValue={competition.description} maxLength={5000} name="description" required rows={4} /></label>
                             <label className={styles.wideField}><span>Tautan pendaftaran</span><input defaultValue={competition.registrationUrl ?? ""} name="registrationUrl" type="url" /></label>
                           </div>
-                          <PublishedToggle defaultChecked={competition.isPublished} />
-                          <button className={styles.saveButton} type="submit">Simpan perubahan</button>
+                          <div className={styles.formFooter}>
+                            <PublishedToggle defaultChecked={competition.isPublished} />
+                            <button className={styles.saveButton} type="submit">Simpan perubahan</button>
+                          </div>
                         </form>
                       </details>
                     </article>
                   ))
                 ) : (
-                  <p className={styles.emptyState}>Belum ada lomba untuk {selectedProgram.name}.</p>
+                  <div className={styles.emptyState}>
+                    <strong>Belum ada lomba</strong>
+                    <span>Tambahkan lomba pertama untuk {selectedProgram.name}.</span>
+                  </div>
                 )}
               </div>
             </section>
 
             <section className={styles.managerSection} aria-labelledby="achievement-manager-title">
-              <div className={styles.sectionIntro}>
-                <span>02</span>
-                <div>
-                  <p className={styles.eyebrow}>Rekam jejak</p>
-                  <h2 id="achievement-manager-title">Prestasi ekskul</h2>
-                  <p>Catat pencapaian yang akan tampil di profil ekskul.</p>
+              <div className={styles.sectionHeader}>
+                <div className={styles.sectionIntro}>
+                  <span>02</span>
+                  <div>
+                    <p className={styles.eyebrow}>Rekam jejak</p>
+                    <h2 id="achievement-manager-title">Prestasi ekskul</h2>
+                    <p>Catat pencapaian yang akan tampil di profil ekskul.</p>
+                  </div>
                 </div>
+                <span className={styles.sectionCount}>
+                  {selectedProgram.achievements.length} prestasi
+                </span>
               </div>
-              <form action={createAchievementAction} className={styles.createForm}>
-                <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                <h3>Tambah prestasi</h3>
-                <div className={styles.formGrid}>
-                  <label className={styles.wideField}><span>Judul prestasi *</span><input maxLength={180} name="title" placeholder="Contoh: Juara 1 Tingkat Kota" required /></label>
-                  <label><span>Nama kompetisi</span><input maxLength={180} name="competitionName" /></label>
-                  <label><span>Peringkat / penghargaan *</span><input maxLength={100} name="rank" placeholder="Juara 1" required /></label>
-                  <label><span>Tingkat</span><input maxLength={80} name="level" placeholder="Kota / Provinsi / Nasional" /></label>
-                  <label><span>Tanggal diraih *</span><input name="achievedAt" required type="date" /></label>
-                  <label className={styles.wideField}><span>Cerita singkat</span><textarea maxLength={5000} name="description" rows={3} /></label>
-                </div>
-                <PublishedToggle />
-                <button className={styles.primaryButton} type="submit">Tambahkan prestasi →</button>
-              </form>
+
+              <details className={styles.createPanel}>
+                <summary>
+                  <span className={styles.addIcon} aria-hidden="true">＋</span>
+                  Tambah prestasi
+                </summary>
+                <form action={createAchievementAction} className={styles.createForm}>
+                  <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
+                  <div className={styles.formGrid}>
+                    <label className={styles.wideField}><span>Judul prestasi *</span><input maxLength={180} name="title" placeholder="Contoh: Juara 1 Tingkat Kota" required /></label>
+                    <label><span>Nama kompetisi</span><input maxLength={180} name="competitionName" /></label>
+                    <label><span>Peringkat / penghargaan *</span><input maxLength={100} name="rank" placeholder="Juara 1" required /></label>
+                    <label><span>Tingkat</span><input maxLength={80} name="level" placeholder="Kota / Provinsi / Nasional" /></label>
+                    <label><span>Tanggal diraih *</span><input name="achievedAt" required type="date" /></label>
+                    <label className={styles.wideField}><span>Cerita singkat</span><textarea maxLength={5000} name="description" rows={3} /></label>
+                  </div>
+                  <div className={styles.formFooter}>
+                    <PublishedToggle />
+                    <button className={styles.primaryButton} type="submit">Tambahkan prestasi →</button>
+                  </div>
+                </form>
+              </details>
+
               <div className={styles.contentList}>
                 {selectedProgram.achievements.length > 0 ? selectedProgram.achievements.map((achievement) => (
                   <article className={styles.contentCard} key={achievement.id}>
@@ -308,7 +343,11 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
                       <div>
                         <span className={achievement.isPublished ? styles.published : styles.draft}>{achievement.isPublished ? "Tayang" : "Draf"}</span>
                         <h3>{achievement.title}</h3>
-                        <p>{achievement.rank} · {dateValue(achievement.achievedAt)}</p>
+                        <p className={styles.cardMeta}>
+                          <span className={styles.metaChip}>{achievement.rank}</span>
+                          <span className={styles.metaChip}>{dateValue(achievement.achievedAt)}</span>
+                          {achievement.level ? <span className={styles.metaChip}>{achievement.level}</span> : null}
+                        </p>
                       </div>
                       <form action={deleteAchievementAction}>
                         <input name="id" type="hidden" value={achievement.id} />
@@ -316,7 +355,7 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
                         <button className={styles.deleteButton} type="submit">Hapus</button>
                       </form>
                     </div>
-                    <details>
+                    <details className={styles.editPanel}>
                       <summary>Edit prestasi</summary>
                       <form action={updateAchievementAction} className={styles.editForm}>
                         <input name="id" type="hidden" value={achievement.id} />
@@ -329,37 +368,58 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
                           <label><span>Tanggal *</span><input defaultValue={dateValue(achievement.achievedAt)} name="achievedAt" required type="date" /></label>
                           <label className={styles.wideField}><span>Cerita singkat</span><textarea defaultValue={achievement.description ?? ""} maxLength={5000} name="description" rows={3} /></label>
                         </div>
-                        <PublishedToggle defaultChecked={achievement.isPublished} />
-                        <button className={styles.saveButton} type="submit">Simpan perubahan</button>
+                        <div className={styles.formFooter}>
+                          <PublishedToggle defaultChecked={achievement.isPublished} />
+                          <button className={styles.saveButton} type="submit">Simpan perubahan</button>
+                        </div>
                       </form>
                     </details>
                   </article>
-                )) : <p className={styles.emptyState}>Belum ada prestasi untuk {selectedProgram.name}.</p>}
+                )) : (
+                  <div className={styles.emptyState}>
+                    <strong>Belum ada prestasi</strong>
+                    <span>Tambahkan prestasi pertama untuk {selectedProgram.name}.</span>
+                  </div>
+                )}
               </div>
             </section>
 
             <section className={styles.managerSection} aria-labelledby="gallery-manager-title">
-              <div className={styles.sectionIntro}>
-                <span>03</span>
-                <div>
-                  <p className={styles.eyebrow}>Dokumentasi visual</p>
-                  <h2 id="gallery-manager-title">Galeri kegiatan</h2>
-                  <p>Gunakan path aset publik seperti /galeri/foto.webp atau URL HTTPS.</p>
+              <div className={styles.sectionHeader}>
+                <div className={styles.sectionIntro}>
+                  <span>03</span>
+                  <div>
+                    <p className={styles.eyebrow}>Dokumentasi visual</p>
+                    <h2 id="gallery-manager-title">Galeri kegiatan</h2>
+                    <p>Gunakan path aset publik seperti /galeri/foto.webp atau URL HTTPS.</p>
+                  </div>
                 </div>
+                <span className={styles.sectionCount}>
+                  {selectedProgram.galleryItems.length} foto
+                </span>
               </div>
-              <form action={createGalleryItemAction} className={styles.createForm}>
-                <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                <h3>Tambah foto</h3>
-                <div className={styles.formGrid}>
-                  <label className={styles.wideField}><span>Path / URL gambar *</span><input name="imageUrl" placeholder="/galeri/nama-foto.webp" required /></label>
-                  <label className={styles.wideField}><span>Teks alternatif *</span><input maxLength={240} name="altText" placeholder="Jelaskan isi foto untuk aksesibilitas" required /></label>
-                  <label className={styles.wideField}><span>Caption</span><textarea maxLength={500} name="caption" rows={2} /></label>
-                  <label><span>Tanggal foto</span><input name="takenAt" type="date" /></label>
-                  <label><span>Urutan</span><input defaultValue="0" max="999" min="0" name="position" type="number" /></label>
-                </div>
-                <PublishedToggle />
-                <button className={styles.primaryButton} type="submit">Tambahkan foto →</button>
-              </form>
+
+              <details className={styles.createPanel}>
+                <summary>
+                  <span className={styles.addIcon} aria-hidden="true">＋</span>
+                  Tambah foto
+                </summary>
+                <form action={createGalleryItemAction} className={styles.createForm}>
+                  <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
+                  <div className={styles.formGrid}>
+                    <label className={styles.wideField}><span>Path / URL gambar *</span><input name="imageUrl" placeholder="/galeri/nama-foto.webp" required /></label>
+                    <label className={styles.wideField}><span>Teks alternatif *</span><input maxLength={240} name="altText" placeholder="Jelaskan isi foto untuk aksesibilitas" required /></label>
+                    <label className={styles.wideField}><span>Caption</span><textarea maxLength={500} name="caption" rows={2} /></label>
+                    <label><span>Tanggal foto</span><input name="takenAt" type="date" /></label>
+                    <label><span>Urutan</span><input defaultValue="0" max="999" min="0" name="position" type="number" /></label>
+                  </div>
+                  <div className={styles.formFooter}>
+                    <PublishedToggle />
+                    <button className={styles.primaryButton} type="submit">Tambahkan foto →</button>
+                  </div>
+                </form>
+              </details>
+
               <div className={styles.galleryAdminGrid}>
                 {selectedProgram.galleryItems.length > 0 ? selectedProgram.galleryItems.map((item) => (
                   <article className={styles.galleryAdminCard} key={item.id}>
@@ -368,7 +428,10 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
                       <div>
                         <span className={item.isPublished ? styles.published : styles.draft}>{item.isPublished ? "Tayang" : "Draf"}</span>
                         <h3>{item.caption || item.altText}</h3>
-                        <p>Urutan {item.position}</p>
+                        <p className={styles.cardMeta}>
+                          <span className={styles.metaChip}>Urutan {item.position}</span>
+                          {item.takenAt ? <span className={styles.metaChip}>{dateValue(item.takenAt)}</span> : null}
+                        </p>
                       </div>
                       <form action={deleteGalleryItemAction}>
                         <input name="id" type="hidden" value={item.id} />
@@ -376,7 +439,7 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
                         <button className={styles.deleteButton} type="submit">Hapus</button>
                       </form>
                     </div>
-                    <details>
+                    <details className={styles.editPanel}>
                       <summary>Edit foto</summary>
                       <form action={updateGalleryItemAction} className={styles.editForm}>
                         <input name="id" type="hidden" value={item.id} />
@@ -388,17 +451,27 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
                           <label><span>Tanggal foto</span><input defaultValue={dateValue(item.takenAt)} name="takenAt" type="date" /></label>
                           <label><span>Urutan</span><input defaultValue={item.position} max="999" min="0" name="position" type="number" /></label>
                         </div>
-                        <PublishedToggle defaultChecked={item.isPublished} />
-                        <button className={styles.saveButton} type="submit">Simpan perubahan</button>
+                        <div className={styles.formFooter}>
+                          <PublishedToggle defaultChecked={item.isPublished} />
+                          <button className={styles.saveButton} type="submit">Simpan perubahan</button>
+                        </div>
                       </form>
                     </details>
                   </article>
-                )) : <p className={styles.emptyState}>Belum ada foto galeri untuk {selectedProgram.name}.</p>}
+                )) : (
+                  <div className={`${styles.emptyState} ${styles.emptyStateWide}`}>
+                    <strong>Belum ada foto</strong>
+                    <span>Tambahkan foto pertama untuk {selectedProgram.name}.</span>
+                  </div>
+                )}
               </div>
             </section>
           </>
         ) : (
-          <p className={styles.emptyState}>Belum ada ekstrakurikuler aktif untuk dikelola.</p>
+          <div className={styles.emptyState}>
+            <strong>Belum ada ekstrakurikuler aktif</strong>
+            <span>Aktifkan ekstrakurikuler terlebih dahulu untuk mengelola konten.</span>
+          </div>
         )}
       </div>
     </main>
