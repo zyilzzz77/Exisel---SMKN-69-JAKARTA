@@ -57,9 +57,11 @@ export async function processEksibotMessage(
   }
 
   // 3. LLM Handler (ag/gemini-3.7-flash-low) for detailed or complex questions
+  console.log(`[EKSIBOT ROUTER] Mengarahkan ke LLM (ag/gemini-3.7-flash-low) untuk query: "${message}"`);
   const llmResult = await callEksibotLLM(message, history);
 
   if (llmResult.success) {
+    console.log(`[EKSIBOT ROUTER] Sukses dijawab oleh LLM (${llmResult.text.length} karakter)`);
     return {
       reply: {
         text: llmResult.text,
@@ -69,6 +71,8 @@ export async function processEksibotMessage(
       context: localResult.context,
       rawResult: localResult,
     };
+  } else {
+    console.warn(`[EKSIBOT ROUTER] LLM gagal/fallback: ${llmResult.text}`);
   }
 
   // 4. Graceful Fallback if LLM fails: return the structured local response
