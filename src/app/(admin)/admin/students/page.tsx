@@ -82,6 +82,29 @@ function filterHref(input: {
   return `/admin/students?${params.toString()}`;
 }
 
+const CLASS_MAJOR_ORDER = ["MEKA", "OTO", "SIJA"] as const;
+const CLASS_GRADE_ORDER = ["X", "XI", "XII", "XIII"] as const;
+
+// Urutkan kelas berdasarkan jurusan (MEKA → OTO → SIJA), lalu tingkat
+// (X → XI → XII → XIII), lalu urutan kelas, supaya filter tidak acak.
+function classSortKey(className: string) {
+  const parts = className.trim().split(/\s+/);
+  const grade = parts[0] ?? "";
+  const major = parts[1] ?? "";
+  const section = Number(parts[2]) || 0;
+  const majorIndex = CLASS_MAJOR_ORDER.indexOf(
+    major as (typeof CLASS_MAJOR_ORDER)[number],
+  );
+  const gradeIndex = CLASS_GRADE_ORDER.indexOf(
+    grade as (typeof CLASS_GRADE_ORDER)[number],
+  );
+  return (
+    (majorIndex >= 0 ? majorIndex : CLASS_MAJOR_ORDER.length) * 1_000 +
+    (gradeIndex >= 0 ? gradeIndex : CLASS_GRADE_ORDER.length) * 100 +
+    section
+  );
+}
+
 export default async function AdminStudentsPage({
   searchParams,
 }: StudentsPageProps) {
@@ -128,7 +151,11 @@ export default async function AdminStudentsPage({
     .filter((value): value is string => Boolean(value));
   const classOptions = [
     ...new Set([...STUDENT_CLASS_OPTIONS, ...dbClassNames]),
-  ].sort((left, right) => left.localeCompare(right, "id", { numeric: true }));
+  ].sort(
+    (left, right) =>
+      classSortKey(left) - classSortKey(right) ||
+      left.localeCompare(right, "id"),
+  );
   const selectedClass = classOptions.includes(requestedClass)
     ? requestedClass
     : "";
