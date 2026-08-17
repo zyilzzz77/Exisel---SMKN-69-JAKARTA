@@ -246,21 +246,29 @@ Dump berisi data siswa dan hash password. Simpan secara privat, transfer hanya
 melalui SSH/SCP, dan jangan masukkan dump ke GitHub.
 
 Kalau memulai dari database kosong (tanpa dump), buat satu akun admin/guru
-setelah langkah 8 selesai. Contoh (ubah email dan password):
+setelah langkah 8 selesai. Gunakan skrip bawaan repo (hash password-nya argon2,
+sesuai yang dipakai login aplikasi), dijalankan di dalam image `migrate` yang
+sudah punya `argon2` dan `pg`, dengan `DATABASE_URL` otomatis dari compose:
 
 ```bash
-sudo docker compose --env-file .env.production -f compose.production.yml exec -T database \
-  psql -U exisel -d exisel -c \
-  "INSERT INTO users (id, email, name, password_hash, role, status, is_active, must_change_password, created_at, updated_at)
-   VALUES (gen_random_uuid(), 'guru@exisel.web.id', 'Admin Guru EXISEL',
-           crypt('GANTI_DENGAN_PASSWORD_KUAT', gen_salt('bf')),
-           'ADMIN', 'APPROVED', TRUE, TRUE, now(), now());"
+cd /opt/exisel
+mkdir -p private
+sudo docker compose --env-file .env.production -f compose.production.yml run --rm \
+  -v "$(pwd)/scripts:/app/scripts:ro" \
+  -v "$(pwd)/private:/app/private" \
+  migrate node scripts/create-local-admin.mjs
+cat private/admin-initial-credentials.txt
 ```
 
-Hash `crypt(gen_salt('bf'))` PostgreSQL BUKAN format argon2 yang dipakai
-aplikasi login, jadi perlakukan akun ini sebagai akun darurat sementara dan
-ganti dengan akun admin yang dibuat lewat mekanisme aplikasi resmi begitu
-tersedia, atau seed akun dari dump database lokal.
+Kredensial tertulis di `private/admin-initial-credentials.txt` (file menjadi
+milik root karena ditulis lewat container; email default `guru@exisel.local`):
+
+```bash
+sudo cat private/admin-initial-credentials.txt
+```
+
+Login lewat `https://exisel.web.id/admin/login`, lalu segera ganti password
+dari halaman profil. Jangan commit atau bagikan file kredensial tersebut.
 
 ## 8. Deploy aplikasi dan SSL
 
