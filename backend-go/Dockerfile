@@ -1,7 +1,12 @@
 # Build stage
-FROM golang:1.22-alpine AS builder
+# go.mod membutuhkan Go 1.26.1; jangan gunakan image yang lebih lama.
+FROM golang:1.26-alpine AS builder
 
 WORKDIR /app
+
+# Arsitektur target (diisi otomatis oleh Docker BuildKit; default amd64).
+ARG TARGETARCH
+
 
 # Install build dependencies & ca-certificates
 RUN apk add --no-cache git ca-certificates tzdata
@@ -13,8 +18,8 @@ RUN go mod download
 # Copy source code
 COPY . .
 
-# Build statically linked binary
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+# Build statically linked binary (arsitektur mengikuti platform target).
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH:-amd64} go build \
     -ldflags="-s -w" \
     -o /app/server ./main.go
 

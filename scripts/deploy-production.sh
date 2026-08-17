@@ -15,8 +15,8 @@ cd "${PROJECT_DIR}"
 compose=(docker compose --env-file "${ENV_FILE}" -f "${COMPOSE_FILE}")
 
 "${compose[@]}" config --quiet
-"${compose[@]}" pull database caddy
-"${compose[@]}" build --pull migrate app
+"${compose[@]}" pull database caddy redis
+"${compose[@]}" build --pull migrate app exisel-core
 "${compose[@]}" up -d --remove-orphans
 "${compose[@]}" ps
 

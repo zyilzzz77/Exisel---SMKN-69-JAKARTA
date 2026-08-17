@@ -27,6 +27,59 @@ services:
       - backend
     logging: *default-logging
 
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "no", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - backend
+    logging: *default-logging
+
+  # Nama service juga menjadi hostname di jaringan Docker ("exisel-core"),
+  # harus sama dengan target reverse_proxy di Caddyfile.
+  exisel-core:
+    build:
+      context: ./backend-go
+    restart: unless-stopped
+    environment:
+      PORT: "8080"
+      ENVIRONMENT: "production"
+      NODE_ENV: "production"
+      DATABASE_URL: postgresql://${POSTGRES_USER:-exisel}:${POSTGRES_PASSWORD:?Isi POSTGRES_PASSWORD di .env.production}@database:5432/${POSTGRES_DB:-exisel}?schema=public
+      REDIS_URL: redis://redis:6379/0
+      SESSION_SECRET: ${SESSION_SECRET:?Isi SESSION_SECRET di .env.production}
+      SESSION_COOKIE_NAME: "exisel_session"
+      CORS_ALLOWED_ORIGIN: ${NEXT_PUBLIC_APP_URL:?Isi NEXT_PUBLIC_APP_URL di .env.production}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - -qO-
+        - http://127.0.0.1:8080/healthz
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    stop_grace_period: 15s
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - backend
+      - edge
+    logging: *default-logging
+
   migrate:
     build:
       context: .
@@ -65,6 +118,9 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:?Isi GOOGLE_CLIENT_SECRET di .env.production}
       GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:?Isi GOOGLE_REDIRECT_URI di .env.production}
       GOOGLE_ALLOWED_EMAIL_DOMAIN: ${GOOGLE_ALLOWED_EMAIL_DOMAIN:-}
+      EXISEL_CORE_URL: http://exisel-core:8080
+      USE_GO_ATTENDANCE: ${USE_GO_ATTENDANCE:-true}
+      USE_GO_SESSION_VALIDATE: ${USE_GO_SESSION_VALIDATE:-false}
     expose:
       - "3000"
     volumes:
@@ -108,6 +164,8 @@ services:
       - caddy_config:/config
     depends_on:
       app:
+        condition: service_healthy
+      exisel-core:
         condition: service_healthy
     security_opt:
       - no-new-privileges:true
