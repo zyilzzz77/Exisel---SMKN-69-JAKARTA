@@ -15,6 +15,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/namsel/exisel/backend-go/internal/attendance"
+	"github.com/namsel/exisel/backend-go/internal/auth"
 	"github.com/namsel/exisel/backend-go/internal/cache"
 	"github.com/namsel/exisel/backend-go/internal/config"
 	"github.com/namsel/exisel/backend-go/internal/database"
@@ -88,12 +89,22 @@ func (s *Server) setupRoutes() {
 	s.Router.Get("/health", s.handleHealthz)
 	s.Router.Get("/ready", s.handleReadyz)
 
+	// Session cookie name must match the Next.js cookie (default
+	// "exisel_session") for RequireAuth to read it.
+	middleware.SetSessionCookieName(s.cfg.SessionCookieName)
+
+	// auth.NewService is graceful: a nil DB pool still validates session
+	// tokens from cache, and a nil Redis client is a no-op fallback.
+	authService := auth.NewService(s.db, s.redis, s.cfg.SessionCookieName)
+
 	// Base API core prefix
 	s.Router.Route("/api/core/v1", func(r chi.Router) {
 		r.Get("/health", s.handleHealthz)
-		
+
 		attendanceHandler := attendance.NewHandler(s.db)
-		r.Post("/attendance/scan", attendanceHandler.HandleScan)
+		// Wire RequireAuth on the attendance route (nil db pool is handled
+		// by the handler's DATABASE_UNAVAILABLE guard, not a panic).
+		r.With(middleware.RequireAuth(authService)).Post("/attendance/scan", attendanceHandler.HandleScan)
 	})
 }
 

@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { AttendanceScanView } from "@/components/attendance/attendance-scan-view";
-import { readSession } from "@/lib/auth/session";
-import { getPrisma } from "@/lib/database/prisma";
 
 export const metadata: Metadata = {
   title: "Absensi QR — EXISEL",
@@ -34,23 +32,12 @@ export default async function AttendanceScanPage({ searchParams }: PageProps) {
     redirect("/attendance/error?code=QR_INVALID");
   }
 
-  const session = await readSession();
-
-  if (session) {
-    const user = await getPrisma().user.findFirst({
-      where: {
-        id: session.userId,
-        role: "STUDENT",
-        status: "APPROVED",
-        isActive: true,
-      },
-      select: { id: true },
-    });
-
-    if (!user) {
-      redirect("/login");
-    }
-  }
-
+  // Deep-link dari Google Lens dibuka lewat GET, jadi halaman ini hanya boleh
+  // me-bootstrap tampilan scan tanpa mutasi apa pun (plan §19). Pre-validasi
+  // user sengaja TIDAK dilakukan di sini: validasi sesi, QR, dan pembuatan
+  // intent saat user belum login semuanya terjadi di POST /api/attendance/scan
+  // yang dikirim sekali oleh scan view. Dengan begitu QR tidak pernah terbuang
+  // untuk user yang login namun belum valid — POST yang membuat
+  // AttendanceIntent lalu mengarahkan ke /login -> /attendance/resume.
   return <AttendanceScanView payload={payload} />;
 }

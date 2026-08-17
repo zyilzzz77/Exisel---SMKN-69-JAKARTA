@@ -14,7 +14,8 @@ export type AttendanceErrorCode =
   | "ALREADY_ATTENDED"
   | "NOT_EXTRACURRICULAR_MEMBER"
   | "ACCOUNT_DISABLED"
-  | "FORBIDDEN";
+  | "FORBIDDEN"
+  | "INTERNAL_ERROR";
 
 export type ProcessAttendanceResult =
   | {
@@ -139,7 +140,10 @@ export async function processAttendance(input: {
       return { status: "already_attended", programName: "" };
     }
 
+    // Unexpected failure: map to INTERNAL_ERROR (never QR_INVALID) so the
+    // route returns 500 with a requestId for tracing, matching the shared
+    // Go/Next error contract.
     console.error("Gagal memproses kehadiran:", error);
-    return { status: "error", error: "QR_INVALID" };
+    return { status: "error", error: "INTERNAL_ERROR" };
   }
 }

@@ -95,3 +95,26 @@ func TestCORSOptions(t *testing.T) {
 		t.Errorf("expected Access-Control-Allow-Origin http://localhost:3000, got %s", origin)
 	}
 }
+
+// With a nil DB pool the attendance scan route must NOT panic (nil-guarded),
+// and RequireAuth must reject an unauthenticated request with 401.
+func TestAttendanceScanWithoutTokenOrDB(t *testing.T) {
+	cfg := &config.Config{
+		Port:              "8080",
+		Environment:       "test",
+		SessionCookieName: "exisel_session",
+	}
+
+	srv := NewServer(cfg, nil, nil, nil)
+
+	req := httptest.NewRequest(http.MethodPost, "/api/core/v1/attendance/scan", nil)
+	rec := httptest.NewRecorder()
+
+	// Must not panic despite nil db pool.
+	srv.Router.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusUnauthorized {
+		t.Errorf("expected status 401 for scan without session token, got %d", rec.Code)
+	}
+}
+

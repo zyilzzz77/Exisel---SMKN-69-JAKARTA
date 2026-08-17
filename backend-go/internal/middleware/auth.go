@@ -13,6 +13,24 @@ type contextKey string
 
 const UserContextKey contextKey = "user"
 
+// DefaultSessionCookieName matches the Next.js session cookie
+// (src/lib/auth/session-core.ts) and config default (SESSION_COOKIE_NAME).
+const DefaultSessionCookieName = "exisel_session"
+
+// sessionCookieName is the cookie read by extractToken. The API process wires
+// it from config (config.SessionCookieName) via SetSessionCookieName.
+// RequireAuth keeps using it so its signature does not change.
+var sessionCookieName = DefaultSessionCookieName
+
+// SetSessionCookieName overrides the session cookie name read by RequireAuth.
+// Empty values keep the default ("exisel_session").
+func SetSessionCookieName(name string) {
+	name = strings.TrimSpace(name)
+	if name != "" {
+		sessionCookieName = name
+	}
+}
+
 // RequireAuth middleware verifies the session token and adds user info to context
 func RequireAuth(authService *auth.Service) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
@@ -56,17 +74,8 @@ func RequireRole(role string) func(http.Handler) http.Handler {
 }
 
 func extractToken(r *http.Request) string {
-	// First check Authorization header
-	authHeader := r.Header.Get("Authorization")
-	if strings.HasPrefix(authHeader, "Bearer ") {
-		return strings.TrimPrefix(authHeader, "Bearer ")
-	}
-
-	// Then check cookies (adjust cookie name based on actual Next.js auth setup, e.g., NextAuth.js uses next-auth.session-token)
-	cookie, err := r.Cookie("session_token")
-	if err == nil {
-		return cookie.Value
-	}
-
-	return ""
+	// Reuses the shared extractor: Authorization Bearer first, then the
+	// configured session cookie (default "exisel_session", the real cookie
+	// set by the Next.js session layer).
+	return auth.ExtractTokenFromRequest(r, sessionCookieName)
 }

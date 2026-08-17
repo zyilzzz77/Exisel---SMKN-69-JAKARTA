@@ -93,6 +93,36 @@
   box-shadow: 2px 2px 0 var(--ink);
 }
 
+/* Tombol retry/error memakai elemen <button>; selaraskan tipografi dan
+   kursor agar identik dengan link neo-brutalist di atas. */
+button.primaryButton {
+  cursor: pointer;
+  font-family: var(--font-manrope, inherit);
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+button.primaryButton:disabled {
+  cursor: progress;
+  opacity: 0.65;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.referenceCode {
+  display: inline-block;
+  margin: -0.25rem 0 1.25rem;
+  padding: 0.5rem 1rem;
+  border: 3px solid var(--ink);
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--blue-light) 65%, transparent);
+  font-family: var(--font-space-grotesk);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  word-break: break-all;
+}
+
 .errorActions {
   display: flex;
   flex-direction: column;
