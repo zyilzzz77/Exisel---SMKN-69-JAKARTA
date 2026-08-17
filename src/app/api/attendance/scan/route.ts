@@ -6,6 +6,7 @@ import { createAttendanceIntent } from "@/lib/attendance/attendance-intent";
 import { validateAttendanceQrPayload } from "@/lib/attendance/rotating-qr";
 import { checkRateLimit, requestClientIp } from "@/lib/attendance/rate-limit";
 import { getPrisma } from "@/lib/database/prisma";
+import { coreFetch } from "@/lib/core-api/client";
 import {
   getJakartaDateKey,
   normalizePrismaJakartaTimestamp,
@@ -27,6 +28,41 @@ function requestOrigin(request: Request): string {
 }
 
 export async function POST(request: Request) {
+  const useGo = process.env.USE_GO_ATTENDANCE === "true";
+
+  if (useGo) {
+    try {
+      const cloned = request.clone();
+      const body = await cloned.json().catch(() => ({}));
+      const coreRes = await coreFetch<{
+        message?: string;
+        status?: string;
+        extracurricularId?: string;
+        programName?: string;
+        checkedInAt?: string;
+      }>("/api/core/v1/attendance/scan", {
+        method: "POST",
+        body: JSON.stringify(body),
+      });
+
+      if (coreRes.ok && coreRes.data) {
+        return NextResponse.json(coreRes.data, {
+          status: coreRes.status,
+          headers: { "Cache-Control": "no-store" },
+        });
+      }
+
+      if (!coreRes.ok && coreRes.code !== "CORE_UNREACHABLE" && coreRes.code !== "GATEWAY_TIMEOUT") {
+        return NextResponse.json(
+          { message: coreRes.error, error: coreRes.code },
+          { status: coreRes.status, headers: { "Cache-Control": "no-store" } }
+        );
+      }
+    } catch {
+      // If Go core fails or is unreachable, transparently fall back to Next.js handler
+    }
+  }
+
   const clientIp = requestClientIp(request);
   const rate = checkRateLimit(`scan:${clientIp}`, SCAN_LIMIT_PER_MINUTE);
   if (!rate.allowed) {

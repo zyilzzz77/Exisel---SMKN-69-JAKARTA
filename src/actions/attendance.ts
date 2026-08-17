@@ -15,9 +15,10 @@ import {
 
 async function requestOrigin(): Promise<string> {
   const headerStore = await headers();
-  const host = headerStore.get("host");
+  const host = headerStore.get("x-forwarded-host") || headerStore.get("host");
   if (!host) return "";
-  return `http://${host}`;
+  const proto = headerStore.get("x-forwarded-proto") || "http";
+  return `${proto}://${host}`;
 }
 
 const attendanceSchema = z

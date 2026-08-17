@@ -63,6 +63,7 @@ export const getStudentDashboard = cache(async () => {
         className: true,
         isActive: true,
         mustChangePassword: true,
+        avatarUrl: true,
         enrollments: {
           where: {
             status: { in: ["PENDING", "APPROVED"] },
@@ -180,6 +181,7 @@ export const getPublicExtracurricularData = cache(async () => {
             className: true,
             isActive: true,
             status: true,
+            avatarUrl: true,
             enrollments: {
               where: { status: { in: ["PENDING", "APPROVED"] } },
               select: {
@@ -231,6 +233,7 @@ export const getStudentRegistrationData = cache(
           role: true,
           className: true,
           isActive: true,
+          avatarUrl: true,
           enrollments: {
             where: {
               extracurricularId:

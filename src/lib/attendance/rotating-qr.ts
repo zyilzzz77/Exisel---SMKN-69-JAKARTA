@@ -88,11 +88,26 @@ export function validateAttendanceQrPayload(
 ) {
   try {
     const url = new URL(payload);
-    const allowedOrigins = new Set<string>([
+    const originSet = new Set<string>([
       qrScanOrigin(input.host),
-      ...(input.allowedOrigins ?? []),
+      ...(input.allowedOrigins ?? []).filter(Boolean),
     ]);
-    if (!allowedOrigins.has(url.origin)) return false;
+
+    // Localhost alias tolerance (e.g. 127.0.0.1 <-> localhost, port variations)
+    if (
+      url.hostname === "localhost" ||
+      url.hostname === "127.0.0.1" ||
+      url.hostname === "::1"
+    ) {
+      originSet.add("http://localhost:3000");
+      originSet.add("http://127.0.0.1:3000");
+      if (url.port) {
+        originSet.add(`http://localhost:${url.port}`);
+        originSet.add(`http://127.0.0.1:${url.port}`);
+      }
+    }
+
+    if (!originSet.has(url.origin)) return false;
     if (url.pathname !== qrScanPath()) return false;
     if (url.searchParams.get("v") !== QR_VERSION) return false;
     if (url.searchParams.get("e") !== input.extracurricularId) return false;
@@ -105,10 +120,16 @@ export function validateAttendanceQrPayload(
     }
 
     const bucket = Number(bucketText);
+    if (!Number.isSafeInteger(bucket)) return false;
+
     const currentBucket = Math.floor(
       (input.now ?? Date.now()) / ATTENDANCE_QR_ROTATION_MS,
     );
-    if (!Number.isSafeInteger(bucket) || bucket !== currentBucket) return false;
+
+    // Allow current bucket and previous bucket (1 rotation window = 25s tolerance)
+    // to handle in-flight submission latency and network round-trip.
+    const isBucketValid = bucket === currentBucket || bucket === currentBucket - 1;
+    if (!isBucketValid) return false;
 
     const expected = signature({ ...input, bucket });
     return timingSafeEqual(Buffer.from(suppliedSignature), Buffer.from(expected));

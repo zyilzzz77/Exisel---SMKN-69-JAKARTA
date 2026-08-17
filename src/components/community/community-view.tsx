@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
+import { AvatarDropdown } from "@/components/avatar-dropdown";
 import { StudentHeaderNav } from "@/components/landing-navigation";
 import type { CommunityChannel, CommunityMessageItem } from "@/lib/community/dal";
 import styles from "./community.module.css";
@@ -14,7 +14,7 @@ type CommunityViewProps = {
   activeChannel: CommunityChannel;
   messages: CommunityMessageItem[];
   isAdmin: boolean;
-  currentUser: { name: string; role: string } | null;
+  currentUser: { name: string; role: string; avatarUrl?: string | null } | null;
 };
 
 const LOCAL_STORAGE_KEY = "exisel-community-last-channel";
@@ -293,12 +293,7 @@ export function CommunityView({
 
           <div className={styles.accountActions}>
             {currentUser ? (
-              <>
-                <span className={styles.userAvatar} aria-hidden="true">
-                  {initials(currentUser.name)}
-                </span>
-                <ConfirmLogoutButton className={styles.logoutBtn} />
-              </>
+              <AvatarDropdown userName={currentUser.name} initials={initials(currentUser.name)} avatarUrl={currentUser.avatarUrl} />
             ) : (
               <Link className={styles.loginBtn} href="/login">
                 Masuk <span aria-hidden="true">↗</span>

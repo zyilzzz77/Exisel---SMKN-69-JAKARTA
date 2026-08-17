@@ -9,7 +9,7 @@ import {
   removeAvatarAction,
   type ProfileActionState,
 } from "@/actions/profile";
-import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
+import { AvatarDropdown } from "@/components/avatar-dropdown";
 import { StudentHeaderNav } from "@/components/landing-navigation";
 import styles from "./profile.module.css";
 
@@ -271,22 +271,10 @@ export function ProfileClient({ user }: ProfileClientProps) {
             </span>
           </Link>
 
-          <StudentHeaderNav activeItem="account" />
+          <StudentHeaderNav />
 
           <div className={styles.accountActions}>
-            <span className={styles.avatar} aria-hidden="true">
-              {avatarPreview ? (
-                <Image
-                  alt={user.name}
-                  height={42}
-                  src={avatarPreview}
-                  width={42}
-                />
-              ) : (
-                initials(user.name)
-              )}
-            </span>
-            <ConfirmLogoutButton className={styles.logoutButton} />
+            <AvatarDropdown userName={user.name} initials={initials(user.name)} avatarUrl={user.avatarUrl} />
           </div>
         </div>
       </header>

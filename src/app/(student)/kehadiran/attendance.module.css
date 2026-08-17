@@ -615,6 +615,58 @@
   font-weight: 800;
 }
 
+.cameraStartButton {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  padding: 18px 26px;
+  border: 3px solid var(--white);
+  border-radius: 14px;
+  background: #123fcb;
+  color: var(--white);
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.cameraStartButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, .35);
+}
+
+.cameraStartButton span {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+.cameraStartButton small {
+  font-size: 9px;
+  font-weight: 600;
+  opacity: .85;
+}
+
+.cameraSwitchButton {
+  position: absolute;
+  z-index: 4;
+  right: 10px;
+  bottom: 10px;
+  padding: 8px 12px;
+  border: 2px solid var(--white);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .8);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cameraSwitchButton:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
 .scanCorners {
   position: absolute;
   z-index: 2;

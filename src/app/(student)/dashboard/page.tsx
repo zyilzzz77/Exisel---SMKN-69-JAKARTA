@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
+import { AvatarDropdown } from "@/components/avatar-dropdown";
 import { StudentHeaderNav } from "@/components/landing-navigation";
 import { TypewriterGreeting } from "@/components/typewriter-greeting";
 import { getStudentDashboard } from "@/lib/auth/dal";
@@ -184,10 +184,7 @@ export default async function DashboardPage() {
           <StudentHeaderNav activeItem="dashboard" followDashboardScroll />
 
           <div className={styles.accountActions}>
-            <span className={styles.avatar} aria-hidden="true">
-              {initials(user.name)}
-            </span>
-            <ConfirmLogoutButton className={styles.logoutButton} />
+            <AvatarDropdown userName={user.name} initials={initials(user.name)} avatarUrl={user.avatarUrl} />
           </div>
         </div>
       </header>

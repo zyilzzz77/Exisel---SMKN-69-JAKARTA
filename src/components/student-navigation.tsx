@@ -27,11 +27,6 @@ const studentNavigationItems = [
     href: "/kehadiran",
     label: "Kehadiran",
   },
-  {
-    id: "account",
-    href: "/profile",
-    label: "Profil",
-  },
 ] as const;
 
 const landingNavigationItems = [

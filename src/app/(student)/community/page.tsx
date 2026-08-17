@@ -16,7 +16,7 @@ type PageProps = {
 export default async function CommunityPage({ searchParams }: PageProps) {
   const { channel } = await searchParams;
   const student = await requireApprovedStudent();
-  const currentUser = { name: student.name, role: student.role };
+  const currentUser = { name: student.name, role: student.role, avatarUrl: student.avatarUrl };
 
   const { channels, activeChannel, messages } = await getCommunityChannelData(channel);
 

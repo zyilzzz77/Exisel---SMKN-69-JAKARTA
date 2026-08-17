@@ -1,22 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import {
-  createAchievementAction,
-  createCompetitionAction,
-  createGalleryItemAction,
-  deleteAchievementAction,
-  deleteCompetitionAction,
-  deleteGalleryItemAction,
-  updateAchievementAction,
-  updateCompetitionAction,
-  updateGalleryItemAction,
-} from "@/actions/extracurricular-content";
 import { AdminHeader } from "@/components/admin-header";
-import { ContentImage } from "@/components/content-image";
+import { AdminContentManager } from "@/components/admin/lomba";
 import { getActiveSessionUser } from "@/lib/auth/authorization";
 import { getPrisma } from "@/lib/database/prisma";
-import styles from "./admin-content.module.css";
 
 export const metadata: Metadata = {
   title: "Kelola Lomba & Profil — EXISEL",
@@ -31,18 +18,6 @@ type AdminContentPageProps = {
   }>;
 };
 
-const notices: Record<string, string> = {
-  "lomba-ditambahkan": "Informasi lomba berhasil ditambahkan.",
-  "lomba-diperbarui": "Informasi lomba berhasil diperbarui.",
-  "lomba-dihapus": "Informasi lomba berhasil dihapus.",
-  "prestasi-ditambahkan": "Prestasi berhasil ditambahkan.",
-  "prestasi-diperbarui": "Prestasi berhasil diperbarui.",
-  "prestasi-dihapus": "Prestasi berhasil dihapus.",
-  "galeri-ditambahkan": "Foto galeri berhasil ditambahkan.",
-  "galeri-diperbarui": "Foto galeri berhasil diperbarui.",
-  "galeri-dihapus": "Foto galeri berhasil dihapus.",
-};
-
 function first(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
 }
@@ -53,22 +28,6 @@ function slugify(value: string) {
     .normalize("NFKD")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
-}
-
-function dateValue(value: Date | null) {
-  return value ? value.toISOString().slice(0, 10) : "";
-}
-
-function PublishedToggle({ defaultChecked = true }: { defaultChecked?: boolean }) {
-  return (
-    <label className={styles.toggleField}>
-      <input defaultChecked={defaultChecked} name="isPublished" type="checkbox" />
-      <span>
-        <strong>Tampilkan ke siswa</strong>
-        <small>Matikan jika konten masih berupa draf.</small>
-      </span>
-    </label>
-  );
 }
 
 export default async function AdminContentPage({ searchParams }: AdminContentPageProps) {
@@ -98,382 +57,37 @@ export default async function AdminContentPage({ searchParams }: AdminContentPag
   const requestedSlug = first(query.ekskul);
   const selectedProgram =
     programs.find((program) => slugify(program.name) === requestedSlug) ?? programs[0];
-  const notice = first(query.notice);
-  const error = first(query.error);
+  const notice = first(query.notice) ?? null;
+  const error = first(query.error) ?? null;
 
   return (
-    <main className={styles.page}>
-      <a className="skip-link" href="#content-manager">
-        Lewati ke pengelola konten
-      </a>
-
+    <div className="min-h-screen bg-exisel-bg">
       <AdminHeader
         activeItem="content"
         adminName={admin.name}
-        announcement="Ruang konten admin & pembina ekstrakurikuler"
         brandSubtitle="Kelola konten ekskul"
         roleLabel="Admin / Pembina"
       />
 
-      <div className={styles.shell} id="content-manager">
-        <section className={styles.hero}>
-          <div>
-            <p className={styles.eyebrow}>Satu panel / tiga jenis konten</p>
-            <h1>
-              Kabar ekskul, <span>selalu hidup.</span>
-            </h1>
-            <p>
-              Terbitkan agenda lomba, rekam prestasi, dan susun galeri. Konten yang
-              aktif langsung tampil pada halaman siswa.
+      {selectedProgram ? (
+        <AdminContentManager
+          programs={programs}
+          selectedProgram={selectedProgram}
+          notice={notice}
+          error={error}
+        />
+      ) : (
+        <main className="mx-auto max-w-[1500px] px-4 py-16 text-center sm:px-6 lg:px-10">
+          <div className="rounded-2xl border-[3px] border-dashed border-exisel-ink bg-white p-12 shadow-brutal-sm">
+            <h2 className="text-xl font-black text-exisel-ink">
+              Belum ada ekstrakurikuler aktif
+            </h2>
+            <p className="mt-2 text-sm font-semibold text-exisel-muted">
+              Aktifkan ekstrakurikuler terlebih dahulu untuk mengelola agenda lomba, prestasi, dan galeri.
             </p>
           </div>
-          <div className={styles.heroStats}>
-            <article className={styles.statCompetition}>
-              <span>Lomba</span>
-              <strong>{selectedProgram?.competitions.length ?? 0}</strong>
-            </article>
-            <article className={styles.statAchievement}>
-              <span>Prestasi</span>
-              <strong>{selectedProgram?.achievements.length ?? 0}</strong>
-            </article>
-            <article className={styles.statGallery}>
-              <span>Galeri</span>
-              <strong>{selectedProgram?.galleryItems.length ?? 0}</strong>
-            </article>
-          </div>
-        </section>
-
-        {notice && notices[notice] ? (
-          <p className={styles.successNotice} role="status">
-            ✓ {notices[notice]}
-          </p>
-        ) : null}
-        {error ? (
-          <p className={styles.errorNotice} role="alert">
-            Konten tidak dapat diproses. Muat ulang halaman lalu coba kembali.
-          </p>
-        ) : null}
-
-        <nav className={styles.programTabs} aria-label="Pilih ekstrakurikuler">
-          {programs.map((program) => {
-            const slug = slugify(program.name);
-            return (
-              <Link
-                aria-current={program.id === selectedProgram?.id ? "page" : undefined}
-                className={program.id === selectedProgram?.id ? styles.activeTab : ""}
-                href={`/admin/lomba?ekskul=${encodeURIComponent(slug)}`}
-                key={program.id}
-              >
-                {program.name}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {selectedProgram ? (
-          <>
-            <div className={styles.programHeading}>
-              <div>
-                <p className={styles.eyebrow}>Sedang dikelola</p>
-                <h2>{selectedProgram.name}</h2>
-              </div>
-              <Link href={`/eskul/${slugify(selectedProgram.name)}`} target="_blank">
-                Lihat halaman siswa ↗
-              </Link>
-            </div>
-
-            <section className={styles.managerSection} aria-labelledby="competition-manager-title">
-              <div className={styles.sectionHeader}>
-                <div className={styles.sectionIntro}>
-                  <span>01</span>
-                  <div>
-                    <p className={styles.eyebrow}>Agenda kompetisi</p>
-                    <h2 id="competition-manager-title">Informasi lomba</h2>
-                    <p>Tambahkan lomba yang relevan dan tautan pendaftarannya.</p>
-                  </div>
-                </div>
-                <span className={styles.sectionCount}>
-                  {selectedProgram.competitions.length} lomba
-                </span>
-              </div>
-
-              <details className={styles.createPanel}>
-                <summary>
-                  <span className={styles.addIcon} aria-hidden="true">＋</span>
-                  Tambah lomba baru
-                </summary>
-                <form action={createCompetitionAction} className={styles.createForm}>
-                  <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                  <div className={styles.formGrid}>
-                    <label className={styles.wideField}>
-                      <span>Judul lomba *</span>
-                      <input maxLength={180} name="title" placeholder="Contoh: Lomba Paskibra Tingkat DKI" required />
-                    </label>
-                    <label>
-                      <span>Penyelenggara</span>
-                      <input maxLength={180} name="organizer" placeholder="Nama penyelenggara" />
-                    </label>
-                    <label>
-                      <span>Tingkat</span>
-                      <input maxLength={80} name="level" placeholder="Sekolah / Kota / Nasional" />
-                    </label>
-                    <label>
-                      <span>Tanggal lomba *</span>
-                      <input name="eventDate" required type="date" />
-                    </label>
-                    <label>
-                      <span>Batas pendaftaran</span>
-                      <input name="registrationDeadline" type="date" />
-                    </label>
-                    <label className={styles.wideField}>
-                      <span>Lokasi</span>
-                      <input maxLength={180} name="location" placeholder="Lokasi kegiatan" />
-                    </label>
-                    <label className={styles.wideField}>
-                      <span>Deskripsi *</span>
-                      <textarea maxLength={5000} name="description" placeholder="Syarat, kategori, dan informasi penting lomba" required rows={4} />
-                    </label>
-                    <label className={styles.wideField}>
-                      <span>Tautan pendaftaran (HTTPS)</span>
-                      <input name="registrationUrl" placeholder="https://..." type="url" />
-                    </label>
-                  </div>
-                  <div className={styles.formFooter}>
-                    <PublishedToggle />
-                    <button className={styles.primaryButton} type="submit">Terbitkan lomba →</button>
-                  </div>
-                </form>
-              </details>
-
-              <div className={styles.contentList}>
-                {selectedProgram.competitions.length > 0 ? (
-                  selectedProgram.competitions.map((competition) => (
-                    <article className={styles.contentCard} key={competition.id}>
-                      <div className={styles.cardSummary}>
-                        <div>
-                          <span className={competition.isPublished ? styles.published : styles.draft}>
-                            {competition.isPublished ? "Tayang" : "Draf"}
-                          </span>
-                          <h3>{competition.title}</h3>
-                          <p className={styles.cardMeta}>
-                            <span className={styles.metaChip}>{dateValue(competition.eventDate)}</span>
-                            {competition.location ? <span className={styles.metaChip}>{competition.location}</span> : null}
-                            {competition.level ? <span className={styles.metaChip}>{competition.level}</span> : null}
-                          </p>
-                        </div>
-                        <form action={deleteCompetitionAction}>
-                          <input name="id" type="hidden" value={competition.id} />
-                          <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                          <button className={styles.deleteButton} type="submit">Hapus</button>
-                        </form>
-                      </div>
-                      <details className={styles.editPanel}>
-                        <summary>Edit informasi lomba</summary>
-                        <form action={updateCompetitionAction} className={styles.editForm}>
-                          <input name="id" type="hidden" value={competition.id} />
-                          <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                          <div className={styles.formGrid}>
-                            <label className={styles.wideField}><span>Judul *</span><input defaultValue={competition.title} maxLength={180} name="title" required /></label>
-                            <label><span>Penyelenggara</span><input defaultValue={competition.organizer ?? ""} maxLength={180} name="organizer" /></label>
-                            <label><span>Tingkat</span><input defaultValue={competition.level ?? ""} maxLength={80} name="level" /></label>
-                            <label><span>Tanggal lomba *</span><input defaultValue={dateValue(competition.eventDate)} name="eventDate" required type="date" /></label>
-                            <label><span>Batas pendaftaran</span><input defaultValue={dateValue(competition.registrationDeadline)} name="registrationDeadline" type="date" /></label>
-                            <label className={styles.wideField}><span>Lokasi</span><input defaultValue={competition.location ?? ""} maxLength={180} name="location" /></label>
-                            <label className={styles.wideField}><span>Deskripsi *</span><textarea defaultValue={competition.description} maxLength={5000} name="description" required rows={4} /></label>
-                            <label className={styles.wideField}><span>Tautan pendaftaran</span><input defaultValue={competition.registrationUrl ?? ""} name="registrationUrl" type="url" /></label>
-                          </div>
-                          <div className={styles.formFooter}>
-                            <PublishedToggle defaultChecked={competition.isPublished} />
-                            <button className={styles.saveButton} type="submit">Simpan perubahan</button>
-                          </div>
-                        </form>
-                      </details>
-                    </article>
-                  ))
-                ) : (
-                  <div className={styles.emptyState}>
-                    <strong>Belum ada lomba</strong>
-                    <span>Tambahkan lomba pertama untuk {selectedProgram.name}.</span>
-                  </div>
-                )}
-              </div>
-            </section>
-
-            <section className={styles.managerSection} aria-labelledby="achievement-manager-title">
-              <div className={styles.sectionHeader}>
-                <div className={styles.sectionIntro}>
-                  <span>02</span>
-                  <div>
-                    <p className={styles.eyebrow}>Rekam jejak</p>
-                    <h2 id="achievement-manager-title">Prestasi ekskul</h2>
-                    <p>Catat pencapaian yang akan tampil di profil ekskul.</p>
-                  </div>
-                </div>
-                <span className={styles.sectionCount}>
-                  {selectedProgram.achievements.length} prestasi
-                </span>
-              </div>
-
-              <details className={styles.createPanel}>
-                <summary>
-                  <span className={styles.addIcon} aria-hidden="true">＋</span>
-                  Tambah prestasi
-                </summary>
-                <form action={createAchievementAction} className={styles.createForm}>
-                  <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                  <div className={styles.formGrid}>
-                    <label className={styles.wideField}><span>Judul prestasi *</span><input maxLength={180} name="title" placeholder="Contoh: Juara 1 Tingkat Kota" required /></label>
-                    <label><span>Nama kompetisi</span><input maxLength={180} name="competitionName" /></label>
-                    <label><span>Peringkat / penghargaan *</span><input maxLength={100} name="rank" placeholder="Juara 1" required /></label>
-                    <label><span>Tingkat</span><input maxLength={80} name="level" placeholder="Kota / Provinsi / Nasional" /></label>
-                    <label><span>Tanggal diraih *</span><input name="achievedAt" required type="date" /></label>
-                    <label className={styles.wideField}><span>Cerita singkat</span><textarea maxLength={5000} name="description" rows={3} /></label>
-                  </div>
-                  <div className={styles.formFooter}>
-                    <PublishedToggle />
-                    <button className={styles.primaryButton} type="submit">Tambahkan prestasi →</button>
-                  </div>
-                </form>
-              </details>
-
-              <div className={styles.contentList}>
-                {selectedProgram.achievements.length > 0 ? selectedProgram.achievements.map((achievement) => (
-                  <article className={styles.contentCard} key={achievement.id}>
-                    <div className={styles.cardSummary}>
-                      <div>
-                        <span className={achievement.isPublished ? styles.published : styles.draft}>{achievement.isPublished ? "Tayang" : "Draf"}</span>
-                        <h3>{achievement.title}</h3>
-                        <p className={styles.cardMeta}>
-                          <span className={styles.metaChip}>{achievement.rank}</span>
-                          <span className={styles.metaChip}>{dateValue(achievement.achievedAt)}</span>
-                          {achievement.level ? <span className={styles.metaChip}>{achievement.level}</span> : null}
-                        </p>
-                      </div>
-                      <form action={deleteAchievementAction}>
-                        <input name="id" type="hidden" value={achievement.id} />
-                        <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                        <button className={styles.deleteButton} type="submit">Hapus</button>
-                      </form>
-                    </div>
-                    <details className={styles.editPanel}>
-                      <summary>Edit prestasi</summary>
-                      <form action={updateAchievementAction} className={styles.editForm}>
-                        <input name="id" type="hidden" value={achievement.id} />
-                        <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                        <div className={styles.formGrid}>
-                          <label className={styles.wideField}><span>Judul *</span><input defaultValue={achievement.title} maxLength={180} name="title" required /></label>
-                          <label><span>Nama kompetisi</span><input defaultValue={achievement.competitionName ?? ""} maxLength={180} name="competitionName" /></label>
-                          <label><span>Peringkat *</span><input defaultValue={achievement.rank} maxLength={100} name="rank" required /></label>
-                          <label><span>Tingkat</span><input defaultValue={achievement.level ?? ""} maxLength={80} name="level" /></label>
-                          <label><span>Tanggal *</span><input defaultValue={dateValue(achievement.achievedAt)} name="achievedAt" required type="date" /></label>
-                          <label className={styles.wideField}><span>Cerita singkat</span><textarea defaultValue={achievement.description ?? ""} maxLength={5000} name="description" rows={3} /></label>
-                        </div>
-                        <div className={styles.formFooter}>
-                          <PublishedToggle defaultChecked={achievement.isPublished} />
-                          <button className={styles.saveButton} type="submit">Simpan perubahan</button>
-                        </div>
-                      </form>
-                    </details>
-                  </article>
-                )) : (
-                  <div className={styles.emptyState}>
-                    <strong>Belum ada prestasi</strong>
-                    <span>Tambahkan prestasi pertama untuk {selectedProgram.name}.</span>
-                  </div>
-                )}
-              </div>
-            </section>
-
-            <section className={styles.managerSection} aria-labelledby="gallery-manager-title">
-              <div className={styles.sectionHeader}>
-                <div className={styles.sectionIntro}>
-                  <span>03</span>
-                  <div>
-                    <p className={styles.eyebrow}>Dokumentasi visual</p>
-                    <h2 id="gallery-manager-title">Galeri kegiatan</h2>
-                    <p>Gunakan path aset publik seperti /galeri/foto.webp atau URL HTTPS.</p>
-                  </div>
-                </div>
-                <span className={styles.sectionCount}>
-                  {selectedProgram.galleryItems.length} foto
-                </span>
-              </div>
-
-              <details className={styles.createPanel}>
-                <summary>
-                  <span className={styles.addIcon} aria-hidden="true">＋</span>
-                  Tambah foto
-                </summary>
-                <form action={createGalleryItemAction} className={styles.createForm}>
-                  <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                  <div className={styles.formGrid}>
-                    <label className={styles.wideField}><span>Path / URL gambar *</span><input name="imageUrl" placeholder="/galeri/nama-foto.webp" required /></label>
-                    <label className={styles.wideField}><span>Teks alternatif *</span><input maxLength={240} name="altText" placeholder="Jelaskan isi foto untuk aksesibilitas" required /></label>
-                    <label className={styles.wideField}><span>Caption</span><textarea maxLength={500} name="caption" rows={2} /></label>
-                    <label><span>Tanggal foto</span><input name="takenAt" type="date" /></label>
-                    <label><span>Urutan</span><input defaultValue="0" max="999" min="0" name="position" type="number" /></label>
-                  </div>
-                  <div className={styles.formFooter}>
-                    <PublishedToggle />
-                    <button className={styles.primaryButton} type="submit">Tambahkan foto →</button>
-                  </div>
-                </form>
-              </details>
-
-              <div className={styles.galleryAdminGrid}>
-                {selectedProgram.galleryItems.length > 0 ? selectedProgram.galleryItems.map((item) => (
-                  <article className={styles.galleryAdminCard} key={item.id}>
-                    <div className={styles.galleryPreview}><ContentImage alt={item.altText} src={item.imageUrl} /></div>
-                    <div className={styles.cardSummary}>
-                      <div>
-                        <span className={item.isPublished ? styles.published : styles.draft}>{item.isPublished ? "Tayang" : "Draf"}</span>
-                        <h3>{item.caption || item.altText}</h3>
-                        <p className={styles.cardMeta}>
-                          <span className={styles.metaChip}>Urutan {item.position}</span>
-                          {item.takenAt ? <span className={styles.metaChip}>{dateValue(item.takenAt)}</span> : null}
-                        </p>
-                      </div>
-                      <form action={deleteGalleryItemAction}>
-                        <input name="id" type="hidden" value={item.id} />
-                        <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                        <button className={styles.deleteButton} type="submit">Hapus</button>
-                      </form>
-                    </div>
-                    <details className={styles.editPanel}>
-                      <summary>Edit foto</summary>
-                      <form action={updateGalleryItemAction} className={styles.editForm}>
-                        <input name="id" type="hidden" value={item.id} />
-                        <input name="extracurricularId" type="hidden" value={selectedProgram.id} />
-                        <div className={styles.formGrid}>
-                          <label className={styles.wideField}><span>Path / URL *</span><input defaultValue={item.imageUrl} name="imageUrl" required /></label>
-                          <label className={styles.wideField}><span>Teks alternatif *</span><input defaultValue={item.altText} maxLength={240} name="altText" required /></label>
-                          <label className={styles.wideField}><span>Caption</span><textarea defaultValue={item.caption ?? ""} maxLength={500} name="caption" rows={2} /></label>
-                          <label><span>Tanggal foto</span><input defaultValue={dateValue(item.takenAt)} name="takenAt" type="date" /></label>
-                          <label><span>Urutan</span><input defaultValue={item.position} max="999" min="0" name="position" type="number" /></label>
-                        </div>
-                        <div className={styles.formFooter}>
-                          <PublishedToggle defaultChecked={item.isPublished} />
-                          <button className={styles.saveButton} type="submit">Simpan perubahan</button>
-                        </div>
-                      </form>
-                    </details>
-                  </article>
-                )) : (
-                  <div className={`${styles.emptyState} ${styles.emptyStateWide}`}>
-                    <strong>Belum ada foto</strong>
-                    <span>Tambahkan foto pertama untuk {selectedProgram.name}.</span>
-                  </div>
-                )}
-              </div>
-            </section>
-          </>
-        ) : (
-          <div className={styles.emptyState}>
-            <strong>Belum ada ekstrakurikuler aktif</strong>
-            <span>Aktifkan ekstrakurikuler terlebih dahulu untuk mengelola konten.</span>
-          </div>
-        )}
-      </div>
-    </main>
+        </main>
+      )}
+    </div>
   );
 }

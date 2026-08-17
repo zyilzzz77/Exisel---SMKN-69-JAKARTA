@@ -54,6 +54,7 @@ export const getStudentAttendanceData = cache(
         name: true,
         nis: true,
         className: true,
+        avatarUrl: true,
         enrollments: {
           where: {
             status: "APPROVED",

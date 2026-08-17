@@ -1,7 +1,14 @@
 "use client";
 
 import Script from "next/script";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
 declare global {
   interface Window {
@@ -21,6 +28,7 @@ export type TurnstileStatus =
   | "ready"
   | "verified"
   | "expired"
+  | "retrying"
   | "error";
 
 export type TurnstileWidgetHandle = {
@@ -30,11 +38,16 @@ export type TurnstileWidgetHandle = {
 type TurnstileWidgetProps = {
   onVerify: (token: string) => void;
   onExpire: () => void;
-  onError: () => void;
+  onError: (code?: string) => void;
 };
 
 const TURNSTILE_SITE_KEY =
   process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+const TURNSTILE_SCRIPT_URL =
+  "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+
+const POLL_INTERVAL_MS = 200;
+const POLL_MAX_ATTEMPTS = 50;
 
 export const TurnstileWidget = forwardRef<
   TurnstileWidgetHandle,
@@ -42,68 +55,139 @@ export const TurnstileWidget = forwardRef<
 >(function TurnstileWidget({ onVerify, onExpire, onError }, ref) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const widgetIdRef = useRef<string | null>(null);
+  const mountedRef = useRef(false);
+  const generationRef = useRef(0);
   const [status, setStatus] = useState<TurnstileStatus>("loading");
   const callbacksRef = useRef({ onVerify, onExpire, onError });
-  callbacksRef.current = { onVerify, onExpire, onError };
 
-  function renderWidget() {
+  useEffect(() => {
+    callbacksRef.current = { onVerify, onExpire, onError };
+  }, [onVerify, onExpire, onError]);
+
+  const renderWidget = useCallback(() => {
+    if (!mountedRef.current) return;
     const container = containerRef.current;
     if (!container) return;
     if (typeof window.turnstile?.render !== "function") return;
     if (widgetIdRef.current) return;
 
-    widgetIdRef.current = window.turnstile.render(container, {
-      sitekey: TURNSTILE_SITE_KEY,
-      action: "login",
-      theme: "auto",
-      size: "flexible",
-      appearance: "always",
-      callback: (token: string) => {
-        setStatus("verified");
-        callbacksRef.current.onVerify(token);
-      },
-      "expired-callback": () => {
-        setStatus("expired");
-        callbacksRef.current.onExpire();
-      },
-      "error-callback": () => {
-        setStatus("error");
-        callbacksRef.current.onError();
-      },
-    });
-    setStatus("ready");
-  }
+    const currentGeneration = generationRef.current;
 
-  useImperativeHandle(ref, () => ({
-    reset() {
-      widgetIdRef.current && typeof window.turnstile?.reset === "function"
-        ? window.turnstile.reset(widgetIdRef.current)
-        : null;
+    try {
+      widgetIdRef.current = window.turnstile.render(container, {
+        sitekey: TURNSTILE_SITE_KEY,
+        action: "login",
+        execution: "render",
+        appearance: "always",
+        theme: "auto",
+        size: "flexible",
+        retry: "auto",
+        "retry-interval": 8000,
+        "refresh-expired": "auto",
+        "refresh-timeout": "auto",
+        callback: (token: string) => {
+          if (currentGeneration !== generationRef.current) return;
+          setStatus("verified");
+          callbacksRef.current.onVerify(token);
+        },
+        "expired-callback": () => {
+          if (currentGeneration !== generationRef.current) return;
+          setStatus("expired");
+          callbacksRef.current.onExpire();
+        },
+        "timeout-callback": () => {
+          if (currentGeneration !== generationRef.current) return;
+          setStatus("retrying");
+          callbacksRef.current.onExpire();
+        },
+        "error-callback": (code?: string) => {
+          if (currentGeneration !== generationRef.current) return false;
+          setStatus("error");
+          callbacksRef.current.onError(code);
+          return false;
+        },
+      });
       setStatus("ready");
-    },
-  }));
-
-  useEffect(() => {
-    if (typeof window.turnstile?.render === "function") {
-      renderWidget();
+    } catch {
+      // render can throw when called too early or on unmounted node
     }
   }, []);
 
+  useImperativeHandle(ref, () => ({
+    reset() {
+      if (widgetIdRef.current && typeof window.turnstile?.reset === "function") {
+        try {
+          window.turnstile.reset(widgetIdRef.current);
+          setStatus("ready");
+          return;
+        } catch {
+          // fallback to recreation if reset failed
+        }
+      }
+
+      widgetIdRef.current = null;
+      renderWidget();
+    },
+  }), [renderWidget]);
+
+  // Robust init: immediately check window.turnstile + polling fallback for race conditions
   useEffect(() => {
+    mountedRef.current = true;
+    generationRef.current += 1;
+
+    let cancelled = false;
+    let attempts = 0;
+
+    function tryRender() {
+      if (cancelled || !mountedRef.current) return;
+      if (containerRef.current && typeof window.turnstile?.render === "function") {
+        renderWidget();
+        return;
+      }
+      attempts += 1;
+      if (attempts > POLL_MAX_ATTEMPTS) {
+        setStatus("error");
+        callbacksRef.current.onError("timeout");
+        return;
+      }
+      window.setTimeout(tryRender, POLL_INTERVAL_MS);
+    }
+
+    tryRender();
+
     return () => {
-      if (widgetIdRef.current && typeof window.turnstile?.remove === "function") {
-        window.turnstile.remove(widgetIdRef.current);
+      cancelled = true;
+      mountedRef.current = false;
+      generationRef.current += 1;
+
+      const id = widgetIdRef.current;
+      widgetIdRef.current = null;
+
+      if (id && typeof window.turnstile?.remove === "function") {
+        try {
+          window.turnstile.remove(id);
+        } catch {
+          // ignore unmount cleanup error
+        }
+      }
+
+      if (containerRef.current) {
+        containerRef.current.replaceChildren();
       }
     };
-  }, []);
+  }, [renderWidget]);
 
   return (
     <>
       <Script
-        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+        id="cloudflare-turnstile"
+        src={TURNSTILE_SCRIPT_URL}
         strategy="afterInteractive"
         onReady={renderWidget}
-        onError={() => setStatus("error")}
+        onError={() => {
+          setStatus("error");
+          callbacksRef.current.onError("script_failed");
+        }}
       />
       <div ref={containerRef} data-turnstile-status={status} />
     </>

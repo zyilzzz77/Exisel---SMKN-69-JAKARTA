@@ -98,8 +98,7 @@ type StudentHeaderItem =
   | "competitions"
   | "community"
   | "attendance"
-  | "schedule"
-  | "account";
+  | "schedule";
 
 export function StudentHeaderNav({
   activeItem,
@@ -120,7 +119,6 @@ export function StudentHeaderNav({
     const sections = [
       { id: "dashboard" as const, elementId: "dashboard-content" },
       { id: "schedule" as const, elementId: "jadwal" },
-      { id: "account" as const, elementId: "akun" },
     ];
     let animationFrame = 0;
 

@@ -1,12 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { useFormStatus } from "react-dom";
 import { logoutAction } from "@/actions/auth";
 import styles from "./confirm-logout-button.module.css";
 
+export type ConfirmLogoutButtonHandle = {
+  openDialog: () => void;
+};
+
 type ConfirmLogoutButtonProps = {
-  className: string;
+  className?: string;
+  ariaLabel?: string;
+  children?: React.ReactNode;
+  /** Aksi konfirmasi keluar; default: logout siswa. */
+  action?: (formData: FormData) => void | Promise<void>;
+  /** Deskripsi dialog konfirmasi; default: teks siswa. */
+  description?: string;
 };
 
 function LogoutSubmitButton() {
@@ -24,7 +41,19 @@ function LogoutSubmitButton() {
   );
 }
 
-export function ConfirmLogoutButton({ className }: ConfirmLogoutButtonProps) {
+export const ConfirmLogoutButton = forwardRef<
+  ConfirmLogoutButtonHandle,
+  ConfirmLogoutButtonProps
+>(function ConfirmLogoutButton(
+  {
+    className,
+    ariaLabel,
+    children,
+    action = logoutAction,
+    description = "Kamu perlu masuk kembali untuk melihat jadwal, pendaftaran, dan kehadiran ekskulmu.",
+  },
+  ref,
+) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -51,21 +80,34 @@ export function ConfirmLogoutButton({ className }: ConfirmLogoutButtonProps) {
     };
   }, [isOpen]);
 
-  const openDialog = () => {
+  const openDialog = useCallback(() => {
     setIsOpen(true);
     dialogRef.current?.showModal();
-  };
+  }, []);
 
-  const closeDialog = () => {
+  const closeDialog = useCallback(() => {
     dialogRef.current?.close();
     setIsOpen(false);
-  };
+  }, []);
+
+  useImperativeHandle(ref, () => ({ openDialog }), [openDialog]);
 
   return (
     <>
-      <button className={className} onClick={openDialog} type="button">
-        Keluar <span aria-hidden="true">↗</span>
-      </button>
+      {className ? (
+        <button
+          className={className}
+          onClick={openDialog}
+          type="button"
+          aria-label={ariaLabel}
+        >
+          {children ?? (
+            <>
+              Keluar <span aria-hidden="true">↗</span>
+            </>
+          )}
+        </button>
+      ) : null}
 
       <dialog
         aria-describedby="logout-dialog-description"
@@ -95,8 +137,7 @@ export function ConfirmLogoutButton({ className }: ConfirmLogoutButtonProps) {
             <p className={styles.eyebrow}>Sebelum kamu pergi</p>
             <h2 id="logout-dialog-title">Yakin mau keluar?</h2>
             <p id="logout-dialog-description" className={styles.description}>
-              Kamu perlu masuk kembali untuk melihat jadwal, pendaftaran, dan
-              kehadiran ekskulmu.
+              {description}
             </p>
 
             <div className={styles.actions}>
@@ -109,7 +150,7 @@ export function ConfirmLogoutButton({ className }: ConfirmLogoutButtonProps) {
                 Batal
               </button>
 
-              <form action={logoutAction}>
+              <form action={action}>
                 <LogoutSubmitButton />
               </form>
             </div>
@@ -118,4 +159,4 @@ export function ConfirmLogoutButton({ className }: ConfirmLogoutButtonProps) {
       </dialog>
     </>
   );
-}
+});

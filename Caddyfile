@@ -22,10 +22,22 @@
 		-X-Powered-By
 	}
 
-	reverse_proxy app:3000 {
-		header_up Host {host}
-		header_up X-Forwarded-Host {host}
-		header_up X-Forwarded-Proto {scheme}
+	# Route to Go Core API
+	handle /api/core/* {
+		reverse_proxy exisel-core:8080 {
+			header_up Host {host}
+			header_up X-Forwarded-Host {host}
+			header_up X-Forwarded-Proto {scheme}
+		}
+	}
+
+	# Default to Next.js App
+	handle {
+		reverse_proxy app:3000 {
+			header_up Host {host}
+			header_up X-Forwarded-Host {host}
+			header_up X-Forwarded-Proto {scheme}
+		}
 	}
 
 	log {

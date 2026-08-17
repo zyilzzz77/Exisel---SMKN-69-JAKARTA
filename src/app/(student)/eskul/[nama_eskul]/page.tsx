@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ConfirmLogoutButton } from "@/components/confirm-logout-button";
+import { AvatarDropdown } from "@/components/avatar-dropdown";
 import { ContentImage } from "@/components/content-image";
 import { PromoVideoPlayer } from "@/components/promo-video-player";
 import { StudentHeaderNav } from "@/components/landing-navigation";
@@ -503,12 +503,7 @@ export default async function ExtracurricularDetailPage({
 
           <div className={styles.accountActions}>
             {user ? (
-              <>
-                <span className={styles.avatar} aria-hidden="true">
-                  {initials(user.name)}
-                </span>
-                <ConfirmLogoutButton className={styles.logoutButton} />
-              </>
+              <AvatarDropdown userName={user.name} initials={initials(user.name)} avatarUrl={user.avatarUrl} />
             ) : (
               <Link className={styles.logoutButton} href="/login">
                 Masuk <span aria-hidden="true">↗</span>
