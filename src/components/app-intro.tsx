@@ -1,19 +1,42 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import schoolLogo from "../../public/logo-smkn69-transparent.png";
 import styles from "./app-intro.module.css";
 
 const INTRO_DURATION_MS = 3000;
 
+// Flow QR attendance (Google Lens / scanner) melakukan navigasi keras
+// berurutan: /attendance/scan -> POST sukses -> window.location.replace
+// ke /kehadiran. Overlay intro 3 detik yang diputar di setiap load membuat
+// siswa menunggu animasi loading (bahkan dua kali) sebelum melihat hasil
+// absennya. Untuk load di halaman fungsional /attendance/* atau yang datang
+// dari sana (serta saat intro sudah pernah selesai di dokumen ini), intro
+// diselesaikan sebelum paint pertama — konten langsung tampil.
+function shouldSkipIntro(): boolean {
+  const referrerPath = (() => {
+    try {
+      return new URL(document.referrer).pathname;
+    } catch {
+      return "";
+    }
+  })();
+  return (
+    document.documentElement.dataset.exiselIntroComplete === "true" ||
+    window.location.pathname.startsWith("/attendance/") ||
+    referrerPath.includes("/attendance/")
+  );
+}
+
 export function AppIntro() {
   const [isVisible, setIsVisible] = useState(true);
 
-  useEffect(() => {
+  // useLayoutEffect menjalankan finalisasi deep-link SEBELUM browser paint,
+  // sehingga overlay tidak pernah terlihat berkedip di frame mana pun,
+  // sekaligus menjaga markup SSR/klien tetap identik (tanpa mismatch).
+  useLayoutEffect(() => {
     const root = document.documentElement;
-    let animationFrame = 0;
-    let finishTimer = 0;
 
     const finishIntro = () => {
       root.classList.remove("exisel-intro-locked");
@@ -21,6 +44,15 @@ export function AppIntro() {
       window.dispatchEvent(new Event("exisel:intro-complete"));
       setIsVisible(false);
     };
+
+    // Deep-link kehadiran langsung menyelesaikan intro tanpa menunggu.
+    if (shouldSkipIntro()) {
+      finishIntro();
+      return;
+    }
+
+    let animationFrame = 0;
+    let finishTimer = 0;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       animationFrame = window.requestAnimationFrame(finishIntro);

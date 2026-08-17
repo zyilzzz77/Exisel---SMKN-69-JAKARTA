@@ -18,12 +18,67 @@ const CAMERA_CONSTRAINTS: MediaStreamConstraints[] = [
   { audio: false, video: true },
 ];
 
+// Di Chrome Android, getUserMedia bisa MENGGANTUNG tanpa melempar error saat
+// sistem tidak memunculkan prompt izin (contoh: izin pernah diblokir lewat
+// pengaturan Android, atau prompt native tidak tampil). Tanpa batas waktu,
+// UI berhenti di "Meminta izin kamera..." selamanya tanpa jalan keluar.
+// Timeout ini memastikan user selalu mendapat panduan pemulihan + tombol retry.
+const CAMERA_PERMISSION_TIMEOUT_MS = 15_000;
+
 function isPermissionError(errName: string) {
   return errName === "NotAllowedError" || errName === "PermissionDeniedError" || errName === "SecurityError";
 }
 
+/**
+ * Race getUserMedia dengan timeout. Jika getUserMedia menang, stream dipakai.
+ * Jika timeout menang, getUserMedia yang masih menggantung tetap dibersihkan:
+ * apabila akhirnya berhasil (mis. user mengizinkan lewat address bar saat
+ * panduan tampil), stream-nya langsung dihentikan agar kamera tidak menyala
+ * diam-diam di latar belakang.
+ */
+async function acquireStreamWithTimeout(
+  acquire: () => Promise<MediaStream>,
+): Promise<MediaStream> {
+  const streamPromise = acquire();
+  let timedOut = false;
+  let timer: number | undefined;
+
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timer = window.setTimeout(() => {
+      timedOut = true;
+      reject(
+        new DOMException(
+          "Popup izin kamera tidak muncul tepat waktu.",
+          "TimeoutError",
+        ),
+      );
+    }, CAMERA_PERMISSION_TIMEOUT_MS);
+  });
+
+  try {
+    return await Promise.race([streamPromise, timeoutPromise]);
+  } finally {
+    window.clearTimeout(timer);
+    void streamPromise
+      .then((stream) => {
+        if (timedOut) {
+          stream.getTracks().forEach((track) => track.stop());
+        }
+      })
+      .catch(() => undefined);
+  }
+}
+
 function parseCameraError(error: unknown): string {
   const name = error instanceof DOMException ? error.name : "";
+  if (name === "TimeoutError") {
+    return (
+      "Popup izin kamera tidak muncul. Buka izinnya manual: ketuk ikon izin " +
+      "(gembok/kamera) di address bar Chrome sebelah kiri alamat situs, pilih " +
+      "Izin > Kamera > Izinkan. Jika tidak ada, buka Pengaturan Android > " +
+      "Aplikasi > Chrome > Izin > Kamera > Izinkan. Lalu tekan tombol coba lagi."
+    );
+  }
   if (isPermissionError(name)) {
     return "Izin kamera ditolak. Klik ikon kamera di address bar untuk mengizinkan, lalu coba lagi.";
   }
@@ -222,7 +277,9 @@ export function AttendanceQrScanner({
       }
 
       try {
-        const stream = await acquireStream(preferredDeviceId);
+        const stream = await acquireStreamWithTimeout(() =>
+          acquireStream(preferredDeviceId),
+        );
         if (!mountedRef.current) {
           stream.getTracks().forEach((t) => t.stop());
           return;
@@ -376,7 +433,13 @@ export function AttendanceQrScanner({
           </button>
         ) : null}
 
-        {cameraState === "starting" ? <p>Meminta izin kamera...</p> : null}
+        {cameraState === "starting" ? (
+          <p>
+            Meminta izin kamera... Jika popup izin tidak muncul dalam beberapa
+            detik, buka ikon izin di address bar, lalu izinkan kamera untuk
+            situs ini.
+          </p>
+        ) : null}
 
         {cameraState === "blocked" ? (
           <div className={styles.cameraError} role="alert">

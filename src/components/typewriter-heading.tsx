@@ -29,7 +29,14 @@ export function TypewriterHeading({
 
   const [displayedText, setDisplayedText] = useState("");
   const [isDone, setIsDone] = useState(false);
-  const [isIntroComplete, setIsIntroComplete] = useState(false);
+  // Jika intro sudah ditandai selesai (termasuk deep-link /attendance/* yang
+  // melewati overlay), heading tidak perlu menunggu event intro — text muncul
+  // langsung tanpa efek ketik yang menunda tampilan halaman.
+  const [isIntroComplete, setIsIntroComplete] = useState(
+    () =>
+      typeof document !== "undefined" &&
+      document.documentElement.dataset.exiselIntroComplete === "true",
+  );
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
