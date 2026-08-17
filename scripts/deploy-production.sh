@@ -18,6 +18,10 @@ compose=(docker compose --env-file "${ENV_FILE}" -f "${COMPOSE_FILE}")
 "${compose[@]}" pull database caddy redis
 "${compose[@]}" build --pull migrate app exisel-core
 "${compose[@]}" up -d --remove-orphans
+# Caddy hanya membaca Caddyfile saat container start. Force-recreate agar setiap
+# perubahan Caddyfile (mis. Permissions-Policy camera) langsung aktif, karena
+# "up -d" biasa tidak me-recreate container yang konfigurasinya tidak berubah.
+"${compose[@]}" up -d --force-recreate caddy
 "${compose[@]}" ps
 
 echo
