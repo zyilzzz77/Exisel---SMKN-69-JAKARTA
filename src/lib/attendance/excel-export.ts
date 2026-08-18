@@ -20,6 +20,32 @@ export interface AttendanceExportMember {
   className?: string | null;
   enrolledAt: string;
   statuses: AttendanceExportStatus[];
+  /** Precomputed count of PRESENT statuses (computed once in report.ts; excludes NOT_ENROLLED). */
+  present?: number;
+  /** Precomputed count of EXCUSED statuses (computed once in report.ts). */
+  excused?: number;
+  /** Precomputed count of ABSENT statuses (computed once in report.ts). */
+  absent?: number;
+  /** Precomputed count of sessions not yet recorded ("Belum mengisi"; report.ts `missing`). */
+  missing?: number;
+  /** Precomputed eligible agenda sessions (report.ts `totalAgenda`; excludes NOT_ENROLLED). */
+  totalAgenda?: number;
+  /** Precomputed attendance rate as a 0–1 fraction (report.ts `attendanceRate`), rendered with numFmt "0.0%". */
+  attendanceRate?: number;
+  /** Precomputed activity label (report.ts `activityLevel`: "Sangat aktif" ... "Belum ada agenda"). */
+  activityLevel?: string;
+}
+
+export interface AttendanceExportSummary {
+  members: number;
+  agenda: number;
+  present: number;
+  excused: number;
+  absent: number;
+  missing: number;
+  totalExpected: number;
+  /** Overall attendance rate as a 0–1 fraction (report.ts summary), rendered with numFmt "0.0%". */
+  attendanceRate: number;
 }
 
 export interface AttendanceExportReport {
@@ -31,6 +57,8 @@ export interface AttendanceExportReport {
   agendaDates: string[];
   schedules: AttendanceExportSchedule[];
   members: AttendanceExportMember[];
+  /** Precomputed overall summary (report.ts `summary`). Used as literal stat-card values. */
+  summary?: AttendanceExportSummary | null;
 }
 
 const colors = {
@@ -84,6 +112,105 @@ function formatDateLabel(dateKey: string): string {
     month: "short",
     year: "numeric",
   }).format(new Date(`${dateKey}T00:00:00.000Z`));
+}
+
+/** Coerces an unknown metric to a finite number; anything non-numeric becomes 0 (never NaN). */
+function sanitizeNumber(value: number | undefined | null): number {
+  return typeof value === "number" && Number.isFinite(value) ? value : 0;
+}
+
+/**
+ * Literal per-member metrics for the Ringkasan/Rekap metric columns.
+ * Consumes the values computed once in report.ts; falls back to deriving the
+ * same figures from `statuses` so narrow payloads stay deterministic.
+ */
+function memberMetrics(member: AttendanceExportMember) {
+  const expected = member.statuses.filter(
+    (entry) => entry.status !== "NOT_ENROLLED",
+  );
+  const present = sanitizeNumber(
+    member.present ??
+      expected.filter((entry) => entry.status === "PRESENT").length,
+  );
+  const excused = sanitizeNumber(
+    member.excused ??
+      expected.filter((entry) => entry.status === "EXCUSED").length,
+  );
+  const absent = sanitizeNumber(
+    member.absent ??
+      expected.filter((entry) => entry.status === "ABSENT").length,
+  );
+  const missing = sanitizeNumber(
+    member.missing ??
+      expected.filter((entry) => entry.status === "MISSING").length,
+  );
+  const totalAgenda = sanitizeNumber(member.totalAgenda ?? expected.length);
+  // report.ts stores rates as 0–1 fractions; guard against a 0–100 value so "0.0%" renders.
+  const rate = normalizeRate(
+    sanitizeNumber(
+      member.attendanceRate ?? (totalAgenda > 0 ? present / totalAgenda : 0),
+    ),
+  );
+  const activityLevel =
+    member.activityLevel ??
+    activityLabelFor(
+      totalAgenda > 0 ? present / totalAgenda : 0,
+      totalAgenda,
+    );
+
+  return { present, excused, absent, missing, totalAgenda, rate, activityLevel };
+}
+
+/** Mirrors report.ts `getActivityLevel` (same labels, same thresholds, same order). */
+function activityLabelFor(rate: number, totalAgenda: number): string {
+  if (totalAgenda === 0) return "Belum ada agenda";
+  if (rate >= 0.8) return "Sangat aktif";
+  if (rate >= 0.6) return "Aktif";
+  if (rate >= 0.4) return "Perlu ditingkatkan";
+  return "Perlu perhatian";
+}
+
+/** Literal stat-card values for Ringkasan row 5, sourced from the report summary. */
+function summaryMetrics(report: AttendanceExportReport) {
+  const fallbackMembers = report.members.map((member) => memberMetrics(member));
+  const fallbackPresent = fallbackMembers.reduce(
+    (total, m) => total + m.present,
+    0,
+  );
+  const fallbackExcused = fallbackMembers.reduce(
+    (total, m) => total + m.excused,
+    0,
+  );
+  const fallbackAbsent = fallbackMembers.reduce(
+    (total, m) => total + m.absent,
+    0,
+  );
+  const fallbackTotalExpected = fallbackMembers.reduce(
+    (total, m) => total + m.totalAgenda,
+    0,
+  );
+  const summary = report.summary ?? null;
+
+  return {
+    members: sanitizeNumber(summary?.members ?? report.members.length),
+    agenda: sanitizeNumber(summary?.agenda ?? report.agendaDates.length),
+    present: sanitizeNumber(summary?.present ?? fallbackPresent),
+    excused: sanitizeNumber(summary?.excused ?? fallbackExcused),
+    absent: sanitizeNumber(summary?.absent ?? fallbackAbsent),
+    totalExpected: sanitizeNumber(summary?.totalExpected ?? fallbackTotalExpected),
+    // report.ts stores rates as 0–1 fractions; guard against a 0–100 value so "0.0%" renders.
+    rate: normalizeRate(
+      sanitizeNumber(
+        summary?.attendanceRate ??
+          (fallbackTotalExpected > 0 ? fallbackPresent / fallbackTotalExpected : 0),
+      ),
+    ),
+  };
+}
+
+/** Rates are fractions (0–1) per report.ts; values above 1 are treated as percentages. */
+function normalizeRate(rate: number): number {
+  return rate > 1 ? rate / 100 : rate;
 }
 
 function styleTitle(
@@ -202,19 +329,15 @@ export async function buildAttendanceExcelBuffer(
   });
 
   const agendaCount = Math.max(report.agendaDates.length, 1);
+  const memberMetricsList = report.members.map((member) =>
+    memberMetrics(member),
+  );
+  const summary = summaryMetrics(report);
   const agendaStartIndex = 6; // 1-based: Col F
   const agendaEndIndex = agendaStartIndex + agendaCount - 1;
   const totalStartIndex = agendaEndIndex + 1;
   const lastColumnIndex = totalStartIndex + 5;
 
-  const agendaStartColumn = getColumnLetter(agendaStartIndex);
-  const agendaEndColumn = getColumnLetter(agendaEndIndex);
-  const totalPresentColumn = getColumnLetter(totalStartIndex);
-  const totalExcusedColumn = getColumnLetter(totalStartIndex + 1);
-  const totalAbsentColumn = getColumnLetter(totalStartIndex + 2);
-  const totalAgendaColumn = getColumnLetter(totalStartIndex + 3);
-  const rateColumn = getColumnLetter(totalStartIndex + 4);
-  const activityColumn = getColumnLetter(totalStartIndex + 5);
   const lastColumn = getColumnLetter(lastColumnIndex);
 
   const memberStartRow = 5;
@@ -334,38 +457,33 @@ export async function buildAttendanceExcelBuffer(
         colIdx++;
       }
 
-      const agendaRange = `${agendaStartColumn}${rowNum}:${agendaEndColumn}${rowNum}`;
+      const metrics = memberMetricsList[mIdx]!;
 
-      // Formulas
+      // Literal precomputed metrics (report.ts) instead of formulas, so every
+      // consumer renders values without Excel recalculation.
       const presentCell = row.getCell(totalStartIndex);
-      presentCell.value = { formula: `COUNTIF(${agendaRange},"Hadir")` };
+      presentCell.value = metrics.present;
       presentCell.alignment = { horizontal: "center" };
 
       const excusedCell = row.getCell(totalStartIndex + 1);
-      excusedCell.value = { formula: `COUNTIF(${agendaRange},"Izin")` };
+      excusedCell.value = metrics.excused;
       excusedCell.alignment = { horizontal: "center" };
 
       const absentCell = row.getCell(totalStartIndex + 2);
-      absentCell.value = { formula: `COUNTIF(${agendaRange},"Tidak hadir")` };
+      absentCell.value = metrics.absent;
       absentCell.alignment = { horizontal: "center" };
 
       const totalAgendaCell = row.getCell(totalStartIndex + 3);
-      totalAgendaCell.value = {
-        formula: `COUNTIF(${agendaRange},"Hadir")+COUNTIF(${agendaRange},"Izin")+COUNTIF(${agendaRange},"Tidak hadir")+COUNTIF(${agendaRange},"Belum mengisi")`,
-      };
+      totalAgendaCell.value = metrics.totalAgenda;
       totalAgendaCell.alignment = { horizontal: "center" };
 
       const rateCell = row.getCell(totalStartIndex + 4);
-      rateCell.value = {
-        formula: `IF(${totalAgendaColumn}${rowNum}=0,0,${totalPresentColumn}${rowNum}/${totalAgendaColumn}${rowNum})`,
-      };
+      rateCell.value = metrics.rate;
       rateCell.numFmt = "0.0%";
       rateCell.alignment = { horizontal: "right" };
 
       const actCell = row.getCell(totalStartIndex + 5);
-      actCell.value = {
-        formula: `IF(${totalAgendaColumn}${rowNum}=0,"Belum ada agenda",IF(${rateColumn}${rowNum}>=0.8,"Sangat aktif",IF(${rateColumn}${rowNum}>=0.6,"Aktif",IF(${rateColumn}${rowNum}>=0.4,"Perlu ditingkatkan","Perlu perhatian"))))`,
-      };
+      actCell.value = metrics.activityLevel;
       actCell.alignment = { horizontal: "center" };
 
       for (let c = 1; c <= lastColumnIndex; c++) {
@@ -491,49 +609,37 @@ export async function buildAttendanceExcelBuffer(
     };
   });
 
-  const recapFormulaEndRow =
-    report.members.length > 0 ? memberEndRow : memberStartRow;
-
-  // Stat Card Values in Row 5
+  // Stat Card Values in Row 5 — written as literal values computed in
+  // report.ts, not formulas (formulas with a leading "=" emit invalid OOXML
+  // and every consumer needs recalculation).
   // Card 1 (A5:B5): Anggota
   const v1 = summarySheet.getCell(5, 1);
-  v1.value = { formula: `=COUNTA('Rekap Kehadiran'!$C$${memberStartRow}:$C$${recapFormulaEndRow})` };
+  v1.value = summary.members;
   v1.numFmt = "#,##0";
 
   // Card 2 (C5:D5): Agenda
   const v2 = summarySheet.getCell(5, 3);
-  v2.value =
-    report.agendaDates.length > 0
-      ? { formula: `=COUNTA('Rekap Kehadiran'!$${agendaStartColumn}$4:$${agendaEndColumn}$4)` }
-      : 0;
+  v2.value = summary.agenda;
   v2.numFmt = "#,##0";
 
   // Card 3 (E5): Jumlah hadir
   const v3 = summarySheet.getCell(5, 5);
-  v3.value = {
-    formula: `=SUM('Rekap Kehadiran'!$${totalPresentColumn}$${memberStartRow}:$${totalPresentColumn}$${recapFormulaEndRow})`,
-  };
+  v3.value = summary.present;
   v3.numFmt = "#,##0";
 
   // Card 4 (F5): Izin
   const v4 = summarySheet.getCell(5, 6);
-  v4.value = {
-    formula: `=SUM('Rekap Kehadiran'!$${totalExcusedColumn}$${memberStartRow}:$${totalExcusedColumn}$${recapFormulaEndRow})`,
-  };
+  v4.value = summary.excused;
   v4.numFmt = "#,##0";
 
   // Card 5 (G5): Tidak hadir
   const v5 = summarySheet.getCell(5, 7);
-  v5.value = {
-    formula: `=SUM('Rekap Kehadiran'!$${totalAbsentColumn}$${memberStartRow}:$${totalAbsentColumn}$${recapFormulaEndRow})`,
-  };
+  v5.value = summary.absent;
   v5.numFmt = "#,##0";
 
-  // Card 6 (H5:J5): Tingkat kehadiran
+  // Card 6 (H5:J5): Tingkat kehadiran (0–1 fraction, rendered via 0.0%)
   const v6 = summarySheet.getCell(5, 8);
-  v6.value = {
-    formula: `=IF(SUM('Rekap Kehadiran'!$${totalAgendaColumn}$${memberStartRow}:$${totalAgendaColumn}$${recapFormulaEndRow})=0,0,E5/SUM('Rekap Kehadiran'!$${totalAgendaColumn}$${memberStartRow}:$${totalAgendaColumn}$${recapFormulaEndRow}))`,
-  };
+  v6.value = summary.rate;
   v6.numFmt = "0.0%";
 
   cardRanges.forEach((card) => {
@@ -587,7 +693,7 @@ export async function buildAttendanceExcelBuffer(
   if (report.members.length > 0) {
     report.members.forEach((member, mIdx) => {
       const summaryRow = summaryStartRow + mIdx;
-      const recapRow = memberStartRow + mIdx;
+      const metrics = memberMetricsList[mIdx]!;
       const row = summarySheet.getRow(summaryRow);
       row.height = 22;
 
@@ -603,28 +709,28 @@ export async function buildAttendanceExcelBuffer(
       row.getCell(4).alignment = { horizontal: "center" };
 
       const presentCell = row.getCell(5);
-      presentCell.value = { formula: `='Rekap Kehadiran'!${totalPresentColumn}${recapRow}` };
+      presentCell.value = metrics.present;
       presentCell.alignment = { horizontal: "center" };
 
       const excusedCell = row.getCell(6);
-      excusedCell.value = { formula: `='Rekap Kehadiran'!${totalExcusedColumn}${recapRow}` };
+      excusedCell.value = metrics.excused;
       excusedCell.alignment = { horizontal: "center" };
 
       const absentCell = row.getCell(7);
-      absentCell.value = { formula: `='Rekap Kehadiran'!${totalAbsentColumn}${recapRow}` };
+      absentCell.value = metrics.absent;
       absentCell.alignment = { horizontal: "center" };
 
       const totalCell = row.getCell(8);
-      totalCell.value = { formula: `='Rekap Kehadiran'!${totalAgendaColumn}${recapRow}` };
+      totalCell.value = metrics.totalAgenda;
       totalCell.alignment = { horizontal: "center" };
 
       const rateCell = row.getCell(9);
-      rateCell.value = { formula: `='Rekap Kehadiran'!${rateColumn}${recapRow}` };
+      rateCell.value = metrics.rate;
       rateCell.numFmt = "0.0%";
       rateCell.alignment = { horizontal: "right" };
 
       const actCell = row.getCell(10);
-      actCell.value = { formula: `='Rekap Kehadiran'!${activityColumn}${recapRow}` };
+      actCell.value = metrics.activityLevel;
       actCell.alignment = { horizontal: "center" };
 
       for (let c = 1; c <= 10; c++) {
