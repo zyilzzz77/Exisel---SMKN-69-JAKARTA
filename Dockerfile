@@ -30,6 +30,8 @@ ENV SESSION_SECRET="docker-build-only-secret-at-least-32-characters"
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY
 ENV NEXT_TELEMETRY_DISABLED="1"
+# Batasi heap Node saat build agar tidak melahap seluruh RAM VPS (3.8GB).
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 RUN pnpm db:generate && pnpm build
 
 FROM system AS runner

@@ -26,6 +26,10 @@ services:
     networks:
       - backend
     logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 768m
 
   redis:
     image: redis:7-alpine
@@ -39,6 +43,10 @@ services:
     networks:
       - backend
     logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 192m
 
   # Nama service juga menjadi hostname di jaringan Docker ("exisel-core"),
   # harus sama dengan target reverse_proxy di Caddyfile.
@@ -79,6 +87,10 @@ services:
       - backend
       - edge
     logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 256m
 
   migrate:
     build:
@@ -94,6 +106,10 @@ services:
     networks:
       - backend
     logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 512m
 
   app:
     build:
@@ -147,6 +163,10 @@ services:
       - backend
       - edge
     logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 1g
 
   caddy:
     image: caddy:2.11.4-alpine
@@ -172,6 +192,10 @@ services:
     networks:
       - edge
     logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 128m
 
 volumes:
   postgres_data:
