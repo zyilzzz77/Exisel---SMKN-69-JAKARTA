@@ -45,14 +45,17 @@ export function AdminLoginForm() {
     <form className={styles.form} action={formAction}>
       <input type="hidden" name="turnstileToken" value={turnstileToken ?? ""} />
 
-      <label className={styles.fieldGroup}>
-        <span className={styles.labelRow}>
-          <strong>Email admin/guru</strong>
+      <div className={styles.fieldGroup}>
+        <div className={styles.labelRow}>
+          <label htmlFor="email">Email admin/guru</label>
           <small>Role terverifikasi</small>
-        </span>
-        <span className={styles.inputFrame}>
-          <b aria-hidden="true">01</b>
+        </div>
+        <div className={styles.inputFrame}>
+          <span className={styles.inputIndex} aria-hidden="true">
+            01
+          </span>
           <input
+            id="email"
             aria-describedby={state.errors?.email ? emailErrorId : undefined}
             aria-invalid={Boolean(state.errors?.email)}
             autoComplete="username"
@@ -63,22 +66,25 @@ export function AdminLoginForm() {
             required
             type="email"
           />
-        </span>
+        </div>
         {state.errors?.email ? (
           <small className={styles.fieldError} id={emailErrorId}>
             {state.errors.email[0]}
           </small>
         ) : null}
-      </label>
+      </div>
 
-      <label className={styles.fieldGroup}>
-        <span className={styles.labelRow}>
-          <strong>Password</strong>
+      <div className={styles.fieldGroup}>
+        <div className={styles.labelRow}>
+          <label htmlFor="password">Password</label>
           <small>Khusus petugas</small>
-        </span>
-        <span className={`${styles.inputFrame} ${styles.passwordFrame}`}>
-          <b aria-hidden="true">02</b>
+        </div>
+        <div className={`${styles.inputFrame} ${styles.passwordFrame}`}>
+          <span className={styles.inputIndex} aria-hidden="true">
+            02
+          </span>
           <input
+            id="password"
             aria-describedby={
               state.errors?.password ? passwordErrorId : undefined
             }
@@ -93,19 +99,29 @@ export function AdminLoginForm() {
           />
           <button
             aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+            aria-controls="password"
             aria-pressed={showPassword}
+            className={styles.passwordToggle}
             onClick={() => setShowPassword((current) => !current)}
             type="button"
           >
-            {showPassword ? "Tutup" : "Lihat"}
+            <span
+              aria-hidden="true"
+              className={`${styles.eyeIcon} ${
+                showPassword ? styles.eyeOpen : styles.eyeClosed
+              }`}
+            />
+            <span className={styles.srOnly}>
+              {showPassword ? "Sembunyikan password" : "Tampilkan password"}
+            </span>
           </button>
-        </span>
+        </div>
         {state.errors?.password ? (
           <small className={styles.fieldError} id={passwordErrorId}>
             {state.errors.password[0]}
           </small>
         ) : null}
-      </label>
+      </div>
 
       {turnstileConfigured ? (
         <div className={styles.turnstileWrapper}>

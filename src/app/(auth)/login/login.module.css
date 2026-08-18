@@ -126,7 +126,7 @@
   display: grid;
   width: min(100% - 80px, 1360px);
   flex: 1;
-  grid-template-columns: minmax(0, 0.95fr) minmax(480px, 1.05fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(480px, 0.92fr);
   align-items: center;
   gap: clamp(48px, 7vw, 108px);
   margin-inline: auto;
@@ -135,7 +135,7 @@
 
 .brandPanel {
   position: relative;
-  min-height: 650px;
+  min-height: 680px;
   overflow: hidden;
   padding: 32px;
   border: var(--border);
@@ -172,11 +172,11 @@
 .posterCopy {
   position: relative;
   z-index: 2;
-  margin-top: 52px;
+  margin-top: 56px;
 }
 
 .eyebrow {
-  margin: 0 0 18px;
+  margin: 0 0 20px;
   color: var(--orange);
   font-size: 11px;
   font-weight: 800;
@@ -217,7 +217,7 @@
   display: grid;
   max-width: 430px;
   gap: 8px;
-  margin-top: 42px;
+  margin-top: 48px;
 }
 
 .activityStack > div {
@@ -786,12 +786,12 @@
   }
 
   .layout {
-    grid-template-columns: minmax(340px, 0.8fr) minmax(440px, 1.2fr);
+    grid-template-columns: minmax(340px, 1.06fr) minmax(420px, 0.94fr);
     gap: 40px;
   }
 
   .brandPanel {
-    min-height: 620px;
+    min-height: 640px;
     padding: 24px;
   }
 

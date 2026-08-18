@@ -1,22 +1,40 @@
 .page {
+  position: relative;
   display: flex;
   min-height: 100vh;
+  overflow: hidden;
   flex-direction: column;
   background: var(--paper);
+}
+
+.navyBlock {
+  position: fixed;
+  z-index: 0;
+  top: 112px;
+  right: -54px;
+  width: 150px;
+  height: 150px;
+  border: var(--border);
+  background: var(--navy);
+  pointer-events: none;
+  transform: rotate(14deg);
 }
 
 .header,
 .layout,
 .footer {
-  width: min(100% - 80px, 1320px);
+  width: min(100% - 80px, 1360px);
   margin-inline: auto;
 }
 
 .header {
+  position: relative;
+  z-index: 5;
   display: flex;
-  min-height: 84px;
+  min-height: 86px;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
   border-bottom: 3px solid var(--ink);
 }
 
@@ -27,97 +45,119 @@
 }
 
 .brandLogo {
-  width: 44px;
-  height: 56px;
+  display: inline-flex;
+  width: 46px;
+  height: 58px;
+  align-items: center;
+  justify-content: center;
 }
 
 .brandLogo img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
 .brand > span:last-child {
-  display: grid;
-  line-height: 1;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
 }
 
 .brand strong {
   font-family: var(--font-display), sans-serif;
-  font-size: 21px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
 .brand small {
-  margin-top: 6px;
+  margin-top: 5px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .studentLink {
-  padding-bottom: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
   border-bottom: 3px solid var(--orange);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
-  text-transform: uppercase;
+}
+
+.studentLink:hover,
+.studentLink:focus-visible {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
+  outline: none;
 }
 
 .layout {
+  position: relative;
+  z-index: 2;
   display: grid;
   flex: 1;
-  grid-template-columns: minmax(0, 1fr) minmax(430px, 0.78fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(480px, 0.92fr);
   align-items: center;
-  gap: 74px;
-  padding-block: 48px;
+  gap: clamp(48px, 7vw, 108px);
+  padding-block: 44px;
 }
 
 .poster {
   position: relative;
-  min-height: 640px;
+  min-height: 680px;
   overflow: hidden;
-  padding: 30px;
+  padding: 32px;
   border: var(--border);
-  background: #0b235f;
-  box-shadow: 11px 11px 0 var(--ink);
+  border-radius: var(--radius);
+  background: var(--navy);
+  box-shadow: 12px 12px 0 var(--ink);
   color: var(--white);
 }
 
 .poster::after {
   position: absolute;
-  right: -54px;
-  bottom: -60px;
-  width: 200px;
-  height: 200px;
+  right: -48px;
+  bottom: -52px;
+  width: 190px;
+  height: 190px;
   border: var(--border);
   background: var(--orange);
   content: "";
-  transform: rotate(16deg);
+  transform: rotate(18deg);
 }
 
 .posterTop {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 18px;
-  padding-bottom: 15px;
+  padding-bottom: 16px;
   border-bottom: 3px solid var(--white);
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .posterCopy {
   position: relative;
   z-index: 2;
-  margin-top: 54px;
+  margin-top: 56px;
 }
 
 .posterCopy > p {
-  margin: 0 0 16px;
+  margin: 0 0 20px;
   color: var(--orange);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -125,38 +165,39 @@
   display: grid;
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(64px, 7vw, 98px);
-  letter-spacing: -0.075em;
-  line-height: 0.82;
+  font-size: clamp(58px, 6.5vw, 92px);
+  font-weight: 800;
+  letter-spacing: -0.065em;
+  line-height: 0.86;
 }
 
 .posterCopy h1 span {
   width: fit-content;
   margin-block: 8px;
-  padding: 2px 10px 8px;
+  padding: 2px 12px 7px;
   border: 3px solid var(--ink);
   background: var(--blue-light);
   box-shadow: 5px 5px 0 var(--ink);
   color: var(--ink);
-  transform: rotate(-1deg);
+  transform: rotate(-1.5deg);
 }
 
 .featureList {
   position: relative;
   z-index: 2;
   display: grid;
-  max-width: 480px;
+  max-width: 430px;
   gap: 8px;
   margin-top: 48px;
 }
 
 .featureList div {
   display: grid;
-  min-height: 48px;
-  grid-template-columns: 36px 1fr auto;
+  min-height: 46px;
+  grid-template-columns: 38px 1fr auto;
   align-items: center;
   gap: 12px;
-  padding: 7px 12px;
+  padding: 6px 12px;
   border: 3px solid var(--ink);
   background: var(--paper);
   box-shadow: 3px 3px 0 var(--ink);
@@ -164,83 +205,105 @@
 }
 
 .featureList div:nth-child(2) {
-  margin-left: 18px;
+  margin-left: 20px;
   background: var(--orange-light);
 }
 
 .featureList div:nth-child(3) {
-  margin-left: 36px;
+  margin-left: 40px;
   background: var(--blue-light);
 }
 
 .featureList span,
 .featureList strong {
   font-family: var(--font-display), sans-serif;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 800;
 }
 
 .featureList small {
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 800;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .loginSection {
-  width: 100%;
-  max-width: 560px;
+  width: min(100%, 620px);
   justify-self: center;
 }
 
 .loginCard {
   border: var(--border);
+  border-radius: var(--radius);
   background: var(--white);
-  box-shadow: 9px 9px 0 var(--ink);
+  box-shadow: 10px 10px 0 var(--ink);
 }
 
 .cardTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
-  padding: 13px 18px;
+  gap: 12px;
+  padding: 14px 20px;
   border-bottom: 3px solid var(--ink);
   background: var(--orange);
-  font-size: 9px;
+}
+
+.accessBadge,
+.cardBadge {
+  padding: 4px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  font-size: 10px;
   font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
+.accessBadge {
+  background: var(--white);
+}
+
+.cardBadge {
+  background: var(--blue-light);
+}
+
 .cardIntro {
-  padding: 26px 28px 0;
+  padding: 28px 32px 0;
 }
 
 .cardIntro > p {
-  margin: 0 0 9px;
+  margin: 0 0 18px;
   color: var(--blue);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .cardIntro h2 {
+  max-width: 520px;
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: 40px;
-  letter-spacing: -0.055em;
-  line-height: 0.95;
+  font-size: clamp(34px, 3.6vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
 }
 
 .cardIntro > span {
   display: block;
-  margin-top: 13px;
+  max-width: 460px;
+  margin-top: 14px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .form {
   display: grid;
-  gap: 20px;
-  padding: 26px 28px 28px;
+  gap: 22px;
+  padding: 28px 32px 32px;
 }
 
 .turnstileWrapper {
@@ -257,34 +320,41 @@
 
 .fieldGroup {
   display: grid;
-  gap: 7px;
+  gap: 8px;
 }
 
 .labelRow {
   display: flex;
+  align-items: end;
   justify-content: space-between;
-  gap: 14px;
+  gap: 16px;
 }
 
-.labelRow strong {
+.labelRow label {
   font-family: var(--font-display), sans-serif;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
 .labelRow small {
   color: var(--muted);
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 800;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .inputFrame {
   display: grid;
-  min-height: 56px;
-  grid-template-columns: 46px 1fr;
+  min-height: 58px;
+  grid-template-columns: 48px 1fr;
+  align-items: stretch;
   border: 3px solid var(--ink);
+  border-radius: 6px;
+  background: var(--white);
   box-shadow: 4px 4px 0 var(--ink);
+  transition: background 140ms ease, box-shadow 140ms ease;
 }
 
 .inputFrame:focus-within {
@@ -292,192 +362,367 @@
   box-shadow: 7px 7px 0 var(--ink);
 }
 
-.inputFrame b {
+.inputIndex {
   display: grid;
   place-items: center;
   border-right: 3px solid var(--ink);
   background: var(--paper);
   font-family: var(--font-display), sans-serif;
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .inputFrame input {
+  width: 100%;
   min-width: 0;
   border: 0;
   outline: 0;
-  padding-inline: 13px;
+  padding: 12px 14px;
   background: transparent;
+  color: var(--ink);
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
 }
 
-.passwordFrame {
-  grid-template-columns: 46px 1fr auto;
+.inputFrame input::placeholder {
+  color: #747687;
+  opacity: 1;
 }
 
-.passwordFrame button {
+.inputFrame:has(input[aria-invalid="true"]) {
+  background: #ffdad6;
+  box-shadow: 4px 4px 0 #ba1a1a;
+}
+
+.passwordFrame {
+  grid-template-columns: 48px 1fr auto;
+}
+
+.passwordToggle {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
   align-self: center;
-  margin-right: 7px;
-  padding: 6px 9px;
+  margin-right: 8px;
+  padding: 0;
   border: 2px solid var(--ink);
+  border-radius: 4px;
   background: var(--orange-light);
-  font-size: 9px;
-  font-weight: 800;
-  text-transform: uppercase;
+  color: var(--ink);
   cursor: pointer;
+  font-family: var(--font-body), sans-serif;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.passwordToggle:hover,
+.passwordToggle:focus-visible {
+  background: var(--orange);
+  outline: none;
+}
+
+.eyeIcon {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-radius: 50% / 65%;
+  pointer-events: none;
+}
+
+.eyeIcon::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+  transform: translate(-50%, -50%);
+}
+
+.eyeOpen {
+  border: 2px solid currentColor;
+  border-radius: 50% / 65%;
+}
+
+.eyeClosed {
+  height: 9px;
+  border: 0;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.eyeClosed::after {
+  display: none;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .fieldError {
+  margin: 0;
   color: #93000a;
-  font-size: 9px;
-  font-weight: 800;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .formMessage {
   display: grid;
-  padding: 11px;
+  gap: 2px;
+  padding: 10px 12px;
   border: 3px solid var(--ink);
   background: #ffd2d2;
   color: #7e1616;
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .formMessage strong {
   font-family: var(--font-display), sans-serif;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .submitButton {
   display: flex;
-  min-height: 56px;
+  min-height: 58px;
   align-items: center;
   justify-content: space-between;
-  padding-inline: 17px;
-  border: 3px solid var(--ink);
+  gap: 16px;
+  padding: 12px 18px;
+  border: var(--border);
+  border-radius: var(--radius);
   background: var(--blue);
   box-shadow: 5px 5px 0 var(--ink);
   color: var(--white);
+  cursor: pointer;
   font: inherit;
-  font-family: var(--font-display), sans-serif;
-  font-size: 12px;
+  font-family: var(--font-body), sans-serif;
+  font-size: 15px;
   font-weight: 800;
   text-transform: uppercase;
-  cursor: pointer;
-}
-
-.submitButton:disabled {
-  cursor: wait;
-  opacity: 0.65;
+  transition: transform 140ms ease, box-shadow 140ms ease;
 }
 
 .submitButton span:last-child {
   font-size: 22px;
 }
 
+.submitButton:hover:not(:disabled),
+.submitButton:focus-visible:not(:disabled) {
+  box-shadow: 8px 8px 0 var(--ink);
+  outline: none;
+  transform: translate(-2px, -2px);
+}
+
+.submitButton:active:not(:disabled) {
+  box-shadow: none;
+  transform: translate(5px, 5px);
+}
+
+.submitButton:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 .securityBox {
   display: grid;
-  padding: 14px 28px;
+  gap: 2px;
+  padding: 16px 32px;
   border-top: 3px solid var(--ink);
   background: var(--blue-light);
-  font-size: 9px;
+  font-size: 11px;
+  line-height: 1.5;
 }
 
 .securityBox strong {
   color: #137234;
   font-family: var(--font-display), sans-serif;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .footer {
+  position: relative;
+  z-index: 2;
   display: flex;
   min-height: 58px;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
   border-top: 3px solid var(--ink);
   color: var(--muted);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
-@media (max-width: 950px) {
+@media (max-width: 1080px) {
   .header,
   .layout,
   .footer {
-    width: calc(100% - 44px);
+    width: calc(100% - 48px);
+  }
+
+  .layout {
+    grid-template-columns: minmax(340px, 1.06fr) minmax(420px, 0.94fr);
+    gap: 40px;
+  }
+
+  .poster {
+    min-height: 640px;
+    padding: 24px;
+  }
+
+  .posterCopy h1 {
+    font-size: clamp(52px, 7vw, 70px);
+  }
+}
+
+@media (max-width: 850px) {
+  .navyBlock {
+    display: none;
   }
 
   .layout {
     grid-template-columns: 1fr;
+    gap: 36px;
+    padding-block: 32px 48px;
   }
 
   .poster {
-    min-height: 500px;
+    min-height: auto;
+    padding: 24px 24px 30px;
+    box-shadow: 8px 8px 0 var(--ink);
   }
 
+  .poster::after,
   .featureList {
     display: none;
   }
+
+  .posterCopy {
+    margin-top: 30px;
+  }
+
+  .posterCopy h1 {
+    font-size: clamp(48px, 12vw, 72px);
+    line-height: 0.9;
+  }
+
+  .loginSection {
+    width: 100%;
+  }
 }
 
-@media (max-width: 580px) {
+@media (max-width: 560px) {
   .header,
   .layout,
   .footer {
-    width: calc(100% - 28px);
+    width: calc(100% - 32px);
   }
 
-  .studentLink,
-  .brand small,
+  .header {
+    min-height: 72px;
+  }
+
+  .brandLogo {
+    width: 38px;
+    height: 48px;
+  }
+
+  .brand strong {
+    font-size: 18px;
+  }
+
+  .brand small {
+    display: none;
+  }
+
+  .studentLink {
+    border-bottom-width: 2px;
+    padding-block: 4px;
+    font-size: 11px;
+  }
+
+  .layout {
+    padding-top: 24px;
+  }
+
+  .poster {
+    padding: 20px;
+    box-shadow: 7px 7px 0 var(--ink);
+  }
+
   .posterTop span:last-child {
     display: none;
   }
 
-  .layout {
-    gap: 34px;
-    padding-block: 28px 46px;
-  }
-
-  .poster {
-    min-height: 390px;
-    padding: 22px;
-    box-shadow: 7px 7px 0 var(--ink);
-  }
-
-  .posterCopy {
-    margin-top: 38px;
-  }
-
   .posterCopy h1 {
-    font-size: clamp(54px, 18vw, 76px);
+    font-size: clamp(43px, 15vw, 60px);
   }
 
   .loginCard {
     box-shadow: 6px 6px 0 var(--ink);
   }
 
-  .cardIntro,
+  .cardTop {
+    padding: 12px 16px;
+  }
+
+  .cardIntro {
+    padding: 24px 20px 0;
+  }
+
+  .cardIntro h2 {
+    font-size: 34px;
+  }
+
   .form {
-    padding-inline: 20px;
+    gap: 20px;
+    padding: 24px 20px;
   }
 
   .labelRow small {
     display: none;
   }
 
+  .inputFrame,
   .passwordFrame {
-    position: relative;
+    min-height: 56px;
     grid-template-columns: 40px 1fr;
   }
 
-  .passwordFrame button {
+  .passwordFrame {
+    position: relative;
+  }
+
+  .passwordToggle {
     position: absolute;
-    right: 0;
+    top: 50%;
+    right: 6px;
+    margin-right: 0;
+    transform: translateY(-50%);
   }
 
   .passwordFrame input {
-    padding-right: 65px;
+    padding-right: 70px;
+  }
+
+  .securityBox {
+    padding: 14px 20px;
   }
 
   .footer {
@@ -485,6 +730,13 @@
     flex-direction: column;
     justify-content: center;
     gap: 2px;
-    padding-block: 13px;
+    padding-block: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inputFrame,
+  .submitButton {
+    transition: none;
   }
 }

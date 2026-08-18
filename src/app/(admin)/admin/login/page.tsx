@@ -23,6 +23,8 @@ export default async function AdminLoginPage() {
         Lewati ke form login admin
       </a>
 
+      <div className={styles.navyBlock} aria-hidden="true" />
+
       <header className={styles.header}>
         <Link
           aria-label="Kembali ke EXISEL"
@@ -56,7 +58,7 @@ export default async function AdminLoginPage() {
             <span>Authorized access only</span>
           </div>
           <div className={styles.posterCopy}>
-            <p>Data hari ini. Keputusan lebih cepat.</p>
+            <p>Data hari ini — keputusan lebih cepat.</p>
             <h1>
               Pantau.
               <span>Catat.</span>
@@ -85,8 +87,8 @@ export default async function AdminLoginPage() {
         <section className={styles.loginSection} id="admin-login-form">
           <div className={styles.loginCard}>
             <div className={styles.cardTop}>
-              <span>Akses petugas</span>
-              <strong>ADMIN / GURU</strong>
+              <span className={styles.accessBadge}>Akses petugas</span>
+              <span className={styles.cardBadge}>Admin / Guru</span>
             </div>
             <div className={styles.cardIntro}>
               <p>Monitoring kehadiran</p>
