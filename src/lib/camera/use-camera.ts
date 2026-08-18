@@ -6,22 +6,73 @@ import { cameraErrorCopy, classifyCameraError, stateForCameraError } from "./err
 import type { CameraErrorCode, CameraState } from "./types";
 
 /**
- * Kontrak constraints getUserMedia (plan §26/§27).
+ * Kontrak constraints getUserMedia.
  * Percobaan pertama memilih kamera belakang secara halus (ideal, bukan exact).
  * HANYA jika percobaan pertama gagal karena OverconstrainedError,
  * controller mencoba sekali dengan { video: true }.
  * Setelah NotAllowedError JANGAN ada retry generic — user harus
- * mengubah izin di pengaturan browser/perangkat dulu (plan §29).
+ * mengubah izin di pengaturan browser/perangkat dulu.
+ *
+ * Sumber: plans/plans_android_camera_root_cause_fix.md §Phase 3.
  */
-const PRIMARY_CONSTRAINTS: MediaStreamConstraints = {
+export const PRIMARY_CONSTRAINTS: MediaStreamConstraints = {
   audio: false,
   video: { facingMode: { ideal: "environment" } },
 };
 
-const FALLBACK_CONSTRAINTS: MediaStreamConstraints = {
+export const FALLBACK_CONSTRAINTS: MediaStreamConstraints = {
   audio: false,
   video: true,
 };
+
+export function primaryConstraints(deviceId?: string): MediaStreamConstraints {
+  if (!deviceId) return PRIMARY_CONSTRAINTS;
+  return { audio: false, video: { deviceId: { exact: deviceId } } };
+}
+
+export function getVisibilityState(): string {
+  return typeof document !== "undefined" ? document.visibilityState : "unknown";
+}
+
+/**
+ * Diagnostic events non-sensitive (plan §Phase 1).
+ * Event: camera_gum_requested, camera_gum_resolved, camera_gum_rejected,
+ * camera_timeout, camera_video_ready, camera_decoder_started, camera_cleanup.
+ * DILARANG log: QR token, session cookie, auth header, attendance payload,
+ * data personal user.
+ */
+export function emitCameraDiagnostic(
+  event: string,
+  detail: Record<string, unknown> = {},
+): void {
+  try {
+    // eslint-disable-next-line no-console -- saluran diagnostik kamera yang disengaja
+    console.info(`[camera] ${event}`, detail);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("exisel:camera-diagnostic", { detail: { event, ...detail } }),
+      );
+    }
+  } catch {
+    // diagnostics tidak boleh mengacaukan kamera
+  }
+}
+
+/**
+ * getUserMedia di Chrome Android bisa MENGGANTUNG tanpa resolve/reject saat
+ * popup izin tidak dimunculkan sistem (izin pernah diblokir lewat pengaturan
+ * Android, atau prompt native tidak tampil). Tanpa batas waktu, UI berhenti
+ * "requesting" selamanya. Race dengan timeout menghasilkan
+ * CAMERA_PERMISSION_TIMEOUT yang deterministik (RC-G).
+ */
+export const PERMISSION_TIMEOUT_MS = 15_000;
+
+/**
+ * Batas waktu tunggu video readiness setelah getUserMedia resolve.
+ * Soft timeout: jika terlampaui, kamera tetap dianggap active
+ * (plan §RC-H: permission bukan akar masalah jika gum resolve).
+ */
+export const VIDEO_READY_TIMEOUT_MS = 5_000;
 
 export interface CameraControllerOptions {
   /** Elemen video tempat stream dipasang; null jika belum ada di DOM. */
@@ -30,62 +81,163 @@ export interface CameraControllerOptions {
   getUserMedia?: (constraints: MediaStreamConstraints) => Promise<MediaStream>;
   /** Pengganti pengecekan konteks aman (di browser memakai window.isSecureContext). */
   getIsSecureContext?: () => boolean;
+  /** Batas waktu tunggu getUserMedia. */
+  permissionTimeoutMs?: number;
+  /** Batas waktu tunggu video readiness. */
+  videoReadyTimeoutMs?: number;
+  /** Pengganti setTimeout untuk unit test deterministik. */
+  setTimeoutFn?: (fn: () => void, ms: number) => number;
+  /** Pengganti clearTimeout untuk unit test deterministik. */
+  clearTimeoutFn?: (id: number) => void;
 }
 
 export interface CameraController {
-  /** State machine kamera (plan §35). */
   getState(): CameraState;
-  /** Kode error terakhir; null saat tidak ada kegagalan. */
   getError(): CameraErrorCode | null;
-  /** Stream aktif; null saat idle/terhenti. */
   getStream(): MediaStream | null;
   /**
-   * Memulai kamera. HANYA dipanggil dari user gesture (plan §24/§25).
-   * Mengembalikan { started, code }:
-   * - code null → kamera aktif.
-   * - code diisi → kamera gagal; error sudah diklasifikasikan.
+   * Memulai kamera. HANYA dipanggil dari user gesture.
+   * options.deviceId dipakai HANYA untuk switch kamera (exact id)
+   * SETELAH enumerateDevices berhasil.
    */
-  start(): Promise<{ started: boolean; code: CameraErrorCode | null }>;
-  /** Menghentikan kamera: stop semua track, lepas srcObject, kembali idle (plan §37). */
+  start(options?: { deviceId?: string }): Promise<{
+    started: boolean;
+    code: CameraErrorCode | null;
+  }>;
   stop(): void;
 }
 
 /**
- * Controller kamera murni — bebas React sehingga bisa diuji langsung
- * dengan node:test/tsx, tanpa renderer. Hook useCamera adalah
- * pembungkus tipis yang menyambungkan controller ke lifecycle React.
+ * Controller kamera murni — bebas React sehingga bisa diuji langsung dengan
+ * node:test/tsx, tanpa renderer. Hook useCamera pembungkus tipisnya.
  */
-export function createCameraController(options: CameraControllerOptions): CameraController {
+export function createCameraController(
+  options: CameraControllerOptions,
+): CameraController {
   let state: CameraState = "idle";
   let error: CameraErrorCode | null = null;
   let stream: MediaStream | null = null;
+  let requestSeq = 0;
+
+  const timeoutMs = options.permissionTimeoutMs ?? PERMISSION_TIMEOUT_MS;
+  const videoReadyTimeoutMs = options.videoReadyTimeoutMs ?? VIDEO_READY_TIMEOUT_MS;
+  const setTimer = options.setTimeoutFn ?? ((fn, ms) => window.setTimeout(fn, ms));
+  const clearTimer = options.clearTimeoutFn ?? ((id) => window.clearTimeout(id));
 
   function setState(next: CameraState, nextError: CameraErrorCode | null): void {
     state = next;
     error = nextError;
   }
 
-  async function start(): Promise<{ started: boolean; code: CameraErrorCode | null }> {
-    // Guard ganda (plan §35): jangan pernah punya dua getUserMedia berjalan bersamaan.
+  /**
+   * Race getUserMedia dengan timeout. Jika timeout menang, getUserMedia yang
+   * masih menggantung tetap dibersihkan: bila akhirnya berhasil, stream-nya
+   * langsung dihentikan agar kamera tidak menyala diam-diam.
+   */
+  async function acquireStreamWithTimeout(
+    acquire: () => Promise<MediaStream>,
+    constraintMode: string,
+  ): Promise<MediaStream> {
+    const streamPromise = acquire();
+    let timedOut = false;
+    let timerId: number | undefined;
+
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timerId = setTimer(() => {
+        timedOut = true;
+        emitCameraDiagnostic("camera_timeout", { constraintMode, timeoutMs });
+        reject(
+          new DOMException(
+            "Popup izin kamera tidak muncul tepat waktu.",
+            "TimeoutError",
+          ),
+        );
+      }, timeoutMs);
+    });
+
+    try {
+      return await Promise.race([streamPromise, timeoutPromise]);
+    } finally {
+      if (timerId !== undefined) clearTimer(timerId);
+      void streamPromise
+        .then((resolvedStream) => {
+          if (timedOut) {
+            resolvedStream.getTracks().forEach((track) => track.stop());
+          }
+        })
+        .catch(() => undefined);
+    }
+  }
+
+  /**
+   * Menunggu video readiness (plan Phase 7).
+   * Urutan: readyState>=1 -> langsung siap; else loadedmetadata/canplay once.
+   * Soft timeout: jika VIDEO_READY_TIMEOUT_MS terlampaui, lanjut saja —
+   * getUserMedia sudah resolve jadi permission bukan akar masalah (RC-H).
+   */
+  function waitVideoReady(video: HTMLVideoElement): Promise<void> {
+    return new Promise<void>((resolve) => {
+      if (video.readyState >= 1) {
+        resolve();
+        return;
+      }
+
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        clearTimer(timerId);
+        video.removeEventListener("loadedmetadata", onReady);
+        video.removeEventListener("canplay", onReady);
+        resolve();
+      };
+      const onReady = () => finish();
+      const timerId = setTimer(finish, videoReadyTimeoutMs);
+
+      video.addEventListener("loadedmetadata", onReady, { once: true });
+      video.addEventListener("canplay", onReady, { once: true });
+    });
+  }
+
+  async function start(
+    startOptions?: { deviceId?: string },
+  ): Promise<{ started: boolean; code: CameraErrorCode | null }> {
+    // Guard: jangan pernah ada dua request kamera berjalan bersamaan.
     if (state === "requesting") {
       return { started: false, code: error };
     }
 
-    // Cek kapabilitas SEBELUM request (plan §23).
-    const secure = options.getIsSecureContext ? options.getIsSecureContext() : window.isSecureContext;
+    const seq = ++requestSeq;
+
+    const secure = options.getIsSecureContext
+      ? options.getIsSecureContext()
+      : window.isSecureContext;
+    const mediaDevicesAvailable = Boolean(
+      typeof navigator !== "undefined" &&
+        navigator.mediaDevices &&
+        typeof navigator.mediaDevices.getUserMedia === "function",
+    );
+
     if (!secure) {
-      setState("error", "INSECURE_CONTEXT");
+      setState("blocked", "INSECURE_CONTEXT");
       return { started: false, code: "INSECURE_CONTEXT" };
     }
 
-    const getUserMedia = options.getUserMedia ?? navigator.mediaDevices?.getUserMedia?.bind(navigator.mediaDevices);
+    const getUserMedia =
+      options.getUserMedia ??
+      (mediaDevicesAvailable
+        ? navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices)
+        : undefined);
     if (!getUserMedia) {
-      setState("unavailable", "UNSUPPORTED");
-      return { started: false, code: "UNSUPPORTED" };
+      setState("unavailable", "MEDIA_DEVICES_UNAVAILABLE");
+      return { started: false, code: "MEDIA_DEVICES_UNAVAILABLE" };
     }
 
-    // Stream lama (mis. setelah ganti tab) dibersihkan dulu supaya tidak
-    // tertinggal dan menyebabkan NotReadableError pada kunjungan berikutnya (plan §37).
+    const deviceId = startOptions?.deviceId;
+    const constraintMode = deviceId ? "exact-device" : "environment-ideal";
+
+    // Stream sisa dari percobaan sebelumnya dihentikan dulu supaya tidak
+    // bocor dan menyebabkan busy.
     const previous = stream;
     stream = null;
     stopTracks(previous);
@@ -96,22 +248,64 @@ export function createCameraController(options: CameraControllerOptions): Camera
 
     setState("requesting", null);
 
+    emitCameraDiagnostic("camera_gum_requested", {
+      constraintMode,
+      isSecureContext: secure,
+      visibilityState: getVisibilityState(),
+      mediaDevicesAvailable,
+    });
+
     let acquired: MediaStream;
     try {
       try {
-        acquired = await getUserMedia(PRIMARY_CONSTRAINTS);
+        acquired = await acquireStreamWithTimeout(
+          () => getUserMedia(primaryConstraints(deviceId)),
+          constraintMode,
+        );
       } catch (firstAttemptError) {
-        const fallback = await retryWithGenericConstraints(getUserMedia, firstAttemptError);
-        if (fallback.attempted) {
-          acquired = fallback.stream as MediaStream;
-        } else {
+        const firstCode = classifyCameraError(firstAttemptError);
+        if (
+          firstCode === "PERMISSION_DENIED" ||
+          firstCode === "POLICY_BLOCKED"
+        ) {
           throw firstAttemptError;
         }
+        if (firstCode !== "OVERCONSTRAINED") {
+          throw firstAttemptError;
+        }
+        acquired = await acquireStreamWithTimeout(
+          () => getUserMedia(FALLBACK_CONSTRAINTS),
+          "video-true-fallback",
+        );
       }
+
+      emitCameraDiagnostic("camera_gum_resolved", { constraintMode });
     } catch (requestError) {
+      if (seq !== requestSeq) {
+        stopTracks(stream);
+        stream = null;
+        return { started: false, code: null };
+      }
+      const errName =
+        requestError instanceof DOMException || requestError instanceof Error
+          ? requestError.name
+          : "";
+      emitCameraDiagnostic("camera_gum_rejected", {
+        errorName: errName,
+        errorMessage: sanitizeMessage(requestError),
+        constraintMode,
+        isSecureContext: secure,
+        visibilityState: getVisibilityState(),
+        mediaDevicesAvailable,
+      });
       const code = classifyCameraError(requestError);
       setState(stateForCameraError(code), code);
       return { started: false, code };
+    }
+
+    if (seq !== requestSeq) {
+      stopTracks(acquired);
+      return { started: false, code: null };
     }
 
     stream = acquired;
@@ -120,13 +314,22 @@ export function createCameraController(options: CameraControllerOptions): Camera
     if (video) {
       video.srcObject = acquired;
       try {
-        // play() dipanggil eksplisit (plan §34); atribut muted/playInline di
-        // elemen video tetap disediakan oleh komponen pemakai (Subagent 6).
         await video.play();
       } catch {
-        // Kegagalan play() jangan menyandera stream: track tetap hidup,
-        // UI dapat mencoba play ulang lewat interaksi berikutnya.
+        // Kegagalan play() jangan menyandera stream: track tetap hidup.
       }
+      await waitVideoReady(video);
+      emitCameraDiagnostic("camera_video_ready", {
+        videoWidth: video.videoWidth,
+        videoHeight: video.videoHeight,
+        readyState: video.readyState,
+      });
+    }
+
+    if (seq !== requestSeq) {
+      stopTracks(stream);
+      stream = null;
+      return { started: false, code: null };
     }
 
     setState("active", null);
@@ -134,8 +337,10 @@ export function createCameraController(options: CameraControllerOptions): Camera
   }
 
   function stop(): void {
-    stopTracks(stream);
+    const active = stream;
+    stopTracks(active);
     stream = null;
+    requestSeq += 1;
 
     const video = options.getVideo();
     if (video) {
@@ -143,6 +348,9 @@ export function createCameraController(options: CameraControllerOptions): Camera
     }
 
     setState("idle", null);
+    emitCameraDiagnostic("camera_cleanup", {
+      stoppedTracks: active ? active.getTracks().length : 0,
+    });
   }
 
   return {
@@ -154,27 +362,11 @@ export function createCameraController(options: CameraControllerOptions): Camera
   };
 }
 
-/**
- * Fallback constraint (plan §27).
- * HANYA OverconstrainedError yang memicu retry generic, dan hanya SEKALI.
- * NotAllowedError dan error lain dilempar ulang apa adanya.
- */
-async function retryWithGenericConstraints(
-  getUserMedia: (constraints: MediaStreamConstraints) => Promise<MediaStream>,
-  firstAttemptError: unknown,
-): Promise<{ attempted: boolean; stream?: MediaStream }> {
-  if (classifyCameraError(firstAttemptError) !== "OVERCONSTRAINED") {
-    return { attempted: false };
-  }
-
-  const fallbackStream = await getUserMedia(FALLBACK_CONSTRAINTS);
-  return { attempted: true, stream: fallbackStream };
+function sanitizeMessage(err: unknown): string {
+  const raw = err instanceof Error ? err.message : String(err ?? "");
+  return raw.slice(0, 120);
 }
 
-/**
- * Menghentikan semua track MediaStream (plan §37/§43).
- * Kesalahan track.close() diabaikan: teardown tidak boleh melempar.
- */
 function stopTracks(target: MediaStream | null): void {
   if (!target) return;
   target.getTracks().forEach((track) => {
@@ -187,35 +379,26 @@ function stopTracks(target: MediaStream | null): void {
 }
 
 export interface UseCameraResult {
-  /** State machine kamera (plan §35). */
   state: CameraState;
-  /** Kode error terklasifikasi; null saat tidak ada kegagalan. */
   error: CameraErrorCode | null;
-  /** Teks panduan Bahasa Indonesia untuk error aktif; null saat tidak ada error. */
   errorCopy: { title: string; description: string } | null;
   /**
-   * Memulai kamera. HANYA panggil langsung dari handler user gesture
-   * (mis. onClick tombol "Aktifkan Kamera") — jangan pernah dari useEffect
-   * atau saat mount, supaya Chrome Android menampilkan prompt izin
-   * (plan §24/§25). Aman dipanggil berulang: panggilan saat state
-   * "requesting" diabaikan.
+   * Memulai kamera. HANYA panggil langsung dari handler user gesture.
+   * options.deviceId hanya untuk switch kamera (exact id).
    */
-  start: () => Promise<void>;
-  /** Menghentikan stream, melepas srcObject, kembali ke idle (plan §37). */
+  start: (options?: { deviceId?: string }) => Promise<void>;
   stop: () => void;
-  /** Stream aktif (ref internal), untuk kebutuhan lanjutan seperti decoder QR. */
   streamRef: RefObject<MediaStream | null>;
 }
 
 /**
  * Hook kamera EXISEL. Meminta getUserMedia hanya dari user gesture,
- * mengelola state machine, fallback constraint sekali, dan cleanup
- * stream saat unmount (plan §23-28, §34-38).
- *
- * Integrasi scanner QR: Subagent 6 memanggil start() dari tombol,
- * menunggu state === "active", lalu memulai decoder pada streamRef.current.
+ * mengelola state machine, fallback constraint sekali, timeout deterministik,
+ * video readiness, dan cleanup stream saat unmount.
  */
-export function useCamera(videoRef: RefObject<HTMLVideoElement | null>): UseCameraResult {
+export function useCamera(
+  videoRef: RefObject<HTMLVideoElement | null>,
+): UseCameraResult {
   const [state, setState] = useState<CameraState>("idle");
   const [error, setError] = useState<CameraErrorCode | null>(null);
 
@@ -228,14 +411,15 @@ export function useCamera(videoRef: RefObject<HTMLVideoElement | null>): UseCame
   }
   const controller = controllerRef.current;
 
-  const start = useCallback(async (): Promise<void> => {
-    // Jangan pernah auto-request kamera di sini; start hanya dipanggil
-    // langsung dari user gesture (plan §24/§25).
-    const result = await controller.start();
-    streamRef.current = controller.getStream();
-    setState(controller.getState());
-    setError(result.code ?? controller.getError());
-  }, [controller]);
+  const start = useCallback(
+    async (options?: { deviceId?: string }): Promise<void> => {
+      const result = await controller.start(options);
+      streamRef.current = controller.getStream();
+      setState(controller.getState());
+      setError(result.code ?? controller.getError());
+    },
+    [controller],
+  );
 
   const stop = useCallback((): void => {
     controller.stop();
@@ -244,8 +428,6 @@ export function useCamera(videoRef: RefObject<HTMLVideoElement | null>): UseCame
     setError(null);
   }, [controller]);
 
-  // Cleanup saat unmount/navigasi (plan §37/§43): pastikan tidak ada
-  // kamera "nyangkut" yang menyebabkan NotReadableError di kunjungan berikutnya.
   useEffect(() => {
     return () => {
       controller.stop();

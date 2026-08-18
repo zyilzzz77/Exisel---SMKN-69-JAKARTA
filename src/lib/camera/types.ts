@@ -1,32 +1,46 @@
 /**
- * Tipe bersama layer kamera EXISEL (Subagent 5 — Mobile Media Engineer).
- * Rencana: plans/plans_exisel_qr_camera_8_subagents.md §23-31, §34-38.
+ * Tipe bersama layer kamera EXISEL.
+ * Sumber kontrak: plans/plans_android_camera_root_cause_fix.md §Phase 4.
  */
 
 /**
- * State machine kamera (plan §35).
+ * State machine tunggal kamera.
  * - idle: kamera belum diminta / sudah dihentikan.
  * - requesting: getUserMedia sedang berjalan (tidak boleh dipanggil ulang).
  * - active: stream terpasang dan video dimainkan.
- * - denied: izin kamera diblokir user/kebijakan browser.
- * - unavailable: kamera/API tidak tersedia di perangkat atau browser.
- * - error: kegagalan lain (konteks tidak aman, kamera sibuk, tak terduga).
+ * - denied: izin kamera diblokir user/kebijakan situs.
+ * - blocked: kebijakan browser/OS memblokir (Permission-Policy/OS-level).
+ * - unavailable: kamera atau API tidak tersedia.
+ * - busy: kamera sedang dipakai aplikasi/tab lain.
+ * - timeout: getUserMedia menggantung melewati batas waktu (popup izin tidak muncul).
+ * - error: kegagalan lain yang tak terklasifikasi.
  */
-export type CameraState = "idle" | "requesting" | "active" | "denied" | "unavailable" | "error";
+export type CameraState =
+  | "idle"
+  | "requesting"
+  | "active"
+  | "denied"
+  | "blocked"
+  | "unavailable"
+  | "busy"
+  | "timeout"
+  | "error";
 
 /**
- * Kategori hasil klasifikasi error getUserMedia (plan §28).
+ * Kategori hasil klasifikasi error kamera.
  * Semua kegagalan HARUS dipetakan ke salah satu kode ini;
  * jangan melabeli semua kegagalan sebagai permission denied.
  */
 export type CameraErrorCode =
   | "PERMISSION_DENIED"
-  | "NOT_FOUND"
-  | "BUSY"
+  | "POLICY_BLOCKED"
+  | "CAMERA_NOT_FOUND"
+  | "CAMERA_BUSY"
   | "OVERCONSTRAINED"
-  | "UNSUPPORTED"
   | "INSECURE_CONTEXT"
-  | "UNKNOWN";
+  | "MEDIA_DEVICES_UNAVAILABLE"
+  | "CAMERA_PERMISSION_TIMEOUT"
+  | "UNKNOWN_CAMERA_ERROR";
 
 /**
  * Salinan teks panduan yang siap ditampilkan UI.

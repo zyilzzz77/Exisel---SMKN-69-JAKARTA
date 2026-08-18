@@ -4,98 +4,20 @@ import { BrowserQRCodeReader, type IScannerControls } from "@zxing/browser";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { submitAttendanceAction, type AttendanceState } from "@/actions/attendance";
+import { useCamera } from "@/lib/camera";
 import styles from "@/app/(student)/kehadiran/attendance.module.css";
 
 const initialState: AttendanceState = { status: "idle", message: "" };
 
-type CameraState = "idle" | "starting" | "ready" | "blocked" | "stopped";
-
-// Progressive constraint fallback chain (rear HD -> rear basic -> front -> any)
-const CAMERA_CONSTRAINTS: MediaStreamConstraints[] = [
-  { audio: false, video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } } },
-  { audio: false, video: { facingMode: { ideal: "environment" } } },
-  { audio: false, video: { facingMode: { ideal: "user" } } },
-  { audio: false, video: true },
-];
-
-// Di Chrome Android, getUserMedia bisa MENGGANTUNG tanpa melempar error saat
-// sistem tidak memunculkan prompt izin (contoh: izin pernah diblokir lewat
-// pengaturan Android, atau prompt native tidak tampil). Tanpa batas waktu,
-// UI berhenti di "Meminta izin kamera..." selamanya tanpa jalan keluar.
-// Timeout ini memastikan user selalu mendapat panduan pemulihan + tombol retry.
-const CAMERA_PERMISSION_TIMEOUT_MS = 15_000;
-
-function isPermissionError(errName: string) {
-  return errName === "NotAllowedError" || errName === "PermissionDeniedError" || errName === "SecurityError";
-}
-
-/**
- * Race getUserMedia dengan timeout. Jika getUserMedia menang, stream dipakai.
- * Jika timeout menang, getUserMedia yang masih menggantung tetap dibersihkan:
- * apabila akhirnya berhasil (mis. user mengizinkan lewat address bar saat
- * panduan tampil), stream-nya langsung dihentikan agar kamera tidak menyala
- * diam-diam di latar belakang.
- */
-async function acquireStreamWithTimeout(
-  acquire: () => Promise<MediaStream>,
-): Promise<MediaStream> {
-  const streamPromise = acquire();
-  let timedOut = false;
-  let timer: number | undefined;
-
-  const timeoutPromise = new Promise<never>((_, reject) => {
-    timer = window.setTimeout(() => {
-      timedOut = true;
-      reject(
-        new DOMException(
-          "Popup izin kamera tidak muncul tepat waktu.",
-          "TimeoutError",
-        ),
-      );
-    }, CAMERA_PERMISSION_TIMEOUT_MS);
-  });
-
-  try {
-    return await Promise.race([streamPromise, timeoutPromise]);
-  } finally {
-    window.clearTimeout(timer);
-    void streamPromise
-      .then((stream) => {
-        if (timedOut) {
-          stream.getTracks().forEach((track) => track.stop());
-        }
-      })
-      .catch(() => undefined);
-  }
-}
-
-function parseCameraError(error: unknown): string {
-  const name = error instanceof DOMException ? error.name : "";
-  if (name === "TimeoutError") {
-    return (
-      "Popup izin kamera tidak muncul. Buka izinnya manual: ketuk ikon izin " +
-      "(gembok/kamera) di address bar Chrome sebelah kiri alamat situs, pilih " +
-      "Izin > Kamera > Izinkan. Jika tidak ada, buka Pengaturan Android > " +
-      "Aplikasi > Chrome > Izin > Kamera > Izinkan. Lalu tekan tombol coba lagi."
-    );
-  }
-  if (isPermissionError(name)) {
-    return "Izin kamera ditolak. Klik ikon kamera di address bar untuk mengizinkan, lalu coba lagi.";
-  }
-  if (name === "NotFoundError" || name === "DevicesNotFoundError") {
-    return "Kamera tidak terdeteksi pada perangkat ini.";
-  }
-  if (name === "NotReadableError" || name === "TrackStartError") {
-    return "Kamera sedang dipakai aplikasi/tab lain. Tutup aplikasi kamera lain lalu coba lagi.";
-  }
-  if (name === "OverconstrainedError" || name === "ConstraintNotSatisfiedError") {
-    return "Sensor kamera yang diminta tidak mendukung resolusi tersebut.";
-  }
-  if (error instanceof Error && error.message) {
-    return error.message;
-  }
-  return "Kamera gagal menampilkan gambar.";
-}
+/** State kamera yang menampilkan panel pemulihan (plan Phase 5). */
+const RECOVERY_STATES = new Set([
+  "denied",
+  "blocked",
+  "unavailable",
+  "busy",
+  "timeout",
+  "error",
+]);
 
 export function AttendanceQrScanner({
   extracurricularId,
@@ -107,65 +29,42 @@ export function AttendanceQrScanner({
   const router = useRouter();
   const [state, setState] = useState(initialState);
   const [pending, setPending] = useState(false);
-  const [cameraState, setCameraState] = useState<CameraState>("idle");
-  const [cameraError, setCameraError] = useState("");
+  const [finished, setFinished] = useState(false);
   const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
-  const [isSwitchingCamera, setIsSwitchingCamera] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const camera = useCamera(videoRef);
+  const { state: cameraState, errorCopy, start, stop, streamRef } = camera;
+
   const readerRef = useRef<BrowserQRCodeReader | null>(null);
   const controlsRef = useRef<IScannerControls | null>(null);
-  const activeStreamRef = useRef<MediaStream | null>(null);
   const isVerifyingRef = useRef(false);
   const lastScannedTokenRef = useRef("");
   const isFinishedRef = useRef(false);
   const mountedRef = useRef(true);
   const videoDevicesRef = useRef<MediaDeviceInfo[]>([]);
   const currentDeviceIndexRef = useRef(0);
-
-  const cleanupCamera = useCallback(() => {
-    try {
-      controlsRef.current?.stop();
-    } catch {
-      // ignore teardown errors from reader
-    }
-    controlsRef.current = null;
-
-    if (activeStreamRef.current) {
-      activeStreamRef.current.getTracks().forEach((track) => {
-        try {
-          track.stop();
-        } catch {
-          // ignore track close error
-        }
-      });
-      activeStreamRef.current = null;
-    }
-
-    const video = videoRef.current;
-    if (video) {
-      video.pause();
-      video.srcObject = null;
-      video.removeAttribute("src");
-      try {
-        video.load(); // WebKit / iOS Safari: release camera stream immediately
-      } catch {
-        // ignore load error during unmount
-      }
-    }
-  }, []);
-
-  const getReader = useCallback(() => {
-    if (!readerRef.current) {
-      readerRef.current = new BrowserQRCodeReader(undefined, { delayBetweenScanAttempts: 250 });
-    }
-    return readerRef.current;
-  }, []);
+  const devicesEnumeratedRef = useRef(false);
 
   useEffect(() => {
     mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      try {
+        controlsRef.current?.stop();
+      } catch {
+        // ignore teardown errors
+      }
+      controlsRef.current = null;
+    };
+  }, []);
 
-    // Enumerate available cameras once (for the switch-camera button)
+  // Plan Phase 2: enumerateDevices() HANYA setelah stream berhasil didapat,
+  // tidak pernah saat mount.
+  useEffect(() => {
+    if (cameraState !== "active" || devicesEnumeratedRef.current) return;
+    devicesEnumeratedRef.current = true;
+
     void navigator.mediaDevices
       ?.enumerateDevices()
       .then((devices) => {
@@ -175,14 +74,18 @@ export function AttendanceQrScanner({
         setHasMultipleCameras(videoInputs.length > 1);
       })
       .catch(() => {
-        // enumeration is optional; ignore
+        // enumeration hanya untuk tombol ganti kamera; kegagalan tidak fatal
       });
+  }, [cameraState]);
 
-    return () => {
-      mountedRef.current = false;
-      cleanupCamera();
-    };
-  }, [cleanupCamera]);
+  const getReader = useCallback(() => {
+    if (!readerRef.current) {
+      readerRef.current = new BrowserQRCodeReader(undefined, {
+        delayBetweenScanAttempts: 250,
+      });
+    }
+    return readerRef.current;
+  }, []);
 
   const verify = useCallback(
     async (token: string) => {
@@ -201,8 +104,14 @@ export function AttendanceQrScanner({
 
       if (result.status === "success" || result.status === "alreadySubmitted") {
         isFinishedRef.current = true;
-        cleanupCamera();
-        setCameraState("stopped");
+        setFinished(true);
+        try {
+          controlsRef.current?.stop();
+        } catch {
+          // ignore teardown errors
+        }
+        controlsRef.current = null;
+        stop();
         router.refresh();
       } else {
         // Jika verifikasi gagal (misal QR kedaluwarsa), izinkan pemindaian QR baru setelah jeda singkat
@@ -212,175 +121,118 @@ export function AttendanceQrScanner({
         }, 1200);
       }
     },
-    [cleanupCamera, extracurricularId, router],
+    [extracurricularId, router, stop],
   );
 
-  const acquireStream = useCallback(
-    async (preferredDeviceId?: string): Promise<MediaStream> => {
-      let lastErr: unknown = null;
+  // Plan Phase 7: decoder QR HANYA start setelah stream aktif (state active),
+  // tidak pernah saat permission masih requesting.
+  useEffect(() => {
+    if (cameraState !== "active" || isFinishedRef.current) return;
+    const stream = streamRef.current;
+    const video = videoRef.current;
+    if (!stream || !video) return;
 
-      // If the user explicitly picked a camera device, try it first with exact id.
-      if (preferredDeviceId) {
-        try {
-          return await navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: { deviceId: { exact: preferredDeviceId } },
-          });
-        } catch (err) {
-          lastErr = err;
-          const name = err instanceof DOMException ? err.name : "";
-          if (isPermissionError(name)) throw err;
-        }
-      }
+    let cancelled = false;
+    let scanAttemptCount = 0;
 
-      for (const constraints of CAMERA_CONSTRAINTS) {
-        if (!mountedRef.current) break;
-        try {
-          return await navigator.mediaDevices.getUserMedia(constraints);
-        } catch (err) {
-          lastErr = err;
-          const name = err instanceof DOMException ? err.name : "";
-          // Do not retry lower constraints if user explicitly blocked camera permissions
-          if (isPermissionError(name)) throw err;
-        }
-      }
+    void getReader()
+      .decodeFromStream(stream, video, (scanResult, scanError) => {
+        if (!mountedRef.current || isFinishedRef.current) return;
 
-      throw lastErr || new Error("Semua opsi kamera gagal dihubungi.");
-    },
-    [],
-  );
-
-  // startScanner is invoked from button click handlers so getUserMedia() runs
-  // DIRECTLY inside a user gesture (required by iOS Safari / some Android WebViews).
-  const startScanner = useCallback(
-    async (preferredDeviceId?: string) => {
-      if (isFinishedRef.current) return;
-
-      cleanupCamera();
-      isVerifyingRef.current = false;
-      lastScannedTokenRef.current = "";
-      setCameraState("starting");
-      setCameraError("");
-
-      if (!window.isSecureContext) {
-        setCameraError("Kamera hanya dapat diakses melalui HTTPS atau localhost.");
-        setCameraState("blocked");
-        setIsSwitchingCamera(false);
-        return;
-      }
-
-      if (!navigator.mediaDevices?.getUserMedia) {
-        setCameraError("Browser ini tidak mendukung API kamera (MediaDevices).");
-        setCameraState("blocked");
-        setIsSwitchingCamera(false);
-        return;
-      }
-
-      try {
-        const stream = await acquireStreamWithTimeout(() =>
-          acquireStream(preferredDeviceId),
-        );
-        if (!mountedRef.current) {
-          stream.getTracks().forEach((t) => t.stop());
+        if (scanError) {
+          // NotFoundException menyala di SETIAP frame tanpa QR — log sekali
+          // tiap 40 frame supaya console tetap terbaca dan membuktikan loop
+          // pemindaian benar-benar berjalan.
+          scanAttemptCount += 1;
+          if (scanAttemptCount % 40 === 1) {
+            console.info(`[camera] scanning frame=${scanAttemptCount} ${scanError.name}`);
+          }
           return;
         }
 
-        activeStreamRef.current = stream;
-
-        const video = videoRef.current;
-        if (!video) {
-          cleanupCamera();
-          setIsSwitchingCamera(false);
+        const token = scanResult?.getText() ?? "";
+        if (
+          !token ||
+          !token.includes("/attendance/scan?") ||
+          isVerifyingRef.current ||
+          token === lastScannedTokenRef.current
+        ) {
+          if (token && !token.includes("/attendance/scan?")) {
+            console.warn("[camera] qr_ignored_not_attendance");
+          }
           return;
         }
 
-        // Explicitly set playback attributes for iOS Safari / WebKit.
-        video.autoplay = true;
-        video.muted = true;
-        video.playsInline = true;
-        video.setAttribute("playsinline", "true");
-
-        // Diagnostics: confirm the camera frames actually reach the video element.
-        console.info("[scanner] stream video track:", {
-          device: stream.getVideoTracks()[0]?.getSettings()?.deviceId,
-          label: stream.getVideoTracks()[0]?.label ?? "(label tersembunyi)",
-        });
-
-        let scanAttemptCount = 0;
-
-        const controls = await getReader().decodeFromStream(stream, video, (scanResult, scanError) => {
-          if (!mountedRef.current || isFinishedRef.current) return;
-
-          if (scanError) {
-            // NotFoundException fires on EVERY frame without a QR — only log
-            // occasionally so the console stays readable while proving the
-            // scan loop is actually running.
-            scanAttemptCount += 1;
-            if (scanAttemptCount % 40 === 1) {
-              console.info(`[scanner] memindai... (${scanAttemptCount} frame)`, scanError.name);
-            }
-            return;
-          }
-
-          const token = scanResult?.getText() ?? "";
-          console.info("[scanner] QR terdeteksi:", token);
-          if (
-            !token ||
-            !token.includes("/attendance/scan?") ||
-            isVerifyingRef.current ||
-            token === lastScannedTokenRef.current
-          ) {
-            if (token && !token.includes("/attendance/scan?")) {
-              console.warn("[scanner] QR bukan token kehadiran, diabaikan.");
-            }
-            return;
-          }
-
-          isVerifyingRef.current = true;
-          lastScannedTokenRef.current = token;
-          void verify(token);
-        });
-
-        if (!mountedRef.current) {
+        // Plan: DILARANG log isi token QR.
+        console.info("[camera] qr_detected");
+        isVerifyingRef.current = true;
+        lastScannedTokenRef.current = token;
+        void verify(token);
+      })
+      .then((controls) => {
+        if (cancelled || !mountedRef.current) {
           controls.stop();
-          cleanupCamera();
           return;
         }
-
         controlsRef.current = controls;
-        setIsSwitchingCamera(false);
-        setCameraState("ready");
-      } catch (err) {
-        cleanupCamera();
-        setIsSwitchingCamera(false);
-        if (mountedRef.current) {
-          setCameraError(parseCameraError(err));
-          setCameraState("blocked");
-        }
+        console.info("[camera] camera_decoder_started");
+      })
+      .catch(() => {
+        // Decoder gagal start; kamera tetap menyala dan user bisa retry.
+      });
+
+    return () => {
+      cancelled = true;
+      try {
+        controlsRef.current?.stop();
+      } catch {
+        // ignore teardown errors
       }
-    },
-    [acquireStream, cleanupCamera, getReader, verify],
-  );
+      controlsRef.current = null;
+    };
+  }, [cameraState, getReader, streamRef, verify]);
 
-  const handleStartCamera = () => {
-    void startScanner();
+  // Dipanggil LANGSUNG dari user gesture supaya Chrome Android menampilkan
+  // prompt izin kamera (plan Phase 3).
+  const handleStartCamera = async () => {
+    console.info("[camera] camera_click", { source: "start" });
+    isVerifyingRef.current = false;
+    lastScannedTokenRef.current = "";
+    await start();
   };
 
-  const handleRetry = () => {
-    void startScanner();
+  const handleRetry = async () => {
+    console.info("[camera] camera_click", { source: "retry" });
+    isVerifyingRef.current = false;
+    lastScannedTokenRef.current = "";
+    devicesEnumeratedRef.current = false;
+    await start();
   };
 
-  const handleSwitchCamera = () => {
+  const handleSwitchCamera = async () => {
     const devices = videoDevicesRef.current;
-    if (devices.length < 2 || isSwitchingCamera) return;
-    setIsSwitchingCamera(true);
-    cleanupCamera();
+    if (devices.length < 2 || cameraState !== "active") return;
+    console.info("[camera] camera_click", { source: "switch" });
+    stop();
     const nextIndex = (currentDeviceIndexRef.current + 1) % devices.length;
     currentDeviceIndexRef.current = nextIndex;
-    void startScanner(devices[nextIndex].deviceId);
+    await start({ deviceId: devices[nextIndex].deviceId });
   };
 
-  const showStartButton = cameraState === "idle";
+  const showRecovery = RECOVERY_STATES.has(cameraState) && !finished;
+  const showVideo = cameraState === "active" && !finished;
+
+  const badge = pending
+    ? "Memverifikasi"
+    : finished
+      ? "Selesai"
+      : cameraState === "active"
+        ? "Kamera aktif"
+        : showRecovery
+          ? "Perlu tindakan"
+          : cameraState === "requesting"
+            ? "Menyiapkan"
+            : "Siap";
 
   return (
     <section className={styles.scannerPanel} aria-labelledby="scanner-title">
@@ -389,19 +241,7 @@ export function AttendanceQrScanner({
           <span>03 / Pindai QR kehadiran</span>
           <h3 id="scanner-title">Arahkan kamera ke QR</h3>
         </div>
-        <strong className={styles.scannerBadge}>
-          {pending
-            ? "Memverifikasi"
-            : cameraState === "ready"
-              ? "Kamera aktif"
-              : cameraState === "stopped"
-                ? "Selesai"
-                : cameraState === "blocked"
-                  ? "Perlu tindakan"
-                  : cameraState === "starting"
-                    ? "Menyiapkan"
-                    : "Siap"}
-        </strong>
+        <strong className={styles.scannerBadge}>{badge}</strong>
       </div>
 
       <div className={styles.cameraViewport}>
@@ -410,10 +250,10 @@ export function AttendanceQrScanner({
           autoPlay
           muted
           playsInline
-          style={{ display: showStartButton || cameraState === "blocked" ? "none" : "block" }}
+          style={{ display: showVideo ? "block" : "none" }}
           onPlaying={() => {
             const v = videoRef.current;
-            console.info("[scanner] video play aktif:", {
+            console.info("[camera] video_playing", {
               videoWidth: v?.videoWidth,
               videoHeight: v?.videoHeight,
             });
@@ -426,14 +266,18 @@ export function AttendanceQrScanner({
           <i />
         </div>
 
-        {showStartButton ? (
-          <button className={styles.cameraStartButton} onClick={handleStartCamera} type="button">
+        {cameraState === "idle" && !finished ? (
+          <button
+            className={styles.cameraStartButton}
+            onClick={() => void handleStartCamera()}
+            type="button"
+          >
             <span>Aktifkan Kamera</span>
             <small>Izinkan akses kamera saat diminta browser</small>
           </button>
         ) : null}
 
-        {cameraState === "starting" ? (
+        {cameraState === "requesting" ? (
           <p>
             Meminta izin kamera... Jika popup izin tidak muncul dalam beberapa
             detik, buka ikon izin di address bar, lalu izinkan kamera untuk
@@ -441,24 +285,28 @@ export function AttendanceQrScanner({
           </p>
         ) : null}
 
-        {cameraState === "blocked" ? (
+        {showRecovery ? (
           <div className={styles.cameraError} role="alert">
-            <strong>Kamera belum dapat dibuka.</strong>
-            <span>{cameraError || "Izinkan kamera di browser, lalu coba kembali."}</span>
-            <button onClick={handleRetry} type="button">
-              Coba buka kamera lagi
+            <strong>{errorCopy?.title ?? "Kamera belum dapat dibuka."}</strong>
+            <span style={{ whiteSpace: "pre-line" }}>
+              {errorCopy?.description ?? "Izinkan kamera di browser, lalu coba kembali."}
+            </span>
+            <button onClick={() => void handleRetry()} type="button">
+              Coba Lagi
+            </button>
+            <button onClick={() => router.push("/kehadiran")} type="button">
+              Kembali
             </button>
           </div>
         ) : null}
 
-        {cameraState === "ready" && hasMultipleCameras ? (
+        {showVideo && hasMultipleCameras ? (
           <button
             className={styles.cameraSwitchButton}
-            disabled={isSwitchingCamera}
-            onClick={handleSwitchCamera}
+            onClick={() => void handleSwitchCamera()}
             type="button"
           >
-            {isSwitchingCamera ? "Mengganti..." : "Ganti kamera"}
+            Ganti kamera
           </button>
         ) : null}
 
